@@ -1,0 +1,104 @@
+version: "3"
+services:
+  cms:
+    image: ${CMS_IMAGE}:${CMS_TAG}
+    volumes:
+      - ./conf/cms/secrets.py:/code/taccsite_cms/secrets.py
+      - ./conf/uwsgi/uwsgi_cms.ini:/code/uwsgi.ini
+      - /var/www/portal/cms/static:/code/static
+      - /var/www/portal/cms/media:/code/media
+    command: ["uwsgi", "--ini", "uwsgi.ini"]
+    container_name: portal_cms
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./conf/uwsgi/uwsgi_params:/etc/nginx/uwsgi_params
+      - ./conf/certificates/dhparam.pem:/etc/ssl/dhparam.pem
+      - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
+      - ./conf/certificates/cep.dev.key/:/etc/ssl/private/portal.key
+      - /var/www/portal/cms/static:/var/www/portal/cms/static
+      - /var/www/portal/cms/media:/var/www/portal/cms/media
+      - /var/www/portal/portal/media:/var/www/portal/portal/media
+      - /var/www/portal/portal/static:/var/www/portal/portal/static
+    ports:
+      - 80:80
+      - 443:443
+    container_name: portal_nginx
+
+  memcached:
+    image: memcached:latest
+    command: ["-m", "1024m"]
+    container_name: portal_memcached
+    restart: always
+
+  redis:
+    image: redis:5.0
+    volumes:
+      - portal_redis_data:/data
+    container_name: portal_redis
+
+  rabbitmq:
+    image: rabbitmq:3.7.17-management
+    volumes:
+      - portal_rabbitmq_data:/var/lib/rabbitmq/mnesia/rabbit@portal_rabbitmq
+    env_file: ./conf/rabbitmq/rabbitmq.env
+    container_name: portal_rabbitmq
+
+  websockets:
+    image: ${PORTAL_IMAGE}:${PORTAL_TAG}
+    command: 'daphne -b 0.0.0.0 -p 9000 -e ssl:443:privateKey=/etc/ssl/private/portal.key:certKey=/etc/ssl/certs/portal.cer --root-path=/srv/www/portal/server --access-log - --proxy-headers portal.asgi:application'
+    volumes:
+      - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
+      - ./conf/certificates/cep.dev.key/:/etc/ssl/private/portal.key
+      - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
+    container_name: portal_websockets
+
+  core:
+    image: ${PORTAL_IMAGE}:${PORTAL_TAG}
+    volumes:
+      - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
+      - /var/www/portal/portal/media:/srv/www/portal/server/media
+      - /var/www/portal/portal/static:/srv/www/portal/server/static
+      - ./conf/uwsgi/uwsgi_core.ini:/srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+    stdin_open: true
+    tty: true
+    command: uwsgi --ini /srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+    container_name: portal_django
+
+  workers:
+    image: ${PORTAL_IMAGE}:${PORTAL_TAG}
+    volumes:
+      - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
+    command: "celery -A portal worker -Q default,indexing,files,api,onboard --concurrency=10"
+    container_name: portal_workers
+
+  postgres:
+    image: postgres:11.5
+    volumes:
+      - portal_postgres_data:/var/lib/postgresql/data/portal
+    container_name: portal_postgres
+    environment:
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=dev
+      - POSTGRES_DB=dev
+      - PGDATA=/var/lib/postgresql/data/portal
+
+  postgrescms:
+    image: postgres:11.5
+    volumes:
+      - core_cms_postgres_data:/var/lib/postgresql/data/portal
+    container_name: core_cms_postgres
+    environment:
+      - POSTGRES_PASSWORD=taccforever
+      - POSTGRES_USER=postgresadmin
+      - POSTGRES_DB=taccsite
+      - PGDATA=/var/lib/postgresql/data/portal
+
+volumes:
+  portal_redis_data:
+  portal_es_data:
+  portal_rabbitmq_data:
+  portal_postgres_data:
+  core_cms_postgres_data:
