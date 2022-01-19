@@ -13,11 +13,17 @@ Create `conf/cms/secrets.py` and `conf/portal/settings_secret.py`
 
 ### Start devlopment environment:
 
-    docker-compose up 
-    docker exec portal_django python3 manage.py migrate
-    docker exec portal_django python3 manage.py collectstatic --noinput
-    docker exec portal_cms python3 manage.py migrate
-    docker exec portal_cms python3 manage.py collectstatic --noinput
+    `docker-compose up`
+
+Followed by:
+```
+    docker exec core_portal_django python3 manage.py migrate
+    docker exec core_portal_django python3 manage.py collectstatic --noinput
+    docker exec core_portal_cms python3 manage.py migrate
+    docker exec core_portal_cms python3 manage.py collectstatic --noinput
+```
+
+Then go to `https://cep.dev/workbench` or `https://cep.dev/`
 
 ### Note on devlopment environment:
 
