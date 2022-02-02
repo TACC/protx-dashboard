@@ -115,6 +115,28 @@ services:
       - POSTGRES_DB=taccsite
       - PGDATA=/var/lib/postgresql/data/portal
 
+  protx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./protx:/app/protx
+      - ~/protx-data:/protx-data
+    ports:
+      - 8000:8000
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - FLASK_APP=/app/protx/app.py
+      - APP_ENV=development
+    stdin_open: true
+    tty: true
+    container_name: protx
+    hostname: protx
+    command: "gunicorn -w 4 -b 0.0.0.0:8000 protx.app:app -k gevent --reload --timeout 300"
+
+
 volumes:
   core_portal_redis_data:
   core_portal_es_data:
