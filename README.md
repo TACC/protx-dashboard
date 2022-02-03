@@ -9,7 +9,7 @@ The development environment configured here is configured similar to the deploye
 
 ### Configure settings
 
-Create `conf/cms/secrets.py` and `conf/portal/settings_secret.py` 
+1) Create `conf/portal/settings_secret.py`
 
 ### Start devlopment environment:
 

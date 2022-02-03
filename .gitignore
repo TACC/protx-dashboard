@@ -87,3 +87,6 @@ coverage.xml
 
 # vim stuff
 *.swp
+
+# diskacahe
+*/database_cache/*
