@@ -28,7 +28,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    container_name: core_portal_nginx
+    container_name: core-portal-nginx # no underscores to allow for requests from another containers
     depends_on:
       - cms
       - core-django
@@ -137,6 +137,7 @@ services:
     container_name: protx
     hostname: protx
     command: "gunicorn -w 4 -b 0.0.0.0:8000 protx.app:app -k gevent --reload --timeout 300"
+    restart: always
 
 
 volumes:

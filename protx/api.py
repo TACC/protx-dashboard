@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource
 from sqlalchemy import create_engine
 from protx.log import logging
-from protx.decorators import onboarded_required
+from protx.decorators import onboarded_user_required
 from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)

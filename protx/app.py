@@ -9,7 +9,6 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 api = Api(app, title="ProTx API", version="1.0", description="Protx")
 
-api.add_namespace(protx_api, path="/protx")
+api.add_namespace(protx_api, path="/protx/api")
 
-# TODO settinsg
-#DELETE? api.init_app(app)
+# TODO settings

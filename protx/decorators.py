@@ -3,24 +3,32 @@ from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
 import logging
+from flask import request
+import requests
 
 logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
 
 
-def onboarded_required(function):
-    """Decorator requires user to be logged in and onboarded.
+def onboarded_user_required(function):
+    """Decorator requires user to be onboarded.
     """
-
     @wraps(function)
     def wrapper(*args, **kwargs):
-        request = args[0]
-        if request.user.is_authenticated and request.user.profile.setup_complete:
+        try:
+            # TODO add note about non dev-approach
+            r = requests.get("https://core-portal-nginx/api/workbench/", cookies=request.cookies, verify=False)
+            r.raise_for_status()
+            json_response = r.json()
+            if json_response['response']['setupComplete']:
+                return function(*args, **kwargs)
+            else:
+                raise Forbidden
             return function(*args, **kwargs)
-        else:
+        except Exception as e:
+            logger.info(e)
             raise Forbidden
-
     return wrapper
 
 

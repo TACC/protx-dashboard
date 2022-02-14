@@ -5,3 +5,4 @@ SQLAlchemy
 pandas
 plotly
 diskcache
+requests
