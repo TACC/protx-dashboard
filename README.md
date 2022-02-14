@@ -10,7 +10,7 @@ The development environment configured here is configured similar to the deploye
 ### Configure settings
 
 1) Create `conf/portal/settings_secret.py`
-
+2) OPTIONAL: If core-django settings need to change, `cp conf/portal/settings_default.py conf/portal/settings_custom.py` and edit `conf/portal/settings_custom.py`.
 ### Start devlopment environment:
 
 `docker-compose up`

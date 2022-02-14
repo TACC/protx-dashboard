@@ -1,5 +1,4 @@
-# TACC WMA SAD CMS SITE: CEP.TACC.UTEXAS.EDU
-# CUSTOM SETTINGS VALUES.
+LOGIN_REDIRECT_URL = "/protx/demographics"
 
 ########################
 # DJANGO SETTINGS
