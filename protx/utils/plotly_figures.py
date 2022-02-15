@@ -57,7 +57,7 @@ def timeseries_lineplot(line_data):
     # FOCAL AREA HIGHLIGHTS ##
     ##########################
 
-    if line_data['fig_aes']['focal_display'] != None:
+    if line_data['fig_aes']['focal_display'] is not None:
         disp_legend = True
     else:
         disp_legend = False
@@ -96,7 +96,7 @@ def timeseries_lineplot(line_data):
 def timeseries_histogram(hist_data):
 
     #########################
-    ## SET PLOT AESTHETICS ##
+    #  SET PLOT AESTHETICS  #
     #########################
 
     # only county and tract supported; rename to .db file later
@@ -113,7 +113,7 @@ def timeseries_histogram(hist_data):
         subplot_titles=[str(i) for i in years])
 
     #################################
-    ## MAKE SUBPLOTS FOR 2011-2019 ##
+    #  MAKE SUBPLOTS FOR 2011-2019  #
     #################################
 
     colnum = 1
@@ -122,7 +122,7 @@ def timeseries_histogram(hist_data):
         data = hist_data['years'][year]
 
         ###################################
-        ## CONDITIONAL LEGEND FORMATTING ##
+        #  CONDITIONAL LEGEND FORMATTING  #
         ###################################
 
         # only generate legend for mean and median value lines on first plot
@@ -139,7 +139,7 @@ def timeseries_histogram(hist_data):
             show_highlight = False
 
         ##########
-        ## BARS ##
+        #  BARS  #
         ##########
 
         fig.add_trace(
@@ -155,7 +155,7 @@ def timeseries_histogram(hist_data):
         )
 
         #####################
-        ## MEAN AND MEDIAN ##
+        #  MEAN AND MEDIAN  #
         #####################
 
         fig.add_trace(
@@ -181,7 +181,7 @@ def timeseries_histogram(hist_data):
             row=1, col=colnum)
 
         ###########################
-        ## FOCAL AREA HIGHLIGHTS ##
+        #  FOCAL AREA HIGHLIGHTS #
         ###########################
 
         # for thresholded histograms, make sure the focal value is assigned to the
@@ -206,7 +206,7 @@ def timeseries_histogram(hist_data):
         colnum += 1
 
     ###################
-    ## UPDATE LAYOUT ##
+    #  UPDATE LAYOUT  #
     ###################
 
     fig.update_layout(bargap=0.0)

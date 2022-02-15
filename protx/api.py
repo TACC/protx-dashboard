@@ -20,6 +20,7 @@ class Maltreatment(Resource):
     def get(self):
         return get_maltreatment_cached()
 
+
 @api.route("/demographics")
 class Demographics(Resource):
     @api.doc("get_demographics")
@@ -30,7 +31,7 @@ class Demographics(Resource):
 @api.route("/demographics-plot-distribution/<area>/<geoid>/<variable>/<unit>/")
 class DemographicsDistributionPlotData(Resource):
     @api.doc("get_demographics_distribution_plot_data")
-    def get(self):
+    def get(self, area, geoid, variable, unit):
         """Get demographics distribution data for plotting
 
         """
@@ -80,7 +81,6 @@ def get_maltreatment_cached():
         result = connection.execute(MALTREATMENT_MIN_MAX_QUERY)
         meta = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
         return {"data": data, "meta": meta}
-
 
 
 @memoize_db_results(db_file=demographics.db_name)
