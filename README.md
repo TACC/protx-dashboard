@@ -9,9 +9,15 @@ The development environment configured here is configured similar to the deploye
 
 ### Configure settings
 
-1) Create `conf/portal/settings_secret.py`
-2) OPTIONAL: If core-django settings need to change, `cp conf/portal/settings_default.py conf/portal/settings_custom.py` and edit `conf/portal/settings_custom.py`.
-### Start devlopment environment:
+* Create `conf/portal/settings_secret.py`
+* OPTIONAL: If core-django settings need to change, `cp conf/portal/settings_default.py conf/portal/settings_custom.py` and edit `conf/portal/settings_custom.py`.
+
+
+### Configure databases
+
+Place `resources.db` and `cooks.db` in `~/protx-data/`
+
+### Start development environment:
 
 `docker-compose up`
 
@@ -22,14 +28,10 @@ Followed by:
     docker exec core_portal_cms python3 manage.py migrate
     docker exec core_portal_cms python3 manage.py collectstatic --noinput
 ```
+Note: CEP portal is not completely configured and is missing steps for ES etc
 
-Install client-side dependencies and bundle code with webpack:
-    cd client
-    npm ci
-    npm run build
+### Start frontend
+
+TODO
 
 Then go to `https://cep.dev/protx`, `https://cep.dev/workbench` or `https://cep.dev/`
-
-### Note on devlopment environment:
-
-CEP is not completely configured and is missing steps for ES etc
