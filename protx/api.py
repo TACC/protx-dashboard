@@ -34,6 +34,8 @@ class DemographicsDistributionPlotData(Resource):
     def get(self, area, geoid, variable, unit):
         """Get demographics distribution data for plotting
 
+        For example, `/protx/api/demographics-plot-distribution/county/48257/CROWD/percent/`
+
         """
         logger.info("Getting demographic plot data for {} {} {} {}".format(area, geoid, variable, unit))
         result = demographics.demographics_simple_lineplot_figure(area=area, geoid=geoid, variable=variable, unit=unit)

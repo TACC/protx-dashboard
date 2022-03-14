@@ -9,13 +9,17 @@ The development environment configured here is configured similar to the deploye
 
 ### Configure settings
 
-* Create `conf/portal/settings_secret.py`
+* Create `conf/portal/settings_secret.py` by using the same CEP developer settings [stored in UT Stache](https://stache.utexas.edu/entry/bedc97190d3a907cb44488785440595c) that are used in other CEPv2 development projects.
 * OPTIONAL: If core-django settings need to change, `cp conf/portal/settings_default.py conf/portal/settings_custom.py` and edit `conf/portal/settings_custom.py`.
 
 
 ### Configure databases
 
 Place `resources.db` and `cooks.db` in `~/protx-data/`
+
+### Build development environment:
+
+`docker-compose build`
 
 ### Start development environment:
 
