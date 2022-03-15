@@ -105,17 +105,6 @@ _PORTAL_DATAFILES_STORAGE_SYSTEMS = [
 # DJANGO APP: ONBOARDING
 ########################
 _PORTAL_USER_ACCOUNT_SETUP_STEPS = [
-    {
-        'step': 'portal.apps.onboarding.steps.mfa.MFAStep',
-        'settings': {}
-    },
-    {
-        'step': 'portal.apps.onboarding.steps.project_membership.ProjectMembershipStep',
-        'settings': {
-            'project_sql_id': 57877,
-            'rt_queue': 'Web & Mobile Apps'
-        }
-    }
 ]
 
 #######################
