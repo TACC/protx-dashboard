@@ -2,14 +2,14 @@
 # DJANGO SETTINGS COMMON
 ########################
 
-_DEBUG = True
+_DEBUG = False
 
 # Namespace for portal
 _PORTAL_NAMESPACE = 'Protx'
 _PORTAL_DOMAIN = 'Protx Portal'
 
 # NOTE: set _WH_BASE_URL to ngrok redirect for local dev testing (i.e. _WH_BASE_URL = 'https://12345.ngrock.io', see https://ngrok.com/)
-_WH_BASE_URL = ''
+_WH_BASE_URL = 'https://pprd.frontera-portal.tacc.utexas.edu'
 
 # Unorganized
 _LOGIN_REDIRECT_URL = '/remote/login/'
@@ -104,22 +104,6 @@ _PORTAL_DATAFILES_STORAGE_SYSTEMS = [
 ########################
 # DJANGO APP: ONBOARDING
 ########################
-"""
-Onboarding steps
-Each step is an object, with the full package name of the step class and
-an associated settings object.
-- If the 'settings' key is omitted, steps will have a default value of None for their settings attribute.
-- If the '_PORTAL_USER_ACCOUNT_SETUP_STEPS' secret is set to [], onboarding will be skipped.
-Example:
-_PORTAL_USER_ACCOUNT_SETUP_STEPS = [
-    {
-        'step': 'portal.apps.onboarding.steps.test_steps.MockStep',
-        'settings': {
-            'key': 'value'
-        }
-    }
-]
-Sample:
 _PORTAL_USER_ACCOUNT_SETUP_STEPS = [
     {
         'step': 'portal.apps.onboarding.steps.mfa.MFAStep',
@@ -128,35 +112,10 @@ _PORTAL_USER_ACCOUNT_SETUP_STEPS = [
     {
         'step': 'portal.apps.onboarding.steps.project_membership.ProjectMembershipStep',
         'settings': {
-            'project_sql_id': 12345
+            'project_sql_id': 57877,
+            'rt_queue': 'Web & Mobile Apps'
         }
-    },
-    {
-        'step': 'portal.apps.onboarding.steps.allocation.AllocationStep',
-        'settings': {}
-    },
-    {
-        'step': 'portal.apps.onboarding.steps.system_creation.SystemCreationStep',
-        'settings': {}
     }
-]
-"""
-
-#_PORTAL_USER_ACCOUNT_SETUP_STEPS = [
-#    {
-#        'step': 'portal.apps.onboarding.steps.mfa.MFAStep',
-#        'settings': {}
-#    },
-#    {
-#        'step': 'portal.apps.onboarding.steps.project_membership.ProjectMembershipStep',
-#        'settings': {
-#            'project_sql_id': 57877,
-#            'rt_queue': 'Web & Mobile Apps'
-#        }
-#    }
-#]
-# Empty due to https://jira.tacc.utexas.edu/browse/FP-1503
-_PORTAL_USER_ACCOUNT_SETUP_STEPS = [
 ]
 
 #######################
