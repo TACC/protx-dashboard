@@ -1,8 +1,0 @@
-gevent
-Flask
-flask-restx
-SQLAlchemy
-pandas
-plotly
-diskcache
-requests
