@@ -15,11 +15,6 @@ def timeseries_lineplot(line_data):
     ########################
     # SET PLOT AESTHETICS ##
     ########################
-
-    # only county and tract supported; rename to .db file later
-    pluralize = {'county': 'counties', 'tract': 'census tracts'}
-    fmt_units = pluralize[line_data['fig_aes']['geotype']]
-
     # number of years to cover: always 2011-2019 (for now)
     years = [i for i in range(2011, 2020)]
 
@@ -102,8 +97,7 @@ def timeseries_histogram(hist_data):
 
     # only county and tract supported; rename to .db file later
     pluralize = {'county': 'counties', 'tract': 'census tracts'}
-    # fmt_units usd in f-string but linting error still occurring
-    fmt_units = pluralize[hist_data['fig_aes']['geotype']] # pylint: disable=unused-variable
+    fmt_units = pluralize[hist_data['fig_aes']['geotype']]
 
     # number of years to cover: always 2011-2019 (for now)
     years = [i for i in range(2011, 2020)]
