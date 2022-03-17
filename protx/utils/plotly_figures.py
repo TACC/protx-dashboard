@@ -7,6 +7,7 @@
 """
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+from plotly.colors import n_colors
 
 
 def timeseries_lineplot(line_data):
@@ -101,7 +102,8 @@ def timeseries_histogram(hist_data):
 
     # only county and tract supported; rename to .db file later
     pluralize = {'county': 'counties', 'tract': 'census tracts'}
-    fmt_units = pluralize[hist_data['fig_aes']['geotype']]
+    # fmt_units usd in f-string but linting error still occurring
+    fmt_units = pluralize[hist_data['fig_aes']['geotype']] # pylint: disable=unused-variable
 
     # number of years to cover: always 2011-2019 (for now)
     years = [i for i in range(2011, 2020)]

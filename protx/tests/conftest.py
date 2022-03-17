@@ -7,7 +7,9 @@ def test_client():
     with app.app_context():
         yield app.test_client()
 
+
 WORKBENCH_PATH = "/api/workbench/"
+
 
 @pytest.fixture
 def core_api_workbench_request_unauthed(requests_mock):
