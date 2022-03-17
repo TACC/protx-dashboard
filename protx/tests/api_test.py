@@ -55,7 +55,7 @@ def test_get_display_setup_complete_false(test_client, core_api_workbench_reques
 
 
 @pytest.mark.skipif(missing_database_directory, reason="requires database directory or to-be-done database fixtures")
-def test_get_display(test_client, core_api_workbench_request):
+def test_get_resources(test_client, core_api_workbench_request):
     resp = test_client.get('/protx/api/resources')
     assert resp.status_code == 200
 
