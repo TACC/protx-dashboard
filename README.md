@@ -39,3 +39,17 @@ Note: CEP portal is not completely configured and is missing steps for ES etc
 TODO
 
 Then go to `https://cep.dev/protx`, `https://cep.dev/workbench` or `https://cep.dev/`
+
+## Testing
+
+### Backend testing
+
+```
+docker exec -it protx /bin/bash
+```
+
+followed by:
+
+```
+pytest -ra
+```
