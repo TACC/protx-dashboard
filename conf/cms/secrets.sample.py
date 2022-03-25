@@ -1,4 +1,6 @@
-LOGIN_REDIRECT_URL = "/protx/demographics"
+# After https://jira.tacc.utexas.edu/browse/COOKS-21, then should
+#be route to frontend: "/protx/demographics"
+LOGIN_REDIRECT_URL = "/protx/api/maltreatment"
 
 ########################
 # DJANGO SETTINGS

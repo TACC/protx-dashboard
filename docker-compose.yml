@@ -31,7 +31,7 @@ services:
     container_name: core-portal-nginx # no underscores to allow for requests from another containers
     depends_on:
       - cms
-      - core-django
+      - django
 
   memcached:
     image: memcached:latest
@@ -61,17 +61,25 @@ services:
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
     container_name: core_portal_websockets
 
-  core-django:
+  django:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
     volumes:
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
       - ./conf/portal/settings_custom.py:/srv/www/portal/server/portal/settings/settings_custom.py
       - /var/www/portal/portal/media:/srv/www/portal/server/media
       - /var/www/portal/portal/static:/srv/www/portal/server/static
-      - ./conf/uwsgi/uwsgi_core.ini:/srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+     # uwsgi is not working in a development environment as containers
+     # are making non-secure (i.e. http) requests to other containers
+     # - ./conf/uwsgi/uwsgi_core.ini:/srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     stdin_open: true
     tty: true
-    command: uwsgi --ini /srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+    # uwsgi is not working in a development environment as containers
+    # are making non-secure (i.e. http) requests to other containers
+    #command: uwsgi --ini /srv/www/portal/server/conf/uwsgi/uwsgi_core.ini
+    command: python manage.py runserver --noasgi 0.0.0.0:6000
     container_name: core_portal_django
 
   workers:
@@ -138,7 +146,6 @@ services:
     hostname: protx
     command: "gunicorn -w 4 -b 0.0.0.0:8000 protx.app:app -k gevent --reload --timeout 300"
     restart: always
-
 
 volumes:
   core_portal_redis_data:
