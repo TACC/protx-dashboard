@@ -28,7 +28,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    container_name: core-portal-nginx # no underscores to allow for requests from another containers
+    container_name: core_portal_nginx
     depends_on:
       - cms
       - django

@@ -17,8 +17,10 @@ def onboarded_user_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            # TODO add note about non dev-approach
-            r = requests.get("https://core-portal-nginx/api/workbench/", cookies=request.cookies, verify=False)
+            # making request directly to core django. alternatively, we could
+            # make the request to the request.get_host() (but then a bit
+            # tricky if it is local development and accessing cep.dev)
+            r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
             r.raise_for_status()
             json_response = r.json()
             if json_response['response']['setupComplete']:
