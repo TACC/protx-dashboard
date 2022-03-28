@@ -59,6 +59,7 @@ services:
       - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
       - ./conf/certificates/cep.dev.key/:/etc/ssl/private/portal.key
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
+      - ./conf/portal/settings_custom.py:/srv/www/portal/server/portal/settings/settings_custom.py
     container_name: core_portal_websockets
 
   django:
@@ -86,6 +87,7 @@ services:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
     volumes:
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
+      - ./conf/portal/settings_custom.py:/srv/www/portal/server/portal/settings/settings_custom.py
     command: "celery -A portal worker -Q default,indexing,files,api,onboard --concurrency=10"
     container_name: core_portal_workers
 
