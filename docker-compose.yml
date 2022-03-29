@@ -17,6 +17,7 @@ services:
     volumes:
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./conf/nginx/protx.location.conf:/etc/nginx/conf.d/protx.location.conf
+      - ./conf/nginx/data.location.conf:/etc/nginx/conf.d/data.location.conf
       - ./conf/uwsgi/uwsgi_params:/etc/nginx/uwsgi_params
       - ./conf/certificates/dhparam.pem:/etc/ssl/dhparam.pem
       - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
@@ -25,6 +26,7 @@ services:
       - /var/www/portal/cms/media:/var/www/portal/cms/media
       - /var/www/portal/portal/media:/var/www/portal/portal/media
       - /var/www/portal/portal/static:/var/www/portal/portal/static
+      - protx_geospatial_data:/protx-data/static
     ports:
       - 80:80
       - 443:443
@@ -149,9 +151,19 @@ services:
     command: "gunicorn -w 4 -b 0.0.0.0:8000 protx.app:app -k gevent --reload --timeout 300"
     restart: always
 
+  protx_geospatial:
+    image: taccwma/protx-geospatial:latest
+    volumes:
+      - type: volume
+        source: protx_geospatial_data
+        target: /data
+    command: ['echo', 'Container provides data to volume and then exits']
+    container_name: protx_geospatial
+
 volumes:
   core_portal_redis_data:
   core_portal_es_data:
   core_portal_rabbitmq_data:
   core_portal_postgres_data:
   core_cms_postgres_data:
+  protx_geospatial_data:
