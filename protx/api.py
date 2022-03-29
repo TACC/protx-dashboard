@@ -1,11 +1,11 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from sqlalchemy import create_engine
 from protx.log import logging
 from protx.decorators import onboarded_user_required
 from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
-from protx.utils import demographics
+from protx.utils import demographics, maltreatment
 from protx.decorators import memoize_db_results
 
 
@@ -39,6 +39,35 @@ class DemographicsDistributionPlotData(Resource):
         """
         logger.info("Getting demographic plot data for {} {} {} {}".format(area, geoid, variable, unit))
         result = demographics.demographics_simple_lineplot_figure(area=area, geoid=geoid, variable=variable, unit=unit)
+        return {"result": result}
+
+
+maltreatment_plot = api.model('MaltreatmentPlot', {
+    "area": fields.String(),
+    "selectedArea": fields.String(),
+    "geoid": fields.String(),
+    "variables": fields.String(),
+    "unit": fields.String()
+})
+
+
+@api.route("/maltreatment-plot-distribution/")
+class MaltreatmentPlotData(Resource):
+    @api.expect(maltreatment_plot)
+    @api.doc("get_maltreatment_plot_data")
+    def put(self):
+        area = api.payload["area"]
+        selectedArea = api.payload["selectedArea"]
+        geoid = api.payload["geoid"]
+        variables = api.payload["variables"]
+        unit = api.payload["unit"]
+        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
+                                                                                                 selectedArea,
+                                                                                                 unit,
+                                                                                                 geoid,
+                                                                                                 variables))
+        result = maltreatment.maltreatment_plot_figure(area=area, selectedArea=selectedArea,
+                                                       geoid=geoid, variables=variables, unit=unit)
         return {"result": result}
 
 
