@@ -68,6 +68,25 @@ def test_get_demographics_setup_complete_false(test_client, core_api_workbench_r
 
 
 @pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
+def test_get_demographics_plot(test_client, core_api_workbench_request):
+    resp = test_client.get('/protx/api/demographics-plot-distribution/county/48257/CROWD/percent/')
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["result"]["data"]
+    assert data["result"]["layout"]
+
+
+def test_get_demographics_plot_unauthed(test_client, core_api_workbench_request_unauthed):
+    resp = test_client.get('/protx/api/demographics-plot-distribution/county/48257/CROWD/percent/')
+    assert resp.status_code == 403
+
+
+def test_get_demographics_plot_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
+    resp = test_client.get('/protx/api/demographics-plot-distribution/county/48257/CROWD/percent/')
+    assert resp.status_code == 403
+
+
+@pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
 def test_get_display(test_client, core_api_workbench_request):
     resp = test_client.get('/protx/api/display')
     assert resp.status_code == 200
