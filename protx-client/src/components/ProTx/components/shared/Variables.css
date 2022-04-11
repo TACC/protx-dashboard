@@ -1,0 +1,62 @@
+/* Web Font Imports */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+/* Site-Wide Variables */
+
+:root {
+  /* Layout & Dimensions */
+  --max-height-header: 81vh;
+  --max-height-no-header: 85.5vh;
+  --map-width: 50vw;
+  --chart-width: 50vw;
+  --chart-height: 90vh;
+  --selector-constant-height: 20px;
+
+  /* Fonts  */
+
+  --font-type-roboto: 'Roboto', sans-serif;
+  --font-type-roboto-condensed: 'Roboto Condensed', sans-serif;
+
+  /* Font Sizes */
+
+  --font-size-base: 1rem;
+
+  --font-size-xxs: calc(var(--font-size-base) * 0.7);
+  --font-size-xs: calc(var(--font-size-base) * 0.8);
+  --font-size-sm: calc(var(--font-size-base) * 0.9);
+  --font-size-normal: var(--font-size-base);
+  --font-size-lg: calc(var(--font-size-base) * 1.1);
+  --font-size-xl: calc(var(--font-size-base) * 1.2);
+  --font-size-xxl: calc(var(--font-size-base) * 1.3);
+
+  /* Font Weights */
+
+  --font-weight-x-light: 300;
+  --font-weight-light: 400;
+  --font-weight-normal: 500;
+  --font-weight-normal-plus: 600;
+  --font-weight-heavy: 700;
+  --font-weight-x-heavy: 800;
+
+  /* Colors & Palettes */
+
+  --color-black: #000000;
+  --color-gray-very-dark: #111111;
+  --color-gray-dark: #444444;
+  --color-gray: #888888;
+  --color-gray-light: aaaaaa;
+  --color-gray-very-light: #efefef;
+  --color-white: #ffffff;
+
+  --color-white-transparent: rgba(255, 255, 255, 0.7);
+  --color-yellow-light: #fff387;
+  --color-blood-orange: #772211;
+  --color-cornflower-blue: rgb(20, 50, 80);
+  --color-skyblue: rgb(80, 220, 255);
+  --color-gold: rgb(255, 180, 0);
+  --color-purple: rgb(80, 50, 100);
+  --color-violet: rgb(222, 166, 255);
+  --color-violet-transparent: rgba(222, 166, 255, 0.2);
+}

@@ -27,6 +27,7 @@ services:
       - /var/www/portal/portal/media:/var/www/portal/portal/media
       - /var/www/portal/portal/static:/var/www/portal/portal/static
       - protx_geospatial_data:/protx-data/static
+      - ./protx-client:/var/www/portal/protx-client
     ports:
       - 80:80
       - 443:443
@@ -143,7 +144,7 @@ services:
       - 8.8.4.4
     environment:
       - FLASK_APP=/app/protx/app.py
-      - APP_ENV=development
+      - FLASK_ENV=development
     stdin_open: true
     tty: true
     container_name: protx

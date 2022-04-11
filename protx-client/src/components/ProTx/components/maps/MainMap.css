@@ -1,0 +1,76 @@
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet.markercluster/dist/MarkerCluster.css';
+@import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+
+.color {
+  padding: 1rem 1rem 0.5rem;
+  border: 1px solid var(--color-black);
+  background: var(--color-white-transparent);
+}
+.legend {
+  line-height: 10px;
+}
+.legend-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal-plus);
+  width: 100%;
+  max-width: 150px;
+  text-align: center;
+  padding-bottom: 10px;
+  line-height: 16px;
+}
+.resources-layers--title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal-plus);
+  max-width: 150px;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 3px;
+  line-height: 16px;
+}
+.scale-value * {
+  vertical-align: sub;
+}
+.scale-value i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+  border: 1px solid var(--color-black);
+}
+.scale-value span {
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-xs);
+}
+.marker-popup-content * {
+  line-height: 1.2;
+  font-family: var(--font-type-roboto-condensed);
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-xs);
+  text-align: center;
+  color: var(--color-black);
+}
+.marker-popup-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal-plus);
+}
+.marker-popup-description {
+  font-weight: var(--font-weight-normal);
+}
+.marker-popup-street {
+  font-style: italic;
+  color: var(--color-gray-dark);
+}
+.marker-popup-location {
+  font-style: italic;
+  color: var(--color-gray-dark);
+}
+.marker-popup-phone {
+  color: var(--color-gray);
+}
+.marker-popup-website {
+  color: var(--color-cornflower-blue);
+}
