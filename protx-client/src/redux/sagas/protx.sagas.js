@@ -72,7 +72,7 @@ export function* fetchProtxMaltreatmentDistribution(action) {
   yield put({ type: 'PROTX_MALTREATMENT_DISTRIBUTION_INIT' });
   try {
     const data = yield call(fetchUtil, {
-      url: `/api/protx/maltreatment-plot-distribution/`,
+      url: `/protx/api/maltreatment-plot-distribution/`,
       headers: {
         'Content-Type': 'application/json'
       },
