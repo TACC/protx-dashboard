@@ -1,0 +1,39 @@
+.plot-details {
+  margin: 0 1vw;
+}
+.plot-details-section {
+  min-height: 3vh;
+  display: flex;
+  border-bottom: 1px solid var(--color-gray-very-dark);
+}
+.plot-details-section-selected {
+  display: inline;
+  margin: 0.5vh;
+  width: 100%;
+  text-align: center;
+}
+.plot-details-section-selected-label {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+}
+.plot-details-section-selected-value {
+  margin-left: 1rem;
+  font-size: calc(var(--font-size-normal) * 1.3);
+  font-weight: var(--font-weight-heavy);
+}
+.plot-details-section-selected-value-list {
+  margin-left: 1rem;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-light);
+  font-style: italic;
+}
+.details-list-item:not(:last-child)::after {
+  content: ', ';
+}
+.plot-details-summary {
+  margin: 0.8vh 1vw 0.5vh;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  line-height: 2vh;
+  font-style: italic;
+}
