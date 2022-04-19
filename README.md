@@ -33,11 +33,38 @@ Followed by:
 ```
 Note: CEP portal is not completely configured and is missing steps for ES etc
 
+### Configure iframe snippets
+
+Get access to Django CMS, run `docker exec -it core_portal_cms /bin/bash` and then:
+
+```
+python3 manage.py createsuperuser
+```
+
+In Django CMS admin (i.e. https://cep.dev/admin/`), make 3 pages with iframe snippets that have the following markup:
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/demographics"></iframe></span></p>
+```
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/maltreatment"></iframe></span></p>
+```
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/analytics"></iframe></span></p>
+```
+
+
 ### Start frontend
 
-TODO
+```
+cd protx-client
+npm ci
+npm run dev
+```
 
-Then go to `https://cep.dev/protx`, `https://cep.dev/workbench` or `https://cep.dev/`
+Then go to either `https://cep.dev/`, `https://cep.dev/workbench`, `https://cep.dev/protx/dash/maltreatment`, `https://cep.dev/protx/dash/demographics` or `https://cep.dev/protx/dash/analytics`
 
 ## Testing
 
