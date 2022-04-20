@@ -33,11 +33,51 @@ Followed by:
 ```
 Note: CEP portal is not completely configured and is missing steps for ES etc
 
+### Configure pages/iframe
+
+Get access to Django CMS, run `docker exec -it core_portal_cms /bin/bash` and then:
+
+```
+python3 manage.py createsuperuser
+```
+
+In Django CMS admin (i.e. https://cep.dev/admin/`), you need to create three pages (using three snippets).
+
+
+The iframe snippets that have the following markup:
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/demographics"></iframe></span></p>
+```
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/maltreatment"></iframe></span></p>
+```
+
+```
+<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/analytics"></iframe></span></p>
+```
+
+To create these pages/snippets:
+* Login to CMS Admin > Snippets
+* Add Snippet > [Paste in that code and name it (ex. demographics)] > Save Snippet
+* Navigate to CMS Admin > Pages
+* Add Page (ex. demographics)
+* In the new Page, add a Text element (in the structure view)
+* Edit the new Text Element, select “Snippet” from the CMS dropdown options, and choose the “demographics” snippet you created.
+* Save and publish the Page.
+* Note: Go into the Continue Editing (Advanced Settings) and change the template from nearest ancestor to Full Width
+* The page will now link to the container route.
+
 ### Start frontend
 
-TODO
+```
+cd protx-client
+npm ci
+npm run dev
+```
 
-Then go to `https://cep.dev/protx`, `https://cep.dev/workbench` or `https://cep.dev/`
+Then go to either `https://cep.dev/`, `https://cep.dev/workbench`, `https://cep.dev/protx/dash/maltreatment`, `https://cep.dev/protx/dash/demographics` or `https://cep.dev/protx/dash/analytics`
 
 ## Testing
 
