@@ -42,12 +42,12 @@ def test_get_maltreatment_plot(test_client, core_api_workbench_request):
 
 
 def test_get_maltreatment_plot_unauthed(test_client, core_api_workbench_request_unauthed):
-    resp = test_client.put('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
+    resp = test_client.patch('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
     assert resp.status_code == 403
 
 
 def test_maltreatment_plot_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
-    resp = test_client.put('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
+    resp = test_client.patch('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
     assert resp.status_code == 403
 
 
