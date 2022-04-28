@@ -15,6 +15,7 @@ api.add_namespace(protx_api, path="/protx/api")
 @app.route("/protx/dash/<path:path>")
 def index(path=None):
     # TODO: Render alternate template for the compiled bundle.
+    # https://jira.tacc.utexas.edu/browse/COOKS-256
     return render_template("dash.html")
 
 # TODO settings
