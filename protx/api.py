@@ -55,7 +55,7 @@ maltreatment_plot = api.model('MaltreatmentPlot', {
 class MaltreatmentPlotData(Resource):
     @api.expect(maltreatment_plot)
     @api.doc("get_maltreatment_plot_data")
-    def put(self):
+    def patch(self):
         area = api.payload["area"]
         selectedArea = api.payload["selectedArea"]
         geoid = api.payload["geoid"]
