@@ -1,0 +1,72 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on pushes to main or on pull request events
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ '**' ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  Server_Side_Unit_Tests:
+    runs-on: ubuntu-18.04
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+
+    - name: Setup Poetry
+      uses: abatilo/actions-poetry@v2.0.0
+      with:
+        poetry-version: 1.1.13
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
+
+    - name: Install Python Packages
+      run:  |
+        poetry install
+
+    - name: Run Server-side unit tests and generate coverage report
+      run: |
+        poetry run pytest -ra protx
+
+  Server_Side_Linting:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+
+    - name: Setup Poetry
+      uses: abatilo/actions-poetry@v2.0.0
+      with:
+        poetry-version: 1.1.0
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
+
+    - name: Install Python Packages
+      run:  |
+        poetry install
+
+    - name: Server-Side Linting
+      run: |
+        cd protx
+        poetry run flake8

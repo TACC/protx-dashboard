@@ -1,0 +1,63 @@
+.report-instructions-hidden {
+  margin: 3rem 1.5rem;
+  border-top: 1px solid var(--color-gray);
+  padding: 1rem 0 0;
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  text-align: center;
+}
+.report-instructions * {
+  font-family: var(--font-type-roboto);
+  margin: 0.5rem;
+}
+.report-instructions {
+  margin: 3rem 1.5rem;
+  border-top: 1px solid var(--color-gray-dark);
+  padding: 1rem 0 0;
+}
+.report-instructions-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-heavy);
+}
+.report-instructions-subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-heavy);
+}
+.report-instructions-description {
+  margin-bottom: 1.5rem;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-light);
+}
+.report-instructions-steps-group * {
+  padding: 0.1rem 0;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-light);
+}
+.report-instructions-steps-group {
+  margin: 0 0 0 1rem;
+}
+.report-instructions-steps {
+  margin: 0 0 0 1rem;
+  padding: 0 0 0 1rem;
+}
+.report-instructions-steps--resources-panel {
+  font-weight: var(--font-weight-heavy);
+}
+.report-instructions-step {
+  margin: 0;
+}
+.report-instructions-icon-layers {
+  display: inline-block;
+  margin: 0 !important;
+  scale: 0.8;
+  vertical-align: calc(-1.4vh);
+}
+.report-instructions-icon-globe {
+  margin: 0 0.2vw 0.3vh;
+  font-size: 1.4rem !important;
+}
+.report-instructions-footer {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-x-light);
+  font-style: italic;
+}

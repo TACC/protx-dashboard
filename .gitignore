@@ -1,0 +1,92 @@
+# ignore intellij IDE things
+.idea/
+
+# OsX DS_Store nonsense
+.DS_Store
+nohup.out
+
+
+# Ignore local Django settings
+*secrets.py
+*settings_secret.py
+*settings_custom.py
+*settings_local.py
+
+# no node modules
+node_modules/
+
+# no client build
+client/build/
+
+# no webpack compiled templates
+server/portal/apps/workbench/templates/portal/apps/workbench/index.html
+server/portal/apps/workbench/templates/portal/apps/workbench/index.html.gz
+
+# ignore various Python things
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+*,cover
+*.mo
+*.pot
+*.log
+docs/_build/
+.docs/build/
+target/
+
+/server/conf/docker/logs.txt
+
+# Custom
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+db.sqlite3
+logs/
+log/
+docker/requirements.txt
+.db/
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# vscode
+.vscode/
+
+# vim stuff
+*.swp
+
+# diskacahe
+*/database_cache/*
