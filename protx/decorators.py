@@ -26,8 +26,9 @@ def onboarded_user_required(function):
             if json_response['response']['setupComplete']:
                 return function(*args, **kwargs)
             else:
-                raise Forbidden
-            return function(*args, **kwargs)
+                return {
+                    "message": "onboarding incomplete"
+                }, 403
         except Exception as e:
             logger.info(e)
             raise Forbidden
