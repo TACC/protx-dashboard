@@ -12,14 +12,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard-root">
-      {setupComplete ? (
-        <DashboardDisplay />
-      ) : (
-        <Redirect
-          from={`${path}`}
-          to={`${ROUTES.WORKBENCH}${ROUTES.ONBOARDING}/setup/`}
-        />
-      )}
+      <DashboardDisplay />
     </div>
   );
 }
