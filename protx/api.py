@@ -2,9 +2,18 @@ from flask_restx import Namespace, Resource, fields
 from sqlalchemy import create_engine
 from protx.log import logging
 from protx.decorators import onboarded_user_required
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_DATABASE_URL,
-                            DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
-                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
+from protx.utils.db import (
+    resources_db,
+    create_dict,
+    SQLALCHEMY_DATABASE_URL,
+    SQLALCHEMY_RESOURCES_DATABASE_URL,
+    DEMOGRAPHICS_JSON_STRUCTURE_KEYS,
+    DEMOGRAPHICS_QUERY,
+    DEMOGRAPHICS_MIN_MAX_QUERY,
+    MALTREATMENT_JSON_STRUCTURE_KEYS,
+    MALTREATMENT_QUERY,
+    MALTREATMENT_MIN_MAX_QUERY
+)
 from protx.utils import demographics, maltreatment
 from protx.decorators import memoize_db_results
 
@@ -38,7 +47,12 @@ class DemographicsDistributionPlotData(Resource):
 
         """
         logger.info("Getting demographic plot data for {} {} {} {}".format(area, geoid, variable, unit))
-        result = demographics.demographics_simple_lineplot_figure(area=area, geoid=geoid, variable=variable, unit=unit)
+        result = demographics.demographics_simple_lineplot_figure(
+            area=area,
+            geoid=geoid,
+            variable=variable,
+            unit=unit
+        )
         return {"result": result}
 
 
@@ -61,13 +75,14 @@ class MaltreatmentPlotData(Resource):
         geoid = api.payload["geoid"]
         variables = api.payload["variables"]
         unit = api.payload["unit"]
-        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
-                                                                                                 selectedArea,
-                                                                                                 unit,
-                                                                                                 geoid,
-                                                                                                 variables))
-        result = maltreatment.maltreatment_plot_figure(area=area, selectedArea=selectedArea,
-                                                       geoid=geoid, variables=variables, unit=unit)
+        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area, selectedArea, unit, geoid, variables))
+        result = maltreatment.maltreatment_plot_figure(
+            area=area,
+            selectedArea=selectedArea,
+            geoid=geoid,
+            variables=variables,
+            unit=unit
+        )
         return {"result": result}
 
 
@@ -83,8 +98,12 @@ class Display(Resource):
             for variable_info in display_data:
                 var = dict(variable_info)
                 # Interpret some variables used to control dropdown population https://jira.tacc.utexas.edu/browse/COOKS-148
-                for boolean_var_key in ["DISPLAY_DEMOGRAPHIC_COUNT", "DISPLAY_DEMOGRAPHIC_RATE",
-                                        "DISPLAY_MALTREATMENT_COUNT", "DISPLAY_MALTREATMENT_RATE"]:
+                for boolean_var_key in [
+                    "DISPLAY_DEMOGRAPHIC_COUNT",
+                    "DISPLAY_DEMOGRAPHIC_RATE",
+                    "DISPLAY_MALTREATMENT_COUNT",
+                    "DISPLAY_MALTREATMENT_RATE"
+                ]:
                     current_value = var[boolean_var_key]
                     var[boolean_var_key] = True if (current_value == 1 or current_value == "1") else False
                 result.append(var)
