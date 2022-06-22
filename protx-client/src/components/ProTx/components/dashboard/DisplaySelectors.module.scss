@@ -21,6 +21,17 @@
   align-items: center;
 }
 
+.download-btn {
+  background-color: var(--global-color-accent--normal);
+  border-color: var(--global-color-accent--alt);
+  border-radius: 0;
+}
+
+.download-btn:hover {
+  background-color: var(--global-color-accent--weak);
+  border-color: var(--global-color-accent--weak);
+}
+
 .radio-container label {
   margin-bottom: 0;
   padding-right: 10px;

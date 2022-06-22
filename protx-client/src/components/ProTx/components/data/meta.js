@@ -1,4 +1,5 @@
 export const SUPPORTED_YEARS = [
+  '2020',
   '2019',
   '2018',
   '2017',
