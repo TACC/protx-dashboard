@@ -41,7 +41,7 @@ function DashboardDisplay() {
 
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(state => state.protx);
-  const protxRoute = '/protx';
+  const protxRoute = '/protx/dash';
 
   // Get systems and any other initial data we need from the backend.
   useEffect(() => {
