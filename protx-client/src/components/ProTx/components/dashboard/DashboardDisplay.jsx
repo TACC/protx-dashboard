@@ -7,7 +7,7 @@ import DisplaySelectors from './DisplaySelectors';
 import MainMap from '../maps/MainMap';
 import MainChart from '../charts/MainChart';
 import './DashboardDisplay.css';
-import './DashboardDisplay.module.scss';
+import styles from './DashboardDisplay.module.scss';
 
 function DashboardDisplay() {
   // Map type and selected types (i.e. geography, year etc)
@@ -79,7 +79,7 @@ function DashboardDisplay() {
 
   if (error) {
     return (
-      <div styleName="error">
+      <div className={styles.error}>
         <SectionMessage type="warn">
           There was a problem loading the map data.
         </SectionMessage>
@@ -89,14 +89,14 @@ function DashboardDisplay() {
 
   if (loading) {
     return (
-      <div styleName="root">
+      <div className={styles.root}>
         <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div styleName="root">
+    <div className={styles.root}>
       <Switch>
         <Route
           path={`${protxRoute}/maltreatment`}

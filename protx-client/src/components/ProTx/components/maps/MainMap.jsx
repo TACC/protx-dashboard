@@ -12,7 +12,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import MapProviders from './MapProviders';
 import { GEOID_KEY } from '../data/meta';
 import './MainMap.css';
-import './MainMap.module.scss';
+import styles from './MainMap.module.scss';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
@@ -458,7 +458,7 @@ function MainMap({
     map
   ]);
 
-  return <div styleName="map" ref={el => (mapContainer = el)} />;
+  return <div className={styles['map']} ref={(el) => (mapContainer = el)} />;
 }
 
 MainMap.propTypes = {

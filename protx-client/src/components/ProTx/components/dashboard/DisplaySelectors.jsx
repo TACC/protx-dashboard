@@ -5,7 +5,7 @@ import { DropdownSelector } from '_common';
 import { Button } from 'reactstrap';
 import MaltreatmentSelector from './MaltreatmentSelector';
 import { OBSERVED_FEATURES_TOP_FIELDS, SUPPORTED_YEARS } from '../data/meta';
-import './DisplaySelectors.module.scss';
+import styles from './DisplaySelectors.module.scss';
 
 /* Radio buttons for types of values to display in dropdown (see COOKS-110 for next steps). */
 function RateSelector({
@@ -19,12 +19,12 @@ function RateSelector({
   const isButton0Selected = value === valueRadioBtn0;
   const isButton1Selected = value === valueRadioBtn1;
   return (
-    <div styleName="radio-container">
+    <div className={styles['radio-container']}>
       <div className="radio-container-element">
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className="radio-button"
+            className={`radio-button ${styles['radio-button']}`}
             type="radio"
             value={valueRadioBtn0}
             styleName="radio-button"
@@ -38,7 +38,7 @@ function RateSelector({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className="radio-button"
+            className={`radio-button ${styles['radio-button']}`}
             type="radio"
             value={valueRadioBtn1}
             styleName="radio-button"
@@ -119,14 +119,13 @@ function DisplaySelectors({
   };
 
   return (
-    <div styleName="display-selectors">
-      <div styleName="control">
-        <span styleName="label">Area</span>
+    <div className={styles['display-selectors']}>
+      <div className={styles['control']}>
+        <span className={styles['label']}>Area</span>
         <DropdownSelector
           value={geography}
-          onChange={event => setGeography(event.target.value)}
-          disabled={disableGeography}
-        >
+          onChange={(event) => setGeography(event.target.value)}
+          disabled={disableGeography}>
           <optgroup label="Select Areas">
             <option value="dfps_region" disabled>
               DFPS Regions
@@ -152,8 +151,8 @@ function DisplaySelectors({
         </DropdownSelector>
       </div>
       {setUnit && (
-        <div styleName="control">
-          <span styleName="label">Value</span>
+        <div className={styles['control']}>
+          <span className={styles['label']}>Value</span>
           <RateSelector
             value={unit}
             valueLabelRadioBtn0={valueLabelRadioBtn0}
@@ -165,8 +164,8 @@ function DisplaySelectors({
         </div>
       )}
       {mapType === 'maltreatment' && (
-        <div styleName="control">
-          <span styleName="label">Type</span>
+        <div className={styles['control']}>
+          <span className={styles['label']}>Type</span>
           <MaltreatmentSelector
             unit={unit}
             variables={display.variables}
@@ -177,12 +176,11 @@ function DisplaySelectors({
       )}
       {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
         <>
-          <div styleName="control">
-            <span styleName="label">Demographic</span>
+          <div className={styles['control']}>
+            <span className={styles['label']}>Demographic</span>
             <DropdownSelector
               value={observedFeature}
-              onChange={event => setObservedFeature(event.target.value)}
-            >
+              onChange={(event) => setObservedFeature(event.target.value)}>
               <optgroup label="Select demographic feature">
                 {display.variables
                   .sort((a, b) => {
@@ -194,7 +192,7 @@ function DisplaySelectors({
                     }
                     return 0;
                   })
-                  .filter(f => {
+                  .filter((f) => {
                     if (limitToTopObservedFeatureFields) {
                       return OBSERVED_FEATURES_TOP_FIELDS.includes(f.NAME);
                     }
@@ -206,7 +204,7 @@ function DisplaySelectors({
                     }
                     return false;
                   })
-                  .map(f => (
+                  .map((f) => (
                     <option key={f.NAME} value={f.NAME}>
                       {f.DISPLAY_TEXT}
                     </option>
@@ -216,15 +214,14 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      <div styleName="control">
-        <span styleName="label">Years</span>
+      <div className={styles['control']}>
+        <span className={styles['label']}>Years</span>
         <DropdownSelector
           value={year}
-          onChange={event => setYear(event.target.value)}
-          disabled={disabledYear}
-        >
+          onChange={(event) => setYear(event.target.value)}
+          disabled={disabledYear}>
           <optgroup label="Select year" />
-          {SUPPORTED_YEARS.map(y => (
+          {SUPPORTED_YEARS.map((y) => (
             <option key={y} value={y}>
               {y}
             </option>
@@ -238,8 +235,7 @@ function DisplaySelectors({
           color="primary"
           size="sm"
           styleName="download-btn"
-          download
-        >
+          download>
           Download
         </Button>
       )}
