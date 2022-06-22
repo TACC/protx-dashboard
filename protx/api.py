@@ -262,4 +262,4 @@ def get_resources_and_display(naics_codes=None):
 @memoize_db_results(db_file=resources_db)
 def get_resources_cached():
     resources_result, display_result = get_resources_and_display()
-    return JsonResponse({"resources": resources_result, "display": display_result})
+    return {"resources": resources_result, "display": display_result}
