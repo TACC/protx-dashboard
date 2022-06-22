@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, Redirect, useLocation, useRouteMatch } from 'react-router-dom';
+import { stringify } from 'query-string';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SectionMessage, LoadingSpinner } from '_common';
 import DisplaySelectors from './DisplaySelectors';
 import MainMap from '../maps/MainMap';
 import MainChart from '../charts/MainChart';
 import './DashboardDisplay.css';
-import styles from  './DashboardDisplay.module.scss';
+import './DashboardDisplay.module.scss';
 
 function DashboardDisplay() {
   // Map type and selected types (i.e. geography, year etc)
@@ -25,18 +26,22 @@ function DashboardDisplay() {
     'SXAB',
     'SXTR'
   ];
+  const DEFAULT_YEAR = '2020';
   const [maltreatmentTypes, setMaltreatmentTypes] = useState(
     PRESELECTED_MALTREATMENT_CATEGORIES
   );
-  const [observedFeature, setObservedFeature] = useState('CROWD');
-  const [year, setYear] = useState('2019');
+  const [observedFeature, setObservedFeature] = useState('AGE17');
+  const [year, setYear] = useState(DEFAULT_YEAR);
   const [selectedGeographicFeature, setSelectedGeographicFeature] = useState(
     ''
   );
   const [unit, setUnit] = useState('count');
+  const [map, setMap] = useState(null);
+  const [resourceLayers, setResourceLayers] = useState(null);
+
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(state => state.protx);
-  const protxRoute = '/protx/dash';
+  const protxRoute = '/protx';
 
   // Get systems and any other initial data we need from the backend.
   useEffect(() => {
@@ -48,18 +53,33 @@ function DashboardDisplay() {
     if (mapType === 'maltreatment') {
       // maltreatment only has county data.
       setGeography('county');
-      setUnit('percent');
+      setUnit('rate_per_100k_under17');
     } else {
-      // observedFeatures (i.e. Demographic Features) and analytics
-      setYear('2019'); // observedFeatures (i.e. Demographic Features) only has 2019 data.
+      setYear(DEFAULT_YEAR);
       setGeography('county');
-      setUnit('count');
+      setUnit('percent');
     }
   }, [mapType]);
 
+  const handleDownloadResources = () => {
+    if (map && resourceLayers) {
+      const selectedResourcesNaicsCode = resourceLayers
+        .filter(r => {
+          return map.hasLayer(r.layer);
+        })
+        .map(r => r.naicsCode);
+      const typeQuery = stringify({
+        naicsCode: selectedResourcesNaicsCode
+      });
+
+      const downloadResourceHref = `/api/protx/download/${geography}/${selectedGeographicFeature}?${typeQuery}`;
+      window.open(downloadResourceHref);
+    }
+  };
+
   if (error) {
     return (
-      <div className={styles.error}>
+      <div styleName="error">
         <SectionMessage type="warn">
           There was a problem loading the map data.
         </SectionMessage>
@@ -69,14 +89,14 @@ function DashboardDisplay() {
 
   if (loading) {
     return (
-      <div className={styles.root}>
+      <div styleName="root">
         <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className={styles.root}>
+    <div styleName="root">
       <Switch>
         <Route
           path={`${protxRoute}/maltreatment`}
@@ -91,10 +111,12 @@ function DashboardDisplay() {
                   observedFeature={observedFeature}
                   year={year}
                   unit={unit}
+                  selectedGeographicFeature={selectedGeographicFeature}
                   setMaltreatmentTypes={setMaltreatmentTypes}
                   setObservedFeature={setObservedFeature}
                   setYear={setYear}
                   setUnit={setUnit}
+                  downloadResources={handleDownloadResources}
                 />
                 <div className="display-layout-root">
                   <div className="display-layout-map">
@@ -110,6 +132,10 @@ function DashboardDisplay() {
                       setSelectedGeographicFeature={
                         setSelectedGeographicFeature
                       }
+                      map={map}
+                      setMap={setMap}
+                      resourceLayers={resourceLayers}
+                      setResourceLayers={setResourceLayers}
                     />
                   </div>
                   <div className="display-layout-chart">
@@ -143,9 +169,11 @@ function DashboardDisplay() {
                   observedFeature={observedFeature}
                   year={year}
                   unit={unit}
+                  selectedGeographicFeature={selectedGeographicFeature}
                   setMaltreatmentTypes={setMaltreatmentTypes}
                   setObservedFeature={setObservedFeature}
                   setUnit={setUnit}
+                  downloadResources={handleDownloadResources}
                 />
                 <div className="display-layout-root">
                   <div className="display-layout-map">
@@ -161,6 +189,10 @@ function DashboardDisplay() {
                       setSelectedGeographicFeature={
                         setSelectedGeographicFeature
                       }
+                      map={map}
+                      setMap={setMap}
+                      resourceLayers={resourceLayers}
+                      setResourceLayers={setResourceLayers}
                     />
                   </div>
                   <div className="display-layout-chart">
@@ -169,7 +201,7 @@ function DashboardDisplay() {
                       mapType={mapType}
                       geography={geography}
                       observedFeature={observedFeature}
-                      year="2019"
+                      year={DEFAULT_YEAR}
                       selectedGeographicFeature={selectedGeographicFeature}
                       data={data}
                       unit={unit}
@@ -194,9 +226,11 @@ function DashboardDisplay() {
                   observedFeature={observedFeature}
                   year={year}
                   unit={unit}
+                  selectedGeographicFeature={selectedGeographicFeature}
                   setMaltreatmentTypes={setMaltreatmentTypes}
                   setObservedFeature={setObservedFeature}
                   setYear={setYear}
+                  downloadResources={handleDownloadResources}
                 />
                 <div className="display-layout-root">
                   <div className="display-layout-map">
@@ -212,6 +246,10 @@ function DashboardDisplay() {
                       setSelectedGeographicFeature={
                         setSelectedGeographicFeature
                       }
+                      map={map}
+                      setMap={setMap}
+                      resourceLayers={resourceLayers}
+                      setResourceLayers={setResourceLayers}
                     />
                   </div>
                   <div className="display-layout-chart">

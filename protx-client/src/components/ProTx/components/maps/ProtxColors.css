@@ -1,0 +1,134 @@
+/* PORTAL UI */
+
+/* Portal Variable Overwrites */
+#react-root {
+    --global-color-accent--normal: #924e8c;
+    --global-color-accent--weak: #924e8c80;
+}
+
+/* CHOROPLETH MAP */
+
+/* To Swap Colors */
+
+/* areas */
+.display-layout-map {
+    --hue1: #EAF6C7;
+    /* (new) between "Light lime" and white */
+    --hue2: #D4EC8E;
+    /* "Light lime" */
+    --hue3: #A9C47F;
+    /* "Light green" */
+    --hue4: #007A53;
+    /* "Cook Children’s green" */
+    --hue5: #003B5C;
+    /* "Cook Children’s blue" */
+    --hue6: #001E2E;
+    /* (new) between "Cook Children’s green" and black */
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#ffffd4"] {
+    fill: var(--hue1);
+}
+
+.scale-value i[style*="#ffffd4"] {
+    background: var(--hue1) !important;
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#fee391"] {
+    fill: var(--hue2);
+}
+
+.scale-value i[style*="#fee391"] {
+    background: var(--hue2) !important;
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#fec44f"] {
+    fill: var(--hue3);
+}
+
+.scale-value i[style*="#fec44f"] {
+    background: var(--hue3) !important;
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#fe9929"] {
+    fill: var(--hue4);
+}
+
+.scale-value i[style*="#fe9929"] {
+    background: var(--hue4) !important;
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#d95f0e"] {
+    fill: var(--hue5);
+}
+
+.scale-value i[style*="#d95f0e"] {
+    background: var(--hue5) !important;
+}
+
+.leaflet-tile-pane > *:nth-child(2) path[fill="#993404"] {
+    fill: var(--hue6);
+}
+
+.scale-value i[style*="#993404"] {
+    background: var(--hue6) !important;
+}
+
+/* To Avoid Muted Appearance */
+
+/* map */
+.leaflet-tile-pane > div:nth-child(1) {
+    /* turn white to transparent */
+    mix-blend-mode: multiply;
+}
+
+/* areas */
+.leaflet-tile-pane > div:nth-child(2) {
+    /* move areas below map */
+    z-index: 0 !important;
+}
+
+/* To Customize Opacity */
+
+/* area opacity */
+.display-layout-map {
+    --area-fill-opacity: 0.75;
+}
+
+.leaflet-tile-pane > div:nth-child(2) path:not([fill="black"]) {
+    fill-opacity: var(--area-fill-opacity);
+}
+
+.scale-value i {
+    opacity: var(--area-fill-opacity) !important;
+}
+
+/* map opacity */
+.leaflet-tile-pane > div:nth-child(1) img {
+    opacity: 0.75 !important;
+}
+
+/* To Recolor Pins */
+
+/* pins */
+img.leaflet-marker-icon {
+    filter: hue-rotate(80deg) brightness(0.8) saturate(0.8);
+}
+
+/* circles */
+.marker-cluster-small,
+.marker-cluster-small div {
+    background-color: #CCCCCC99 !important;
+}
+
+.marker-cluster-medium,
+.marker-cluster-medium div {
+    background-color: #66666699 !important;
+    color: #FFFFFF !important;
+}
+
+.marker-cluster-large,
+.marker-cluster-large div {
+    background-color: #33333399 !important;
+    color: #FFFFFF !important;
+}

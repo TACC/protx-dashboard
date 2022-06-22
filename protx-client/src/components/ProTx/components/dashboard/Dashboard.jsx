@@ -7,10 +7,19 @@ import './Dashboard.css';
 import * as ROUTES from '../../../../constants/routes';
 
 function Dashboard() {
+  const { path } = useRouteMatch();
+  const setupComplete = useSelector(state => state.workbench.setupComplete);
 
   return (
     <div className="dashboard-root">
+      {setupComplete ? (
         <DashboardDisplay />
+      ) : (
+        <Redirect
+          from={`${path}`}
+          to={`${ROUTES.WORKBENCH}${ROUTES.ONBOARDING}/setup/`}
+        />
+      )}
     </div>
   );
 }

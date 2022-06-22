@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { DropdownSelector } from '_common';
+import { Button } from 'reactstrap';
 import MaltreatmentSelector from './MaltreatmentSelector';
 import { OBSERVED_FEATURES_TOP_FIELDS, SUPPORTED_YEARS } from '../data/meta';
-import styles from './DisplaySelectors.module.scss';
+import './DisplaySelectors.module.scss';
 
 /* Radio buttons for types of values to display in dropdown (see COOKS-110 for next steps). */
 function RateSelector({
@@ -18,14 +19,15 @@ function RateSelector({
   const isButton0Selected = value === valueRadioBtn0;
   const isButton1Selected = value === valueRadioBtn1;
   return (
-    <div className={styles["radio-container"]}>
+    <div styleName="radio-container">
       <div className="radio-container-element">
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className="radio-button"
             type="radio"
             value={valueRadioBtn0}
+            styleName="radio-button"
             checked={isButton0Selected}
             onChange={() => setValue(valueRadioBtn0)}
           />
@@ -36,9 +38,10 @@ function RateSelector({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className="radio-button"
             type="radio"
             value={valueRadioBtn1}
+            styleName="radio-button"
             checked={isButton1Selected}
             onChange={() => setValue(valueRadioBtn1)}
           />
@@ -77,12 +80,14 @@ function DisplaySelectors({
   observedFeature,
   year,
   unit,
+  selectedGeographicFeature,
   setGeography,
   setMaltreatmentTypes,
   setObservedFeature,
   setYear,
   setUnit,
-  limitToTopObservedFeatureFields
+  limitToTopObservedFeatureFields,
+  downloadResources
 }) {
   const disableGeography = mapType === 'maltreatment' || setGeography === null;
   const disabledYear = mapType === 'observedFeatures' || setYear == null;
@@ -114,9 +119,9 @@ function DisplaySelectors({
   };
 
   return (
-    <div className={styles["display-selectors"]}>
-      <div className={styles["control"]}>
-        <span className={styles["label"]}>Area</span>
+    <div styleName="display-selectors">
+      <div styleName="control">
+        <span styleName="label">Area</span>
         <DropdownSelector
           value={geography}
           onChange={event => setGeography(event.target.value)}
@@ -147,8 +152,8 @@ function DisplaySelectors({
         </DropdownSelector>
       </div>
       {setUnit && (
-        <div className={styles["control"]}>
-          <span className={styles["label"]}>Value</span>
+        <div styleName="control">
+          <span styleName="label">Value</span>
           <RateSelector
             value={unit}
             valueLabelRadioBtn0={valueLabelRadioBtn0}
@@ -160,8 +165,8 @@ function DisplaySelectors({
         </div>
       )}
       {mapType === 'maltreatment' && (
-        <div className={styles["control"]}>
-          <span className={styles["label"]}>Type</span>
+        <div styleName="control">
+          <span styleName="label">Type</span>
           <MaltreatmentSelector
             unit={unit}
             variables={display.variables}
@@ -172,8 +177,8 @@ function DisplaySelectors({
       )}
       {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
         <>
-          <div className={styles["control"]}>
-            <span className={styles["label"]}>Demographic</span>
+          <div styleName="control">
+            <span styleName="label">Demographic</span>
             <DropdownSelector
               value={observedFeature}
               onChange={event => setObservedFeature(event.target.value)}
@@ -211,8 +216,8 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      <div className={styles["control"]}>
-        <span className={styles["label"]}>Years</span>
+      <div styleName="control">
+        <span styleName="label">Years</span>
         <DropdownSelector
           value={year}
           onChange={event => setYear(event.target.value)}
@@ -226,6 +231,18 @@ function DisplaySelectors({
           ))}
         </DropdownSelector>
       </div>
+
+      {selectedGeographicFeature && (
+        <Button
+          onClick={downloadResources}
+          color="primary"
+          size="sm"
+          styleName="download-btn"
+          download
+        >
+          Download
+        </Button>
+      )}
     </div>
   );
 }
@@ -237,12 +254,14 @@ DisplaySelectors.propTypes = {
   observedFeature: PropTypes.string.isRequired,
   year: PropTypes.string.isRequired,
   unit: PropTypes.string.isRequired,
+  selectedGeographicFeature: PropTypes.string.isRequired,
   setGeography: PropTypes.func,
   setMaltreatmentTypes: PropTypes.func.isRequired,
   setObservedFeature: PropTypes.func.isRequired,
   setYear: PropTypes.func,
   setUnit: PropTypes.func,
-  limitToTopObservedFeatureFields: PropTypes.bool
+  limitToTopObservedFeatureFields: PropTypes.bool,
+  downloadResources: PropTypes.func.isRequired
 };
 
 DisplaySelectors.defaultProps = {
