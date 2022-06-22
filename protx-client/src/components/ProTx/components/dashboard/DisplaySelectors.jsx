@@ -19,12 +19,12 @@ function RateSelector({
   const isButton0Selected = value === valueRadioBtn0;
   const isButton1Selected = value === valueRadioBtn1;
   return (
-    <div className={styles['radio-container']}>
+    <div className={styles["radio-container"]}>
       <div className="radio-container-element">
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className={`radio-button ${styles["radio-button"]}`}
             type="radio"
             value={valueRadioBtn0}
             styleName="radio-button"
@@ -38,7 +38,7 @@ function RateSelector({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className={`radio-button ${styles["radio-button"]}`}
             type="radio"
             value={valueRadioBtn1}
             styleName="radio-button"
@@ -119,9 +119,9 @@ function DisplaySelectors({
   };
 
   return (
-    <div className={styles['display-selectors']}>
-      <div className={styles['control']}>
-        <span className={styles['label']}>Area</span>
+    <div className={styles["display-selectors"]}>
+      <div className={styles["control"]}>
+        <span className={styles["label"]}>Area</span>
         <DropdownSelector
           value={geography}
           onChange={(event) => setGeography(event.target.value)}
@@ -151,8 +151,8 @@ function DisplaySelectors({
         </DropdownSelector>
       </div>
       {setUnit && (
-        <div className={styles['control']}>
-          <span className={styles['label']}>Value</span>
+        <div className={styles["control"]}>
+          <span className={styles["label"]}>Value</span>
           <RateSelector
             value={unit}
             valueLabelRadioBtn0={valueLabelRadioBtn0}
@@ -164,8 +164,8 @@ function DisplaySelectors({
         </div>
       )}
       {mapType === 'maltreatment' && (
-        <div className={styles['control']}>
-          <span className={styles['label']}>Type</span>
+        <div className={styles["control"]}>
+          <span className={styles["label"]}>Type</span>
           <MaltreatmentSelector
             unit={unit}
             variables={display.variables}
@@ -176,8 +176,8 @@ function DisplaySelectors({
       )}
       {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
         <>
-          <div className={styles['control']}>
-            <span className={styles['label']}>Demographic</span>
+          <div className={styles["control"]}>
+            <span className={styles["label"]}>Demographic</span>
             <DropdownSelector
               value={observedFeature}
               onChange={(event) => setObservedFeature(event.target.value)}>
@@ -214,8 +214,8 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      <div className={styles['control']}>
-        <span className={styles['label']}>Years</span>
+      <div className={styles["control"]}>
+        <span className={styles["label"]}>Years</span>
         <DropdownSelector
           value={year}
           onChange={(event) => setYear(event.target.value)}
