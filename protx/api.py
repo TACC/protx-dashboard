@@ -259,7 +259,6 @@ def get_resources_and_display(naics_codes=None):
     return resources_result, display_result
 
 
-
 @memoize_db_results(db_file=resources_db)
 def get_resources_cached():
     resources_result, display_result = get_resources_and_display()
