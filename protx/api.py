@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from protx.log import logging
 from protx.decorators import onboarded_user_required
 from protx.utils.db import (
-    cooks_db,
     resources_db,
     DEMOGRAPHICS_QUERY,
     DEMOGRAPHICS_MIN_MAX_QUERY,
@@ -101,8 +100,6 @@ class DemographicsDistributionPlotData(Resource):
             unit=unit
         )
         return {"result": result}
-        # Do we need to wrap the response in Flask?
-        # return JsonResponse({"result": result})
 
 
 @onboarded_user_required
@@ -153,8 +150,6 @@ class MaltreatmentPlotData(Resource):
             unit=unit
         )
         return {"result": result}
-        # Do we need to wrap the response in Flask?
-        # return JsonResponse({"result": result})
 
 
 @onboarded_user_required
@@ -237,9 +232,6 @@ def get_maltreatment_cached():
         result = connection.execute(MALTREATMENT_MIN_MAX_QUERY)
         meta = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
         return {"data": data, "meta": meta}
-        # Do we need to wrap the response in Flask?
-        # return JsonResponse({"data": data, "meta": meta})
-
 
 
 @memoize_db_results(db_file=resources_db)
