@@ -41,8 +41,8 @@ class Demographics(Resource):
 class DownloadResources(Resource):
     @api.doc("get_resources")
     def get(self):
-        # TODO
-        return get_resources_cached()
+        # TODO  download_resources needs to be updated for streaming in flask
+        return {}
 
 
 @onboarded_user_required
