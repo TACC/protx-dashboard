@@ -34,7 +34,6 @@ def hist_to_bar(vector, range_vals, bins):
 
 
 def pearson_kurtosis(x):
-
     sigma = np.std(x)
     mean = np.mean(x)
     deviation = x - mean
@@ -88,49 +87,34 @@ def get_bin_edges(query_return_df, label_template):
         bar_centers_threshold = bar_centers[0: len(edges_threshold) + 1]
 
         # update the bar labels
-        label_fmt_threshold = [label_template(edges_threshold[i - 1], edges_threshold[i]) for i in
-                               range(1, len(edges_threshold))]
+        label_fmt_threshold = [label_template(edges_threshold[i - 1], edges_threshold[i]) for i in range(1, len(edges_threshold))]
 
         return edges_threshold, bar_centers_threshold, label_fmt_threshold
 
 
-subplot_mapping_aes = {
-    'people': {
-        'AGE17': {'col': 1, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#636EFA'},
-        'GROUPQ': {'col': 2, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#EF553B'},
-        'NOHSDP': {'col': 3, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#00CC96'},
-        'POV': {'col': 4, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#AB63FA'}
-    },
-    'hh': {
-        'SNGPNT': {'col': 6, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#FFA15A'}
-    },
-    'hu': {
-        'CROWD': {'col': 8, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#19D3F3'}
-    },
-    'dollars': {
-        'PCI': {'col': 10, 'range': None, 'label_fmt': currency, 'color': '#FF6692'}
-    }
-}
+"""
+Demographics Demo
 
-# ## Demographics demo: response to user selection, time series
-#
-# 1. User selects the "Demographics" tab.
-#
-# 2. User selects the following from drop down menus:
-#
-#     - Area (currently fixed to counties)
-#     - Demographic
-#     - Years (currently fixed to 2019)
-#     - (pending: rate vs percent)
-#
-#
-# 3. User selects an area from the map (must happen after drop-down selection for "area" is made)
+- Response to user selection, time series
+
+1. User selects the "Demographics" tab.
+
+2. User selects the following from drop down menus:
+    - Area (currently fixed to counties)
+    - Demographic
+    - Years (currently fixed to 2019)
+    - (pending: rate vs percent)
+
+3. User selects an area from the map.
+    - Must happen after drop-down selection for "area" is made.
+"""
 
 # ### Select variable across all years
 
 yearly_data_query = '''
 select d.VALUE, d.GEOID, d.GEOTYPE, d.DEMOGRAPHICS_NAME, d.YEAR,
-    d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units, u.DISPLAY_TEXT as units_display
+    d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units,
+    u.DISPLAY_TEXT as units_display, u.DISPLAY_TEXT_PLOT as units_plot
 from {report_type} d
 left join display_geotype g on
     g.GEOID = d.GEOID and
@@ -147,7 +131,8 @@ where d.GEOTYPE = "{area}" and
 
 focal_query = '''
 select d.VALUE, d.GEOID, d.GEOTYPE, d.DEMOGRAPHICS_NAME, d.YEAR,
-    d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units, u.DISPLAY_TEXT as units_display
+    d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units,
+    u.DISPLAY_TEXT as units_display, u.DISPLAY_TEXT_PLOT as units_plot
 from {report_type} d
 left join display_geotype g on
     g.GEOID = d.GEOID and
@@ -185,9 +170,11 @@ def demographic_data_prep(query_return_df):
         label_template = currency
         # division is done in formatting helper but could be pushed up to .db file
         label_units = query_return_df['units_display'].unique().item() + ' (1000s of dollars)'
+        label_legend = query_return_df['units_plot'].unique().item() + ' (1000s of dollars)'
     else:
         label_template = not_currency
         label_units = query_return_df['units_display'].unique().item()
+        label_legend = query_return_df['units_plot'].unique().item()
         # for line plots, PCI should use median and others should use mean
     if query_return_df['DEMOGRAPHICS_NAME'].unique().item() == 'PCI':
         center = 'median'
@@ -217,6 +204,7 @@ def demographic_data_prep(query_return_df):
             'xrange': (0, 0),  # for horizontal boxplots, updated dynamically
             'geotype': query_return_df['GEOTYPE'].unique().item(),
             'label_units': label_units,
+            'label_legend': label_legend,
             'bar_labels': None,
             'bar_centers': None,
             'focal_display': None,
@@ -226,14 +214,14 @@ def demographic_data_prep(query_return_df):
             i: {'focal_value': None,
                 'mean': None,
                 'median': None,
-                'bars': [None]} for i in range(2011, 2020)}
+                'bars': [None]} for i in range(2011, 2021)}
     }
 
     ################################
     # CALCULATE ANNUAL HISTOGRAMS ##
     ################################
 
-    for year in range(2010, 2020):
+    for year in range(2010, 2021):
         data = query_return_df[query_return_df['YEAR'] == year]['VALUE'].values
         data = data[np.logical_not(np.isnan(data))]
 
@@ -285,7 +273,7 @@ def update_focal_area(display_dict, focal_data):
 
     focal_dict = focal_data[['YEAR', 'VALUE']].set_index('YEAR').transpose().to_dict(orient='records')[0]
     display_dict['fig_aes']['focal_display'] = display_name
-    for year in range(2011, 2020):
+    for year in range(2011, 2021):
         try:
             focal_val = focal_dict[year]
         except KeyError:

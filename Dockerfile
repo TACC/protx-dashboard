@@ -1,7 +1,6 @@
 FROM python:3.9-slim
 
-RUN apt-get update
-RUN apt-get install -y curl
+RUN apt-get update && apt-get install -y curl
 
 ENV POETRY_VERSION=1.1.13
 ENV POETRY_HOME=/opt/poetry

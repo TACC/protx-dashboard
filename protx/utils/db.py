@@ -1,4 +1,3 @@
-
 import logging
 
 from protx.utils import demographics
@@ -7,7 +6,7 @@ from werkzeug.exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
 
-# TODO single engine for django instance
+# TODO: single engine for django instance.
 
 
 MALTREATMENT_QUERY = "SELECT * FROM maltreatment"
@@ -21,6 +20,7 @@ SELECT
     MIN(m.value) as MIN,
     MAX(m.value) as MAX
 FROM maltreatment m
+WHERE m.GEOTYPE='county'
 GROUP BY
     m.GEOTYPE,
     m.UNITS,
