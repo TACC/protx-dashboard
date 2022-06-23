@@ -17,11 +17,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
-import {
-  getMetaData,
-  getMaltreatmentLabel,
-  getObservedFeaturesLabel
-} from '../shared/dataUtils';
+import { getMetaData, getMapLegendLabel } from '../shared/dataUtils';
 import getFeatureStyle from '../shared/mapUtils';
 import IntervalColorScale from '../shared/colorsUtils';
 
@@ -44,6 +40,10 @@ function MainMap({
   year,
   unit,
   data,
+  map,
+  setMap,
+  resourceLayers,
+  setResourceLayers,
   selectedGeographicFeature,
   setSelectedGeographicFeature
 }) {
@@ -55,9 +55,7 @@ function MainMap({
   // Leaflet related layers, controls, and map
   const [legendControl, setLegendControl] = useState(null);
   const [layersControl, setLayersControl] = useState(null);
-  const [resourceLayers, setResourceLayers] = useState(null);
   const [texasOutlineLayer, setTexasOutlineLayer] = useState(null);
-  const [map, setMap] = useState(null);
   const [colorScale, setColorScale] = useState(null);
   const [selectedGeoid, setSelectedGeoid] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(6);
@@ -96,7 +94,12 @@ function MainMap({
       if (newZoomLevel >= RESOURCE_ZOOM_LEVEL) {
         currentLayerControl.expand();
         refResourceLayers.current.forEach(resourceLayer => {
-          currentMap.addLayer(resourceLayer.layer);
+          if (
+            resourceLayer.label === 'Child and Youth Services' ||
+            resourceLayer.label === "Cook Children's Locations"
+          ) {
+            currentMap.addLayer(resourceLayer.layer);
+          }
         });
       } else {
         currentLayerControl.collapse();
@@ -196,10 +199,13 @@ function MainMap({
       setColorScale(intervalColorScale);
 
       if (intervalColorScale) {
-        const label =
-          mapType === 'maltreatment'
-            ? getMaltreatmentLabel(maltreatmentTypes, unit)
-            : getObservedFeaturesLabel(observedFeature, data);
+        const label = getMapLegendLabel(
+          mapType,
+          maltreatmentTypes,
+          observedFeature,
+          unit,
+          data
+        );
 
         const newLegend = L.control({ position: 'bottomright' });
 
@@ -293,7 +299,24 @@ function MainMap({
 
       const newResourceLayers = [];
       const currentZoom = map.getZoom();
-      Object.keys(resourcesClusterGroups).forEach(naicsCode => {
+
+      const resourcesClusterGroupsSorted = Object.keys(
+        resourcesClusterGroups
+      ).sort((a, b) => {
+        const matchingMetaA = resourcesMeta.find(
+          r => r.NAICS_CODE === parseInt(a, 10)
+        );
+
+        const matchingMetaB = resourcesMeta.find(
+          r => r.NAICS_CODE === parseInt(b, 10)
+        );
+
+        return matchingMetaA.DESCRIPTION.localeCompare(
+          matchingMetaB.DESCRIPTION
+        );
+      });
+
+      resourcesClusterGroupsSorted.forEach(naicsCode => {
         const markersClusterGroup = resourcesClusterGroups[naicsCode];
         const matchingMeta = resourcesMeta.find(
           r => r.NAICS_CODE === parseInt(naicsCode, 10)
@@ -307,6 +330,7 @@ function MainMap({
           map.addLayer(markersClusterGroup);
         }
         newResourceLayers.push({
+          naicsCode,
           label: layerLabel,
           layer: markersClusterGroup
         });
@@ -434,7 +458,7 @@ function MainMap({
     map
   ]);
 
-  return <div className={styles["map"]} ref={el => (mapContainer = el)} />;
+  return <div className={styles['map']} ref={(el) => (mapContainer = el)} />;
 }
 
 MainMap.propTypes = {
@@ -447,7 +471,17 @@ MainMap.propTypes = {
   selectedGeographicFeature: PropTypes.string.isRequired,
   setSelectedGeographicFeature: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  map: PropTypes.object,
+  setMap: PropTypes.func.isRequired,
+  resourceLayers: PropTypes.arrayOf(PropTypes.object),
+  setResourceLayers: PropTypes.func.isRequired
+};
+
+MainMap.defaultProps = {
+  map: null,
+  resourceLayers: null
 };
 
 export default MainMap;

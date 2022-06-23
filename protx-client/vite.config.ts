@@ -9,14 +9,17 @@ export default defineConfig({
   resolve: {
     alias: {
       _common: resolve(__dirname, 'src/components/_common'),
-      utils: resolve(__dirname, 'src/utils'),
-    },
+      utils: resolve(__dirname, 'src/utils') //,
+      // this is required for the SCSS modules
+      // find: /^~(.*)$/,
+      // replacement: '$1'
+    }
   },
   server: {
-    host: "cep.dev",
+    host: 'cep.dev',
     https: {
       key: readFileSync('../conf/certificates/cep.dev.key'),
       cert: readFileSync('../conf/certificates/cep.dev.crt')
-    },
-  },
-})
+    }
+  }
+});
