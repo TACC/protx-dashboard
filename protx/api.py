@@ -8,18 +8,9 @@ import shapely
 import datetime
 from protx.log import logging
 from protx.decorators import onboarded_user_required
-from protx.utils.db import (
-    resources_db,
-    DEMOGRAPHICS_QUERY,
-    DEMOGRAPHICS_MIN_MAX_QUERY,
-    DEMOGRAPHICS_JSON_STRUCTURE_KEYS,
-    MALTREATMENT_QUERY,
-    MALTREATMENT_MIN_MAX_QUERY,
-    MALTREATMENT_JSON_STRUCTURE_KEYS,
-    SQLALCHEMY_DATABASE_URL,
-    SQLALCHEMY_RESOURCES_DATABASE_URL,
-    create_dict
-)
+from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_DATABASE_URL,
+                            DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
+                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
 from protx.utils import demographics, maltreatment
 from protx.decorators import memoize_db_results
 
@@ -27,15 +18,6 @@ from protx.decorators import memoize_db_results
 api = Namespace("api", description="Data related operations", decorators=[onboarded_user_required])
 
 logger = logging.getLogger(__name__)
-
-
-maltreatment_plot = api.model('MaltreatmentPlot', {
-    "area": fields.String(),
-    "selectedArea": fields.String(),
-    "geoid": fields.String(),
-    "variables": fields.String(),
-    "unit": fields.String()
-})
 
 
 @onboarded_user_required
@@ -53,13 +35,6 @@ class Demographics(Resource):
     def get(self):
         return get_demographics_cached()
 
-
-@onboarded_user_required
-@api.route("/resources")
-class Resources(Resource):
-    @api.doc("get_resources")
-    def get(self):
-        return get_resources_cached()
 
 
 @onboarded_user_required
@@ -82,13 +57,17 @@ class DemographicsDistributionPlotData(Resource):
 
         """
         logger.info("Getting demographic plot data for {} {} {} {}".format(area, geoid, variable, unit))
-        result = demographics.demographics_simple_lineplot_figure(
-            area=area,
-            geoid=geoid,
-            variable=variable,
-            unit=unit
-        )
+        result = demographics.demographics_simple_lineplot_figure(area=area,geoid=geoid,variable=variable,unit=unit)
         return {"result": result}
+
+
+maltreatment_plot = api.model('MaltreatmentPlot', {
+    "area": fields.String(),
+    "selectedArea": fields.String(),
+    "geoid": fields.String(),
+    "variables": fields.String(),
+    "unit": fields.String()
+})
 
 
 @onboarded_user_required
@@ -103,14 +82,15 @@ class MaltreatmentPlotData(Resource):
         geoid = api.payload["geoid"]
         variables = api.payload["variables"]
         unit = api.payload["unit"]
-        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area, selectedArea, unit, variables))  # geoid
-        result = maltreatment.maltreatment_plot_figure(
-            area=area,
-            selectedArea=selectedArea,
-            geoid=geoid,
-            variables=variables,
-            unit=unit
-        )
+        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
+                                                                                                 selectedArea,
+                                                                                                 unit,
+                                                                                                 variables))  # geoid
+        result = maltreatment.maltreatment_plot_figure(area=area,
+                                                       selectedArea=selectedArea,
+                                                       geoid=geoid,
+                                                       variables=variables,
+                                                       unit=unit)
         return {"result": result}
 
 
@@ -135,9 +115,19 @@ class Display(Resource):
             return {"variables": result}
 
 
+@onboarded_user_required
+@api.route("/resources")
+class Resources(Resource):
+    @api.doc("get_resources")
+    def get(self):
+        return get_resources_cached()
+
+
 @memoize_db_results(db_file=demographics.db_name)
 def get_demographics_cached():
-    """Get demographics data"""
+    """Get demographics data
+
+    """
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
         result = connection.execute(DEMOGRAPHICS_QUERY)
@@ -149,7 +139,9 @@ def get_demographics_cached():
 
 @memoize_db_results(db_file=maltreatment.db_name)
 def get_maltreatment_cached():
-    """Get maltreatment data"""
+    """Get maltreatment data
+
+    """
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
         result = connection.execute(MALTREATMENT_QUERY)
