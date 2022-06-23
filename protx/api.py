@@ -84,12 +84,10 @@ class MaltreatmentPlotData(Resource):
         logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
                                                                                                  selectedArea,
                                                                                                  unit,
-                                                                                                 variables))  # geoid
-        result = maltreatment.maltreatment_plot_figure(area=area,
-                                                       selectedArea=selectedArea,
-                                                       geoid=geoid,
-                                                       variables=variables,
-                                                       unit=unit)
+                                                                                                 geoid,
+                                                                                                 variables))
+        result = maltreatment.maltreatment_plot_figure(area=area, selectedArea=selectedArea,
+                                                       geoid=geoid, variables=variables, unit=unit)
         return {"result": result}
 
 
