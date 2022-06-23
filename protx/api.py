@@ -41,7 +41,7 @@ class Demographics(Resource):
 class DownloadResources(Resource):
     @api.doc("get_resources")
     def get(self):
-        # TODO  download_resources needs to be updated for streaming in flask
+        # TODO  download_resources needs to be updated for streaming in flask https://jira.tacc.utexas.edu/browse/COOKS-275
         return {}
 
 
