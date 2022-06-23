@@ -190,6 +190,10 @@ class Echo:
         return value
 
 
+class StreamingHttpResponse:
+    pass
+
+
 @onboarded_user_required
 def download_resources(request, area, geoid):
     """Get display information data"""
