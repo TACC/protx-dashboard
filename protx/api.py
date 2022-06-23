@@ -36,7 +36,6 @@ class Demographics(Resource):
         return get_demographics_cached()
 
 
-
 @onboarded_user_required
 @api.route("/download/<area>/<geoid>/")
 class DownloadResources(Resource):
@@ -57,7 +56,7 @@ class DemographicsDistributionPlotData(Resource):
 
         """
         logger.info("Getting demographic plot data for {} {} {} {}".format(area, geoid, variable, unit))
-        result = demographics.demographics_simple_lineplot_figure(area=area,geoid=geoid,variable=variable,unit=unit)
+        result = demographics.demographics_simple_lineplot_figure(area=area, geoid=geoid, variable=variable, unit=unit)
         return {"result": result}
 
 
@@ -180,6 +179,7 @@ def get_resources_and_display(naics_codes=None):
 def get_resources_cached():
     resources_result, display_result = get_resources_and_display()
     return {"resources": resources_result, "display": display_result}
+
 
 _DOWNLOAD_FIELDS = ["NAME", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
 
