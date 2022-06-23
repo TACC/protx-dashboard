@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask import abort
 from sqlalchemy import create_engine
 import psycopg2
 import geopandas
@@ -161,7 +162,7 @@ def download_resources(request, area, geoid):
 
     if area != "county":
         # currently assuming county and query is hardcoded for "texas_counties"
-        raise ApiException("Only downloading counties is supported")
+        abort(500, "Only downloading counties is supported")
 
     connection = psycopg2.connect(database="postgres", user="postgres", password="postgres", host="protx_geospatial")
     query = "select * from texas_counties where texas_counties.geo_id='{}'".format(geoid)
