@@ -92,37 +92,22 @@ def get_bin_edges(query_return_df, label_template):
         return edges_threshold, bar_centers_threshold, label_fmt_threshold
 
 
-# subplot_mapping_aes = {
-#     'people': {
-#         'AGE17': {'col': 1, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#636EFA'},
-#         'GROUPQ': {'col': 2, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#EF553B'},
-#         'NOHSDP': {'col': 3, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#00CC96'},
-#         'POV': {'col': 4, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#AB63FA'}
-#     },
-#     'hh': {
-#         'SNGPNT': {'col': 6, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#FFA15A'}
-#     },
-#     'hu': {
-#         'CROWD': {'col': 8, 'range': (0, 100), 'label_fmt': not_currency, 'color': '#19D3F3'}
-#     },
-#     'dollars': {
-#         'PCI': {'col': 10, 'range': None, 'label_fmt': currency, 'color': '#FF6692'}
-#     }
-# }
+"""
+Demographics Demo
 
-# ## Demographics demo: response to user selection, time series
-#
-# 1. User selects the "Demographics" tab.
-#
-# 2. User selects the following from drop down menus:
-#
-#     - Area (currently fixed to counties)
-#     - Demographic
-#     - Years (currently fixed to 2019)
-#     - (pending: rate vs percent)
-#
-#
-# 3. User selects an area from the map (must happen after drop-down selection for "area" is made)
+- Response to user selection, time series
+
+1. User selects the "Demographics" tab.
+
+2. User selects the following from drop down menus:
+    - Area (currently fixed to counties)
+    - Demographic
+    - Years (currently fixed to 2019)
+    - (pending: rate vs percent)
+
+3. User selects an area from the map.
+    - Must happen after drop-down selection for "area" is made.
+"""
 
 # ### Select variable across all years
 
