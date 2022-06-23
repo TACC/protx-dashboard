@@ -120,6 +120,20 @@ class Resources(Resource):
         return get_resources_cached()
 
 
+@memoize_db_results(db_file=maltreatment.db_name)
+def get_maltreatment_cached():
+    """Get maltreatment data
+
+    """
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
+    with engine.connect() as connection:
+        result = connection.execute(MALTREATMENT_QUERY)
+        data = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS)
+        result = connection.execute(MALTREATMENT_MIN_MAX_QUERY)
+        meta = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
+        return {"data": data, "meta": meta}
+
+
 @memoize_db_results(db_file=demographics.db_name)
 def get_demographics_cached():
     """Get demographics data
@@ -134,18 +148,10 @@ def get_demographics_cached():
         return {"data": data, "meta": meta}
 
 
-@memoize_db_results(db_file=maltreatment.db_name)
-def get_maltreatment_cached():
-    """Get maltreatment data
-
-    """
-    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
-    with engine.connect() as connection:
-        result = connection.execute(MALTREATMENT_QUERY)
-        data = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS)
-        result = connection.execute(MALTREATMENT_MIN_MAX_QUERY)
-        meta = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
-        return {"data": data, "meta": meta}
+@memoize_db_results(db_file=resources_db)
+def get_resources_cached():
+    resources_result, display_result = get_resources_and_display()
+    return {"resources": resources_result, "display": display_result}
 
 
 @memoize_db_results(db_file=resources_db)
@@ -171,12 +177,6 @@ def get_resources_and_display(naics_codes=None):
         for m in meta:
             display_result.append(dict(m))
     return resources_result, display_result
-
-
-@memoize_db_results(db_file=resources_db)
-def get_resources_cached():
-    resources_result, display_result = get_resources_and_display()
-    return {"resources": resources_result, "display": display_result}
 
 
 _DOWNLOAD_FIELDS = ["NAME", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
