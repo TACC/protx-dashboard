@@ -1,5 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from sqlalchemy import create_engine
+import psycopg2
+import geopandas
 from protx.log import logging
 from protx.decorators import onboarded_user_required
 from protx.utils.db import (

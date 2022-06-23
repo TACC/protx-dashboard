@@ -1,14 +1,32 @@
 import logging
+
 from protx.utils import demographics
 from werkzeug.exceptions import HTTPException
 
 
 logger = logging.getLogger(__name__)
 
-### TODO: single engine for django instance.
+# TODO: single engine for django instance.
 
-cooks_db = '/protx-data/cooks.db'
-resources_db = '/protx-data/resources.db'
+
+MALTREATMENT_QUERY = "SELECT * FROM maltreatment"
+
+MALTREATMENT_MIN_MAX_QUERY = '''
+SELECT
+    m.GEOTYPE,
+    m.UNITS,
+    m.YEAR,
+    m.MALTREATMENT_NAME,
+    MIN(m.value) as MIN,
+    MAX(m.value) as MAX
+FROM maltreatment m
+WHERE m.GEOTYPE='county'
+GROUP BY
+    m.GEOTYPE,
+    m.UNITS,
+    m.YEAR,
+    m.MALTREATMENT_NAME;
+'''
 
 # Support county and tract for https://jira.tacc.utexas.edu/browse/COOKS-135
 DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county'"
@@ -30,33 +48,13 @@ GROUP BY
     d.DEMOGRAPHICS_NAME;
 '''
 
-DEMOGRAPHICS_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "DEMOGRAPHICS_NAME", "GEOID"]
+resources_db = '/protx-data/resources.db'
 
-MALTREATMENT_QUERY = "SELECT * FROM maltreatment"
-
-MALTREATMENT_MIN_MAX_QUERY = '''
-SELECT
-    m.GEOTYPE,
-    m.UNITS,
-    m.YEAR,
-    m.MALTREATMENT_NAME,
-    MIN(m.value) as MIN,
-    MAX(m.value) as MAX
-FROM maltreatment m
-WHERE m.GEOTYPE='county'
-GROUP BY
-    m.GEOTYPE,
-    m.UNITS,
-    m.YEAR,
-    m.MALTREATMENT_NAME;
-'''
+SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(demographics.db_name)
+SQLALCHEMY_RESOURCES_DATABASE_URL = 'sqlite:///{}'.format(resources_db)
 
 MALTREATMENT_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "MALTREATMENT_NAME", "GEOID"]
-
-# SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(demographics.db_name)
-SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(cooks_db)
-
-SQLALCHEMY_RESOURCES_DATABASE_URL = 'sqlite:///{}'.format(resources_db)
+DEMOGRAPHICS_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "DEMOGRAPHICS_NAME", "GEOID"]
 
 
 def create_dict(data, level_keys):
