@@ -1,6 +1,5 @@
 import sqlite3
 import json
-import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import logging
@@ -23,7 +22,8 @@ maltrt_palette = {
 }
 
 """
-TODO: Lookup the {focal_value} string value using the geoid value instead of passing the selectedArea string vaalue from the client. The {focal_value}is used as the DISPLAY_TEXT in the query.
+TODO: Lookup the {focal_value} string value using the geoid value instead of passing the selectedArea string value from
+ the client. The {focal_value}is used as the DISPLAY_TEXT in the query.
 """
 
 maltrt_query = '''
