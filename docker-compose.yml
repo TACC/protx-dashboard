@@ -145,6 +145,7 @@ services:
     environment:
       - FLASK_APP=/app/protx/app.py
       - FLASK_ENV=development
+      - USE_DEV_CLIENT=true
     stdin_open: true
     tty: true
     container_name: protx

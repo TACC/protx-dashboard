@@ -30,3 +30,5 @@ RUN apt-get install -y nodejs
 COPY ./protx-client /app/protx-client
 WORKDIR /app/protx-client
 RUN npm ci && npm run build
+
+WORKDIR /app/protx
