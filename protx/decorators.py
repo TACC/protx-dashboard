@@ -23,14 +23,13 @@ def onboarded_user_required(function):
             r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
             r.raise_for_status()
             json_response = r.json()
-            if json_response['response']['setupComplete']:
-                return function(*args, **kwargs)
-            else:
+            if not json_response['response']['setupComplete']:
                 raise Forbidden
-            return function(*args, **kwargs)
         except Exception as e:
-            logger.info(e)
+            logger.error(e)
             raise Forbidden
+        else:
+            return function(*args, **kwargs)
     return wrapper
 
 
