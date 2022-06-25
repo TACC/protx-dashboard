@@ -8,12 +8,16 @@ app = Flask(__name__)
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-template_folder = "templates" if os.getenv('USE_DEV_CLIENT') else "/app/protx-client/dist/"
-api = Api(app, title="ProTx API", version="1.0", description="Protx")
+use_dev_client = os.getenv('USE_DEV_CLIENT') == 'true'
+
+template_folder = "templates" if use_dev_client else "/app/protx-client/dist/"
+template = "dash.html" if use_dev_client else "index.html"
+
+api = Api(app, title="ProTx API", version="1.0", description="Protx", template_folder=template_folder)
 
 api.add_namespace(protx_api, path="/protx/api")
 
 
 @app.route("/protx/dash/<path:path>")
 def index(path=None):
-    return render_template("dash.html" if os.getenv('USE_DEV_CLIENT') else "index.html")
+    return render_template(template)
