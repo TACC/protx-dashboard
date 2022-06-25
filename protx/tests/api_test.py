@@ -34,7 +34,7 @@ maltreatment_plot_data = {
 @pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
 def test_get_maltreatment_plot(test_client, core_api_workbench_request):
 
-    resp = test_client.put('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
+    resp = test_client.patch('/protx/api/maltreatment-plot-distribution/', json=maltreatment_plot_data)
     assert resp.status_code == 200
     data = resp.get_json()
     assert data["result"]["data"]

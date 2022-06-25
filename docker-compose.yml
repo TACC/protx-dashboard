@@ -159,12 +159,15 @@ services:
     restart: always
 
   protx_geospatial:
-    image: taccwma/protx-geospatial:latest
+    image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
     volumes:
       - type: volume
         source: protx_geospatial_data
         target: /data
-    command: ['echo', 'Container provides data to volume and then exits']
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
     container_name: protx_geospatial
 
 volumes:
