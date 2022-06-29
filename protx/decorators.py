@@ -3,7 +3,7 @@ from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
 import logging
-from flask import request
+from flask import request, redirect
 import requests
 
 logger = logging.getLogger(__name__)
@@ -17,18 +17,15 @@ def onboarded_user_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            # making request directly to core django. alternatively, we could
-            # make the request to the request.get_host() (but then a bit
-            # tricky if it is local development and accessing cep.dev)
             r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
             r.raise_for_status()
             json_response = r.json()
+            redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
+
             if json_response['response']['setupComplete']:
                 return function(*args, **kwargs)
             else:
-                return {
-                    "message": "onboarding incomplete"
-                }, 403
+                return redirect(redirect_url + '/workbench/onboarding')
         except Exception as e:
             logger.info(e)
             raise Forbidden
