@@ -17,6 +17,9 @@ def onboarded_user_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
+            # making request directly to core django. alternatively, we could
+            # make the request to the request.get_host() (but then a bit
+            # tricky if it is local development and accessing cep.dev)
             r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
             r.raise_for_status()
             json_response = r.json()
