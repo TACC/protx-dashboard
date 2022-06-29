@@ -72,7 +72,10 @@ function DashboardDisplay() {
         naicsCode: selectedResourcesNaicsCode
       });
 
-      const downloadResourceHref = `/api/protx/download/${geography}/${selectedGeographicFeature}?${typeQuery}`;
+      let downloadResourceHref = `/protx/api/download/${geography}/${selectedGeographicFeature}/`;
+      if (typeQuery) {
+          downloadResourceHref += `?${typeQuery}`;
+      }
       window.open(downloadResourceHref);
     }
   };

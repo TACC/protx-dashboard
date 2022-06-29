@@ -1,17 +1,12 @@
 from flask_restx import Namespace, Resource, fields
-from flask import abort
+from flask import request
 from sqlalchemy import create_engine
-import psycopg2
-import geopandas
-import csv
-import shapely
-import datetime
 from protx.log import logging
 from protx.decorators import onboarded_user_required
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_DATABASE_URL,
+from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
-from protx.utils import demographics, maltreatment
+from protx.utils import demographics, maltreatment, resources
 from protx.decorators import memoize_db_results
 
 
@@ -40,9 +35,9 @@ class Demographics(Resource):
 @api.route("/download/<area>/<geoid>/")
 class DownloadResources(Resource):
     @api.doc("get_resources")
-    def get(self):
-        # TODO  download_resources needs to be updated for streaming in flask https://jira.tacc.utexas.edu/browse/COOKS-275
-        return {}
+    def get(self, area, geoid):
+        naics_codes = request.args.getlist("naicsCode")
+        return resources.download_resources(naics_codes=naics_codes, area=area, geoid=geoid)
 
 
 @onboarded_user_required
@@ -150,91 +145,5 @@ def get_demographics_cached():
 
 @memoize_db_results(db_file=resources_db)
 def get_resources_cached():
-    resources_result, display_result = get_resources_and_display()
+    resources_result, display_result = resources.get_resources_and_display()
     return {"resources": resources_result, "display": display_result}
-
-
-@memoize_db_results(db_file=resources_db)
-def get_resources_and_display(naics_codes=None):
-    """
-    Get resources and related metadata
-
-    if naics_codes, then limit the resources returned to those
-    that have a NAICS_CODE in naics_codes
-    """
-    engine = create_engine(SQLALCHEMY_RESOURCES_DATABASE_URL, connect_args={'check_same_thread': False})
-    with engine.connect() as connection:
-        resource_query = "SELECT * FROM business_locations"
-        if naics_codes:
-            resource_query += " r WHERE r.NAICS_CODE IN ({})".format(
-                ','.join(['"{}"'.format(code) for code in naics_codes]))
-        resources = connection.execute(resource_query)
-        resources_result = []
-        for r in resources:
-            resources_result.append(dict(r))
-        meta = connection.execute("SELECT * FROM business_menu")
-        display_result = []
-        for m in meta:
-            display_result.append(dict(m))
-    return resources_result, display_result
-
-
-_DOWNLOAD_FIELDS = ["NAME", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
-
-
-class Echo:
-    """An object that implements just the write method of the file-like
-    interface."""
-    def write(self, value):
-        """Write the value by returning it, instead of storing in a buffer."""
-        return value
-
-
-class StreamingHttpResponse:
-    pass
-
-
-@onboarded_user_required
-def download_resources(request, area, geoid):
-    """Get display information data"""
-    selected_naics_codes = request.GET.getlist("naicsCode")
-
-    if area != "county":
-        # currently assuming county and query is hardcoded for "texas_counties"
-        abort(500, "Only downloading counties is supported")
-
-    connection = psycopg2.connect(database="postgres", user="postgres", password="postgres", host="protx_geospatial")
-    query = "select * from texas_counties where texas_counties.geo_id='{}'".format(geoid)
-    county_dataframe = geopandas.GeoDataFrame.from_postgis(query, connection, geom_col='geom')
-    county_name = county_dataframe.iloc[0]["name"]
-    connection.close()
-
-    def generate_csv_rows():
-        # header row
-        yield _DOWNLOAD_FIELDS + ["NAICS_DESCRIPTION"]
-
-        resources_result, display_result = get_resources_and_display(naics_codes=selected_naics_codes)
-
-        naics_to_description = {d["NAICS_CODE"]: d["DESCRIPTION"] for d in display_result}
-
-        for r in resources_result:
-            long = r["LONGITUDE"]
-            lat = r["LATITUDE"]
-            if lat and long:  # some resources are missing position
-                point = shapely.geometry.Point(long, lat)
-                if county_dataframe.contains(point).any():
-                    row = [r[key] for key in _DOWNLOAD_FIELDS] + [naics_to_description[r["NAICS_CODE"]]]
-                    yield row
-
-    pseudo_buffer = Echo()
-    writer = csv.writer(pseudo_buffer)
-    response = StreamingHttpResponse(
-        (writer.writerow(row) for row in generate_csv_rows()),
-        content_type="text/csv",
-    )
-
-    # datetime object containing current date and time
-    timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M")
-    filename = f"{county_name}_{area}_resources_{timestamp}.csv"
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
-    return response
