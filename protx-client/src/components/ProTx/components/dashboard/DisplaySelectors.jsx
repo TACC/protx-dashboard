@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { DropdownSelector } from '_common';
+import { Button } from 'reactstrap';
 import MaltreatmentSelector from './MaltreatmentSelector';
 import { OBSERVED_FEATURES_TOP_FIELDS, SUPPORTED_YEARS } from '../data/meta';
 import styles from './DisplaySelectors.module.scss';
@@ -23,9 +24,10 @@ function RateSelector({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className={`radio-button ${styles["radio-button"]}`}
             type="radio"
             value={valueRadioBtn0}
+            styleName="radio-button"
             checked={isButton0Selected}
             onChange={() => setValue(valueRadioBtn0)}
           />
@@ -36,9 +38,10 @@ function RateSelector({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className={`radio-button ${styles['radio-button']}`}
+            className={`radio-button ${styles["radio-button"]}`}
             type="radio"
             value={valueRadioBtn1}
+            styleName="radio-button"
             checked={isButton1Selected}
             onChange={() => setValue(valueRadioBtn1)}
           />
@@ -77,12 +80,14 @@ function DisplaySelectors({
   observedFeature,
   year,
   unit,
+  selectedGeographicFeature,
   setGeography,
   setMaltreatmentTypes,
   setObservedFeature,
   setYear,
   setUnit,
-  limitToTopObservedFeatureFields
+  limitToTopObservedFeatureFields,
+  downloadResources
 }) {
   const disableGeography = mapType === 'maltreatment' || setGeography === null;
   const disabledYear = mapType === 'observedFeatures' || setYear == null;
@@ -119,9 +124,8 @@ function DisplaySelectors({
         <span className={styles["label"]}>Area</span>
         <DropdownSelector
           value={geography}
-          onChange={event => setGeography(event.target.value)}
-          disabled={disableGeography}
-        >
+          onChange={(event) => setGeography(event.target.value)}
+          disabled={disableGeography}>
           <optgroup label="Select Areas">
             <option value="dfps_region" disabled>
               DFPS Regions
@@ -176,8 +180,7 @@ function DisplaySelectors({
             <span className={styles["label"]}>Demographic</span>
             <DropdownSelector
               value={observedFeature}
-              onChange={event => setObservedFeature(event.target.value)}
-            >
+              onChange={(event) => setObservedFeature(event.target.value)}>
               <optgroup label="Select demographic feature">
                 {display.variables
                   .sort((a, b) => {
@@ -189,7 +192,7 @@ function DisplaySelectors({
                     }
                     return 0;
                   })
-                  .filter(f => {
+                  .filter((f) => {
                     if (limitToTopObservedFeatureFields) {
                       return OBSERVED_FEATURES_TOP_FIELDS.includes(f.NAME);
                     }
@@ -201,7 +204,7 @@ function DisplaySelectors({
                     }
                     return false;
                   })
-                  .map(f => (
+                  .map((f) => (
                     <option key={f.NAME} value={f.NAME}>
                       {f.DISPLAY_TEXT}
                     </option>
@@ -215,17 +218,27 @@ function DisplaySelectors({
         <span className={styles["label"]}>Years</span>
         <DropdownSelector
           value={year}
-          onChange={event => setYear(event.target.value)}
-          disabled={disabledYear}
-        >
+          onChange={(event) => setYear(event.target.value)}
+          disabled={disabledYear}>
           <optgroup label="Select year" />
-          {SUPPORTED_YEARS.map(y => (
+          {SUPPORTED_YEARS.map((y) => (
             <option key={y} value={y}>
               {y}
             </option>
           ))}
         </DropdownSelector>
       </div>
+
+      {selectedGeographicFeature && (
+        <Button
+          onClick={downloadResources}
+          color="primary"
+          size="sm"
+          styleName="download-btn"
+          download>
+          Download
+        </Button>
+      )}
     </div>
   );
 }
@@ -237,12 +250,14 @@ DisplaySelectors.propTypes = {
   observedFeature: PropTypes.string.isRequired,
   year: PropTypes.string.isRequired,
   unit: PropTypes.string.isRequired,
+  selectedGeographicFeature: PropTypes.string.isRequired,
   setGeography: PropTypes.func,
   setMaltreatmentTypes: PropTypes.func.isRequired,
   setObservedFeature: PropTypes.func.isRequired,
   setYear: PropTypes.func,
   setUnit: PropTypes.func,
-  limitToTopObservedFeatureFields: PropTypes.bool
+  limitToTopObservedFeatureFields: PropTypes.bool,
+  downloadResources: PropTypes.func.isRequired
 };
 
 DisplaySelectors.defaultProps = {

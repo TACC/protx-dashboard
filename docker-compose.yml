@@ -18,6 +18,7 @@ services:
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./conf/nginx/protx.location.conf:/etc/nginx/conf.d/protx.location.conf
       - ./conf/nginx/data.location.conf:/etc/nginx/conf.d/data.location.conf
+      - ./conf/nginx/assets.location.conf:/etc/nginx/conf.d/assets.location.conf
       - ./conf/uwsgi/uwsgi_params:/etc/nginx/uwsgi_params
       - ./conf/certificates/dhparam.pem:/etc/ssl/dhparam.pem
       - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
@@ -28,6 +29,7 @@ services:
       - /var/www/portal/portal/static:/var/www/portal/portal/static
       - protx_geospatial_data:/protx-data/static
       - ./protx-client:/var/www/portal/protx-client
+      - protx_app_distribution:/protx-app-distribution
     ports:
       - 80:80
       - 443:443
@@ -137,6 +139,9 @@ services:
     volumes:
       - ./protx:/app/protx
       - ~/protx-data:/protx-data
+      - type: volume
+        source: protx_app_distribution
+        target: /app/protx-client/dist/
     ports:
       - 8000:8000
     dns:
@@ -145,6 +150,7 @@ services:
     environment:
       - FLASK_APP=/app/protx/app.py
       - FLASK_ENV=development
+      - USE_DEV_CLIENT=true #  if false, use built-in-container client
     stdin_open: true
     tty: true
     container_name: protx
@@ -153,12 +159,15 @@ services:
     restart: always
 
   protx_geospatial:
-    image: taccwma/protx-geospatial:latest
+    image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
     volumes:
       - type: volume
         source: protx_geospatial_data
         target: /data
-    command: ['echo', 'Container provides data to volume and then exits']
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
     container_name: protx_geospatial
 
 volumes:
@@ -168,3 +177,4 @@ volumes:
   core_portal_postgres_data:
   core_cms_postgres_data:
   protx_geospatial_data:
+  protx_app_distribution: # can be used for testing client built-in-container locally

@@ -30,8 +30,10 @@ def onboarded_user_required(function):
             else:
                 return redirect(redirect_url + '/workbench/onboarding')
         except Exception as e:
-            logger.info(e)
+            logger.error(e)
             raise Forbidden
+        else:
+            return function(*args, **kwargs)
     return wrapper
 
 
