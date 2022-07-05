@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
 
-def is_setup_complete(function, redirect_onboarding):
+def is_setup_complete(function, redirect_onboarding, *args, **kwargs):
     try:
         # making request directly to core django. alternatively, we could
         # make the request to the request.get_host() (but then a bit
@@ -36,7 +36,7 @@ def onboarded_user_setup_complete(function):
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        return is_setup_complete(function, True)
+        return is_setup_complete(function, True, *args, **kwargs)
     return wrapper
 
 
@@ -45,7 +45,7 @@ def onboarded_user_required(function):
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        return is_setup_complete(function, False)
+        return is_setup_complete(function, False, *args, **kwargs)
     return wrapper
 
 
