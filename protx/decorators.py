@@ -3,7 +3,7 @@ from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
 import logging
-from flask import request, redirect, url_for
+from flask import request, redirect
 import requests
 
 logger = logging.getLogger(__name__)
