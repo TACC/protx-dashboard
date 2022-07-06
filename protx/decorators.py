@@ -10,33 +10,31 @@ logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
 
-def is_setup_complete(function, redirect_onboarding, *args, **kwargs):
-    try:
-        # making request directly to core django. alternatively, we could
-        # make the request to the request.get_host() (but then a bit
-        # tricky if it is local development and accessing cep.dev)
-        r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
-        r.raise_for_status()
-        json_response = r.json()
-        if json_response['response']['setupComplete']:
-            return function(*args, **kwargs)
-        else:
-            if redirect_onboarding:
-                redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
-                return redirect(redirect_url + '/workbench/onboarding')
-            else:
-                raise Forbidden
 
-    except Exception as e:
-        logger.error(e)
-        raise Forbidden
+def is_setup_complete() -> bool:
+    # making request directly to core django. alternatively, we could
+    # make the request to the request.get_host() (but then a bit
+    # tricky if it is local development and accessing cep.dev)
+    r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
+    r.raise_for_status()
+    json_response = r.json()
+    return json_response['response']['setupComplete']
+
 
 def onboarded_user_setup_complete(function):
     """Decorator requires user to have setup_completed or redirects.
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        return is_setup_complete(function, True, *args, **kwargs)
+        try:
+            if is_setup_complete():
+                return function(*args, **kwargs)
+            else:
+                redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
+                return redirect(redirect_url + '/workbench/onboarding')
+        except Exception as e:
+            logger.error(e)
+            raise Forbidden
     return wrapper
 
 
@@ -45,7 +43,14 @@ def onboarded_user_required(function):
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        return is_setup_complete(function, False, *args, **kwargs)
+        try:
+            if is_setup_complete():
+                return function(*args, **kwargs)
+            else:
+                raise Forbidden
+        except Exception as e:
+            logger.error(e)
+            raise Forbidden
     return wrapper
 
 
