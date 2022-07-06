@@ -27,14 +27,14 @@ def onboarded_user_setup_complete(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            if is_setup_complete():
-                return function(*args, **kwargs)
-            else:
+            if not is_setup_complete():
                 redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
                 return redirect(redirect_url + '/workbench/onboarding')
         except Exception as e:
             logger.error(e)
             raise Forbidden
+        else:
+          return function(*args, **kwargs)
     return wrapper
 
 
@@ -44,13 +44,13 @@ def onboarded_user_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            if is_setup_complete():
-                return function(*args, **kwargs)
-            else:
+            if not is_setup_complete():
                 raise Forbidden
         except Exception as e:
             logger.error(e)
             raise Forbidden
+        else:
+          return function(*args, **kwargs)
     return wrapper
 
 
