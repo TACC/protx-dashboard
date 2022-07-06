@@ -34,7 +34,7 @@ def onboarded_user_setup_complete(function):
             logger.error(e)
             raise Forbidden
         else:
-          return function(*args, **kwargs)
+            return function(*args, **kwargs)
     return wrapper
 
 
@@ -50,14 +50,14 @@ def onboarded_user_required(function):
             logger.error(e)
             raise Forbidden
         else:
-          return function(*args, **kwargs)
+            return function(*args, **kwargs)
     return wrapper
 
 
 def check_db_timestamp_and_cache_validity(db_file):
     """ Check if cache should be updated as data db file has been modified
 
-        :param str db_file: path to file where results are derived.
+    :param str db_file: path to file where results are derived.
     """
     def decorator(f):
         @wraps(f)
