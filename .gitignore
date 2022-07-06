@@ -12,6 +12,12 @@ nohup.out
 *settings_custom.py
 *settings_local.py
 
+docker_repo.var
+
+#ignore portal.env
+.env
+portal.env
+
 # no node modules
 node_modules/
 
@@ -47,8 +53,6 @@ target/
 /server/conf/docker/logs.txt
 
 # Custom
-
-docker_repo.var
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
