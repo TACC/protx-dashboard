@@ -142,16 +142,19 @@ services:
     container_name: core_portal_workers
 
   protx:
-    image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG}
-    # build:
-    #   context: .
-    #   dockerfile: ./Dockerfile
+    # Uncomment this line to use an image defined in .env file.
+    # image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG}
+    # Comment out the build block if using an image.
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     volumes:
-      # - ./protx:/app/protx
       - ~/protx-data:/protx-data
-      # - type: volume
-      #   source: protx_app_distribution
-      #   target: /app/protx-client/dist/
+      # Comment out these two volumes if using an image.
+      - ./protx:/app/protx
+      - type: volume
+        source: protx_app_distribution
+        target: /app/protx-client/dist/
     ports:
       - 8000:8000
     dns:
@@ -159,7 +162,7 @@ services:
       - 8.8.4.4
     environment:
       - FLASK_APP=/app/protx/app.py
-      - FLASK_ENV=production  #development
+      - FLASK_ENV=development
       - USE_DEV_CLIENT=false #  if false, use the pre-built-container client.
     stdin_open: true
     tty: true
@@ -187,4 +190,4 @@ volumes:
   core_portal_postgres_data:
   core_cms_postgres_data:
   protx_geospatial_data:
-  protx_app_distribution: # can be used for testing client built-in-container locally
+  protx_app_distribution: # Can be used for testing client built-in-container locally. Comment out if testing an image.
