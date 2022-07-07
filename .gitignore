@@ -14,9 +14,6 @@ nohup.out
 
 docker_repo.var
 
-#ignore portal.env
-.env
-portal.env
 
 # no node modules
 node_modules/

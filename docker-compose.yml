@@ -108,7 +108,7 @@ services:
     # ** matching deployed configurations. Be aware there is no autoreload for local
     # ** development with this enabled.
     # command: 'daphne -b 0.0.0.0 -p 9000 -e ssl:443:privateKey=/etc/ssl/private/portal.key:certKey=/etc/ssl/certs/portal.cer --root-path=/srv/www/portal/server --access-log - --proxy-headers portal.asgi:application'
-    command: 'python manage.py runserver 0.0.0.0:9000'
+    # command: 'python manage.py runserver 0.0.0.0:9000'
 
   django:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
@@ -136,8 +136,8 @@ services:
     volumes:
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
       - ./conf/portal/settings_custom.py:/srv/www/portal/server/portal/settings/settings_custom.py
-      - /var/www/portal/portal/media:/srv/www/portal/server/media
-      - /var/www/portal/portal/static:/srv/www/portal/server/static
+      # - /var/www/portal/portal/media:/srv/www/portal/server/media
+      # - /var/www/portal/portal/static:/srv/www/portal/server/static
     command: "celery -A portal worker -Q default,indexing,files,api,onboard --concurrency=10"
     container_name: core_portal_workers
 
@@ -150,7 +150,6 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ~/protx-data:/protx-data
-      # Comment out these two volumes if using an image.
       - ./protx:/app/protx
       - type: volume
         source: protx_app_distribution
@@ -163,7 +162,7 @@ services:
     environment:
       - FLASK_APP=/app/protx/app.py
       - FLASK_ENV=development
-      - USE_DEV_CLIENT=false #  if false, use the pre-built-container client.
+      - USE_DEV_CLIENT=true  # if false, use the pre-built-container client.
     stdin_open: true
     tty: true
     container_name: protx
@@ -190,4 +189,4 @@ volumes:
   core_portal_postgres_data:
   core_cms_postgres_data:
   protx_geospatial_data:
-  protx_app_distribution: # Can be used for testing client built-in-container locally. Comment out if testing an image.
+  protx_app_distribution: # Used to test the pre-built-container client locally.
