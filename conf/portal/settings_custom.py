@@ -170,5 +170,5 @@ _WORKBENCH_SETTINGS = {
     "makePublic": False,
     "hideApps": True,
     "hideDataFiles": True,
-    "onboardingCompleteRedirect": '/protx/'
+    "onboardingCompleteRedirect": '/analytics'
 }

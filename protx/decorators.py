@@ -3,12 +3,40 @@ from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
 import logging
-from flask import request
+from flask import request, redirect
 import requests
 
 logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
+
+
+def is_setup_complete() -> bool:
+    # making request directly to core django. alternatively, we could
+    # make the request to the request.get_host() (but then a bit
+    # tricky if it is local development and accessing cep.dev)
+    r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
+    r.raise_for_status()
+    json_response = r.json()
+    return json_response['response']['setupComplete']
+
+
+def onboarded_user_setup_complete(function):
+    """Decorator requires user to have setup_completed or redirects.
+    """
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        try:
+            if not is_setup_complete():
+                redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
+                return redirect(redirect_url + '/workbench/onboarding')
+        except Exception as e:
+            # User isn't logged in which is unexpected as pages (which contain this SPA as an iframe) are controlled by CMS which should require a login
+            logger.error(e)
+            raise Forbidden
+        else:
+            return function(*args, **kwargs)
+    return wrapper
 
 
 def onboarded_user_required(function):
@@ -17,13 +45,7 @@ def onboarded_user_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            # making request directly to core django. alternatively, we could
-            # make the request to the request.get_host() (but then a bit
-            # tricky if it is local development and accessing cep.dev)
-            r = requests.get("http://django:6000/api/workbench/", cookies=request.cookies)
-            r.raise_for_status()
-            json_response = r.json()
-            if not json_response['response']['setupComplete']:
+            if not is_setup_complete():
                 raise Forbidden
         except Exception as e:
             logger.error(e)
@@ -36,7 +58,7 @@ def onboarded_user_required(function):
 def check_db_timestamp_and_cache_validity(db_file):
     """ Check if cache should be updated as data db file has been modified
 
-        :param str db_file: path to file where results are derived.
+    :param str db_file: path to file where results are derived.
     """
     def decorator(f):
         @wraps(f)
