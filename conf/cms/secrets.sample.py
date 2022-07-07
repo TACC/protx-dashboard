@@ -1,4 +1,4 @@
-LOGIN_REDIRECT_URL = "/demographics"
+LOGIN_REDIRECT_URL = "/analytics"
 
 ########################
 # DJANGO SETTINGS
