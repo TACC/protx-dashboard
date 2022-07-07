@@ -31,6 +31,7 @@ def onboarded_user_setup_complete(function):
                 redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
                 return redirect(redirect_url + '/workbench/onboarding')
         except Exception as e:
+            # User isn't logged in which is unexpected as pages (which contain this SPA as an iframe) are controlled by CMS which should require a login
             logger.error(e)
             raise Forbidden
         else:
