@@ -10,12 +10,17 @@ logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
 
+def get_host():
+    host = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
+    return host
 
 def is_setup_complete() -> bool:
-    # making request directly to core django. alternatively, we could
-    # make the request to the request.get_host() (but then a bit
-    # tricky if it is local development and accessing cep.dev)
-    r = requests.get("http://core:6000/api/workbench/", cookies=request.cookies)
+    host = get_host()
+    if host.endswith("cep.dev"):
+        # unable to access cep.dev (as actual site on web) so using docker service instead.  Note that staging/prod are
+        # unable to use the service directly (https-requirement for uwsgi configs?)
+        host = "http://core:6000/"
+    r = requests.get(host + "api/workbench/", cookies=request.cookies)
     r.raise_for_status()
     json_response = r.json()
     if 'setupComplete' in json_response['response']:
@@ -38,8 +43,7 @@ def onboarded_user_setup_complete(function):
     def wrapper(*args, **kwargs):
         try:
             if not is_setup_complete():
-                redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
-                return redirect(redirect_url + '/workbench/onboarding')
+                return redirect(get_host() + '/workbench/onboarding')
         except Exception as e:
             logger.error(e)
             raise Forbidden
