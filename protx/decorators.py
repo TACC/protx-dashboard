@@ -18,7 +18,17 @@ def is_setup_complete() -> bool:
     r = requests.get("http://core:6000/api/workbench/", cookies=request.cookies)
     r.raise_for_status()
     json_response = r.json()
-    return json_response['response']['setupComplete']
+    if 'setupComplete' in json_response['response']:
+        return json_response['response']['setupComplete']
+    else:
+        # User isn't logged in which is unexpected as pages (which contain this SPA as an iframe)
+        # are controlled by CMS which should require a login
+        #
+        # If if the future, CMS are no longer configured to keep pages behind login, then we should refactor
+        # this function and `onboarded_user_setup_complete` to redirect to login instead of /workbench/onboarding if
+        # user isn't logged in.  See https://jira.tacc.utexas.edu/browse/COOKS-279
+        logger.error("User not logged in which is unexpected as CMS should be blocking pages")
+        return False
 
 
 def onboarded_user_setup_complete(function):
@@ -31,7 +41,6 @@ def onboarded_user_setup_complete(function):
                 redirect_url = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
                 return redirect(redirect_url + '/workbench/onboarding')
         except Exception as e:
-            # User isn't logged in which is unexpected as pages (which contain this SPA as an iframe) are controlled by CMS which should require a login
             logger.error(e)
             raise Forbidden
         else:
