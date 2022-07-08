@@ -10,9 +10,11 @@ logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache")
 
+
 def get_host():
     host = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
     return host
+
 
 def is_setup_complete() -> bool:
     host = get_host()
