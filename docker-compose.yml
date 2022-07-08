@@ -94,7 +94,8 @@ services:
     container_name: core_portal_nginx
     depends_on:
       - cms
-      - django
+      - core
+      - protx
 
   websockets:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
@@ -110,7 +111,7 @@ services:
     # command: 'daphne -b 0.0.0.0 -p 9000 -e ssl:443:privateKey=/etc/ssl/private/portal.key:certKey=/etc/ssl/certs/portal.cer --root-path=/srv/www/portal/server --access-log - --proxy-headers portal.asgi:application'
     command: 'python manage.py runserver 0.0.0.0:9000'
 
-  django:
+  core:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
     volumes:
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
