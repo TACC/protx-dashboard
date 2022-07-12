@@ -5,6 +5,8 @@ import os
 import logging
 from flask import request, redirect
 import requests
+from urllib.parse import urljoin
+
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ def is_setup_complete() -> bool:
         # unable to access cep.dev (as actual site on web) so using docker service instead.  Note that staging/prod are
         # unable to use the service directly (https-requirement for uwsgi configs?)
         host = "http://core:6000/"
-    r = requests.get(host + "/api/workbench/", cookies=request.cookies)
+    r = requests.get(urljoin(host, "/api/workbench"), cookies=request.cookies)
     r.raise_for_status()
     json_response = r.json()
     if 'setupComplete' in json_response['response']:
