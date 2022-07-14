@@ -28,8 +28,7 @@ GROUP BY
     m.MALTREATMENT_NAME;
 '''
 
-# Support county and tract for https://jira.tacc.utexas.edu/browse/COOKS-135
-DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county'"
+DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'"
 
 DEMOGRAPHICS_MIN_MAX_QUERY = '''
 SELECT
@@ -40,7 +39,7 @@ SELECT
     MIN(d.value) AS MIN,
     MAX(d.value) AS MAX
 FROM demographics d
-WHERE d.GEOTYPE='county'
+WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'
 GROUP BY
     d.GEOTYPE,
     d.UNITS,
@@ -85,7 +84,7 @@ def create_dict(data, level_keys):
         if "MAX" in row:
             value_key = row["UNITS"]
             if row["MIN"] is None or row["MAX"] is None:
-                logger.error("max/min problem with this row: {}".format(row))
+                logger.debug("max/min problem with this row: {}".format(row))
                 continue
             value = {key.lower(): int(row[key]) if value_key == "count" else row[key] for key in ["MAX", "MIN"]}
         elif "VALUE" in row:
