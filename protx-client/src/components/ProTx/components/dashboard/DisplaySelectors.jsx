@@ -132,8 +132,6 @@ function DisplaySelectors({
             </option>
             <option
               value="tract"
-              disabled
-              /* # Support county and tract for https://jira.tacc.utexas.edu/browse/COOKS-135 */
             >
               Census Tracts
             </option>

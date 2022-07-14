@@ -176,6 +176,7 @@ function DashboardDisplay() {
                   setMaltreatmentTypes={setMaltreatmentTypes}
                   setObservedFeature={setObservedFeature}
                   setUnit={setUnit}
+                  setGeography={setGeography}
                   downloadResources={handleDownloadResources}
                 />
                 <div className="display-layout-root">
