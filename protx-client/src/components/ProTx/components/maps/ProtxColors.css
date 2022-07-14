@@ -12,17 +12,7 @@
 
 /* areas */
 .display-layout-map {
-    /* Wes' Old Colors */
-    /*
-    --hue1: #EAF6C7;
-    --hue2: #D4EC8E;
-    --hue3: #A9C47F;
-    --hue4: #007A53;
-    --hue5: #003B5C;
-    --hue6: #001E2E;
-    */
-
-    /* Francesca's New Colors */
+    /* COOKS-251: Updated-Map-Colors-Francescas-Inputs  */
     --hue1: #eff5d6;
     --hue2: #c6e8b0;
     --hue3: #8fcca1;
