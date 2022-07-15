@@ -43,7 +43,7 @@ class Echo:
 
 def download_resources(naics_codes, area, geoid):
     """Get resources csv"""
-    download_fields = ["NAME", "STREET". "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "HOVER_DESCRIPTION", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
+    download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
 
     if area != "county":
         # currently assuming county and query is hardcoded for "texas_counties"
