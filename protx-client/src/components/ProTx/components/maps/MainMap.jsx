@@ -407,6 +407,8 @@ function MainMap({
             // Simple zoom to point clicked and having fixed zoom level for counties
             // See https://jira.tacc.utexas.edu/browse/COOKS-54
             map.setView(e.latlng, 9);
+          } else {
+            map.setView(e.latlng, 11);
           }
         } else {
           updateSelectedGeographicFeature('');
