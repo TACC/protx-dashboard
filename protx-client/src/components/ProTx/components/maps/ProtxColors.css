@@ -12,18 +12,13 @@
 
 /* areas */
 .display-layout-map {
-    --hue1: #EAF6C7;
-    /* (new) between "Light lime" and white */
-    --hue2: #D4EC8E;
-    /* "Light lime" */
-    --hue3: #A9C47F;
-    /* "Light green" */
-    --hue4: #007A53;
-    /* "Cook Children’s green" */
-    --hue5: #003B5C;
-    /* "Cook Children’s blue" */
-    --hue6: #001E2E;
-    /* (new) between "Cook Children’s green" and black */
+    /* COOKS-251: Updated-Map-Colors-Francescas-Inputs  */
+    --hue1: #eff5d6;
+    --hue2: #c6e8b0;
+    --hue3: #8fcca1;
+    --hue4: #62ad9c;
+    --hue5: #3c7d8a;
+    --hue6: #26547a;
 }
 
 .leaflet-tile-pane > *:nth-child(2) path[fill="#ffffd4"] {
