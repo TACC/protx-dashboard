@@ -23,7 +23,7 @@ def is_setup_complete() -> bool:
     if host.endswith("cep.dev"):
         # unable to access cep.dev (as actual site on web) so using docker service instead.  Note that staging/prod are
         # unable to use the service directly (https-requirement for uwsgi configs?)
-        host = "http://core:6000/"
+        host = "http://core:6000"
     r = requests.get(urljoin(host, "/api/workbench"), cookies=request.cookies)
     r.raise_for_status()
     json_response = r.json()
@@ -84,7 +84,7 @@ def check_db_timestamp_and_cache_validity(db_file):
             cached_data_db_timestamp = cache.get(db_file)
             if cached_data_db_timestamp != current_data_db_timestamp:
                 logger.info(f"Removing any cache related to file '{db_file}' as the derived file's "
-                            f"modified time {db_file} != cached modified time {cached_data_db_timestamp}.")
+                            f"modified time {current_data_db_timestamp} != cached modified time {cached_data_db_timestamp}.")
                 cache.evict(db_file)
                 cache.set(db_file, current_data_db_timestamp)
             return f(*args, **kwargs)
