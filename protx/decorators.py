@@ -84,7 +84,7 @@ def check_db_timestamp_and_cache_validity(db_file):
             cached_data_db_timestamp = cache.get(db_file)
             if cached_data_db_timestamp != current_data_db_timestamp:
                 logger.info(f"Removing any cache related to file '{db_file}' as the derived file's "
-                            f"modified time {db_file} != cached modified time {cached_data_db_timestamp}.")
+                            f"modified time {current_data_db_timestamp} != cached modified time {cached_data_db_timestamp}.")
                 cache.evict(db_file)
                 cache.set(db_file, current_data_db_timestamp)
             return f(*args, **kwargs)
