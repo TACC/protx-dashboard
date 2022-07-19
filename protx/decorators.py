@@ -10,7 +10,7 @@ from urllib.parse import urljoin
 
 logger = logging.getLogger(__name__)
 
-cache = Cache("database_cache")
+cache = Cache("database_cache", disk_min_file_size=0, eviction_policy="none")
 
 
 def get_host():
@@ -82,13 +82,10 @@ def check_db_timestamp_and_cache_validity(db_file):
         def wrapper(*args, **kwargs):
             current_data_db_timestamp = os.path.getmtime(db_file)
             cached_data_db_timestamp = cache.get(db_file)
-            logger.debug("Getting cache results for {}: current file's modified time {}"
-                         " vs cached modified time {}.".format(db_file,
-                                                               current_data_db_timestamp,
-                                                               cached_data_db_timestamp))
             if cached_data_db_timestamp != current_data_db_timestamp:
-                logger.info("Removing cache related to file '{}' as it has been updated.".format(db_file))
-                cache.clear()
+                logger.info(f"Removing any cache related to file '{db_file}' as the derived file's "
+                            f"modified time {current_data_db_timestamp} != cached modified time {cached_data_db_timestamp}.")
+                cache.evict(db_file)
                 cache.set(db_file, current_data_db_timestamp)
             return f(*args, **kwargs)
         return wrapper
@@ -110,7 +107,7 @@ def memoize_db_results(db_file):
 
     def decorator(f):
         @check_db_timestamp_and_cache_validity(db_file)
-        @cache.memoize()
+        @cache.memoize(tag=db_file)
         @wraps(f)
         def wrapper(*args, **kwargs):
             return f(*args, **kwargs)
