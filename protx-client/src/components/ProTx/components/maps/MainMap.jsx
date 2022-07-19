@@ -128,6 +128,7 @@ function MainMap({
     const texasBounds = texasOutlineGeojson.getBounds(texasOutlineGeojson);
 
     const newMap = L.map(mapContainer, {
+      keyboard: false,
       zoom: zoomLevel,
       minZoom: 6,
       maxZoom: 16,
