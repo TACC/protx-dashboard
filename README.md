@@ -31,6 +31,13 @@ Followed by:
     docker exec core_portal_cms python3 manage.py migrate
     docker exec core_portal_cms python3 manage.py collectstatic --noinput
 ```
+
+To run queries ahead-of-time (needed whenever databases have changed) so that they are cached and do
+not exceed the timeout:
+```
+docker exec -it protx python3 scripts/run_queries.py
+```
+
 Note: CEP portal is not completely configured and is missing steps for ES etc
 
 ### Configure pages/iframe

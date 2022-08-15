@@ -24,7 +24,7 @@ export const OBSERVED_FEATURES_TOP_FIELDS = [
 // TOOO: we should correct vector files to all be the same thing (GEOID)
 export const GEOID_KEY = {
   cbsa: 'GEOID_left',
-  census_tract: 'GEOID',
+  tract: 'GEOID',
   county: 'GEO_ID',
   dfps_region: 'Sheet1__Re',
   urban_area: 'GEOID10',

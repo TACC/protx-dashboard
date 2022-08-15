@@ -171,6 +171,7 @@ services:
 
   protx_geospatial:
     image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
+    pull_policy: always
     volumes:
       - type: volume
         source: protx_geospatial_data
