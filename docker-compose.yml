@@ -150,9 +150,6 @@ services:
     volumes:
       - ~/protx-data:/protx-data
       - ./protx:/app/protx
-      - type: volume
-        source: protx_app_distribution
-        target: /app/protx-client/dist/
     ports:
       - 8000:8000
     dns:
@@ -172,15 +169,25 @@ services:
   protx_geospatial:
     image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
     pull_policy: always
-    volumes:
-      - type: volume
-        source: protx_geospatial_data
-        target: /data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
     container_name: protx_geospatial
+
+  protx_setup_client_app_volume:
+    image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG}
+    pull_policy: always
+    volumes:
+      - protx_app_distribution:/app_dist
+    command: cp -rf /app/protx-client/dist/. /app_dist
+
+  protx_geospatial_setup_volumes:
+    image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
+    pull_policy: always
+    volumes:
+      - protx_geospatial_data:/geospatial_data
+    command: cp -ru /data/. /geospatial_data
 
 volumes:
   core_portal_redis_data:
