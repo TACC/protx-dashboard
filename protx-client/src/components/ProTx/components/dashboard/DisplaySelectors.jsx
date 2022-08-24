@@ -127,7 +127,7 @@ function DisplaySelectors({
           onChange={(event) => setGeography(event.target.value)}
           disabled={disableGeography}>
           <optgroup label="Select Areas">
-            <option value="dfps_region" disabled>
+            <option value="dfps_region">
               DFPS Regions
             </option>
             <option
