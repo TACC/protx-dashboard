@@ -136,15 +136,6 @@ function DisplaySelectors({
               Census Tracts
             </option>
             <option value="county">Counties</option>
-            <option value="cbsa" disabled>
-              Core base statistical areas
-            </option>
-            <option value="urban_area" disabled>
-              Urban Areas
-            </option>
-            <option value="zcta" disabled>
-              Zip Codes
-            </option>
           </optgroup>
         </DropdownSelector>
       </div>
