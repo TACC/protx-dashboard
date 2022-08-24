@@ -157,7 +157,7 @@ services:
     environment:
       - FLASK_APP=/app/protx/app.py
       - FLASK_ENV=development
-      - USE_DEV_CLIENT=true  # if false, use the pre-built-container client. set to False if using an image (4/4)
+      - USE_DEV_CLIENT=true  # if false, use the pre-built-container client. set to false if using an image (4/4)
     stdin_open: true
     tty: true
     container_name: protx
