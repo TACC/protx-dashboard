@@ -28,7 +28,7 @@ GROUP BY
     m.MALTREATMENT_NAME;
 '''
 
-DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'"
+DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract' OR d.GEOTYPE='dfps_region'"
 
 DEMOGRAPHICS_MIN_MAX_QUERY = '''
 SELECT
@@ -39,7 +39,7 @@ SELECT
     MIN(d.value) AS MIN,
     MAX(d.value) AS MAX
 FROM demographics d
-WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'
+WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract' OR d.GEOTYPE='dfps_region'
 GROUP BY
     d.GEOTYPE,
     d.UNITS,
