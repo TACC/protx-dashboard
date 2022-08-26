@@ -136,6 +136,8 @@ function DisplaySelectors({
               Census Tracts
             </option>
             <option value="county">Counties</option>
+          </optgroup>
+          <optgroup label="Not currently available">
             <option value="cbsa" disabled>
               Core base statistical areas
             </option>
