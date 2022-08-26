@@ -141,18 +141,14 @@ services:
     container_name: core_portal_workers
 
   protx:
-    # Uncomment this line to use an image defined in .env file.
-    # image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG}
-    # Comment out the build block if using an image.
+    # image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG} # Uncomment this line to use an image defined in .env file. (1/4)
+    # Comment out the build block if using an image. (2/4)
     build:
       context: .
       dockerfile: ./Dockerfile
     volumes:
       - ~/protx-data:/protx-data
-      - ./protx:/app/protx
-      - type: volume
-        source: protx_app_distribution
-        target: /app/protx-client/dist/
+      - ./protx:/app/protx # Comment out this line if using an image (3/4).
     ports:
       - 8000:8000
     dns:
@@ -161,7 +157,7 @@ services:
     environment:
       - FLASK_APP=/app/protx/app.py
       - FLASK_ENV=development
-      - USE_DEV_CLIENT=true  # if false, use the pre-built-container client.
+      - USE_DEV_CLIENT=true  # if false, use the pre-built-container client. set to false if using an image (4/4)
     stdin_open: true
     tty: true
     container_name: protx
@@ -172,15 +168,25 @@ services:
   protx_geospatial:
     image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
     pull_policy: always
-    volumes:
-      - type: volume
-        source: protx_geospatial_data
-        target: /data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
     container_name: protx_geospatial
+
+  protx_setup_client_app_volume:
+    image: ${PROTX_DASHBOARD_IMAGE}:${PROTX_DASHBOARD_TAG}
+    pull_policy: always
+    volumes:
+      - protx_app_distribution:/app_dist
+    command: cp -rf /app/protx-client/dist/. /app_dist
+
+  protx_geospatial_setup_volumes:
+    image: taccwma/protx-geospatial:${PROTX_GEOSPATIAL_TAG}
+    pull_policy: always
+    volumes:
+      - protx_geospatial_data:/geospatial_data
+    command: cp -ru /data/. /geospatial_data
 
 volumes:
   core_portal_redis_data:
