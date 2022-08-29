@@ -59,7 +59,7 @@ def download_resources(naics_codes, area, geoid):
     query = f"select * from {area_table} where {area_table}.{area_id_key}='{geoid}'"
     area_dataframe = geopandas.GeoDataFrame.from_postgis(query, connection, geom_col='geom')
     area_name = area_dataframe.iloc[0][name_key]
-    area_name = area_name.replace(".", "_") # tracts have form forms like '2107.08'
+    area_name = area_name.replace(".", "_")  # tracts have the form like '2107.08'
 
     connection.close()
 
