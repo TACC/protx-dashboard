@@ -111,3 +111,16 @@ def memoize_db_results(db_file):
             return f(*args, **kwargs)
         return wrapper
     return decorator
+
+
+def create_compressed_json():
+    """Take functions returned dictionary and convert to compressed json
+
+    """
+
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator

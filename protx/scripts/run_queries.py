@@ -1,4 +1,4 @@
-from protx.api import get_maltreatment_cached, get_demographics_cached, get_resources_cached
+from protx.api import get_maltreatment_cached, get_demographics_cached_and_compressed, get_resources_cached_and_compressed
 import time
 
 
@@ -10,7 +10,7 @@ def call_function_and_report(f):
     print(f"  {f.__name__} completed in {total_time} seconds")
 
 
-functions_to_cache = [get_maltreatment_cached, get_demographics_cached, get_resources_cached]
+functions_to_cache = [get_maltreatment_cached, get_demographics_cached_and_compressed, get_resources_cached_and_compressed]
 
 print(f" Running {len(functions_to_cache)} methods in order to cache their results")
 

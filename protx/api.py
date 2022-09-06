@@ -1,14 +1,16 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
+import gzip
+from flask import make_response
+import json
 
 from protx.log import logger
-from protx.decorators import onboarded_user_required
+from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
 from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
 from protx.utils import demographics, maltreatment, resources
-from protx.decorators import memoize_db_results
 
 
 api = Namespace("api", description="Data related operations", decorators=[onboarded_user_required])
@@ -27,7 +29,12 @@ class Maltreatment(Resource):
 class Demographics(Resource):
     @api.doc("get_demographics")
     def get(self):
-        return get_demographics_cached()
+        logger.info("getting demographics")
+        compressed_content = get_demographics_cached_and_compressed()
+        response = make_response(compressed_content)
+        response.headers['Content-length'] = len(compressed_content)
+        response.headers['Content-Encoding'] = 'gzip'
+        return response
 
 
 @onboarded_user_required
@@ -111,7 +118,11 @@ class Display(Resource):
 class Resources(Resource):
     @api.doc("get_resources")
     def get(self):
-        return get_resources_cached()
+        compressed_content = get_resources_cached_and_compressed()
+        response = make_response(compressed_content)
+        response.headers['Content-length'] = len(compressed_content)
+        response.headers['Content-Encoding'] = 'gzip'
+        return response
 
 
 @memoize_db_results(db_file=maltreatment.db_name)
@@ -128,8 +139,7 @@ def get_maltreatment_cached():
         return {"data": data, "meta": meta}
 
 
-@memoize_db_results(db_file=demographics.db_name)
-def get_demographics_cached():
+def get_demographics():
     """Get demographics data
 
     """
@@ -139,10 +149,31 @@ def get_demographics_cached():
         data = create_dict(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS)
         result = connection.execute(DEMOGRAPHICS_MIN_MAX_QUERY)
         meta = create_dict(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS[:-1])
-        return {"data": data, "meta": meta}
+        return data, meta
+
+
+@memoize_db_results(db_file=demographics.db_name)
+@create_compressed_json()
+def get_demographics_cached_and_compressed():
+    """Get demographics data as compressed json string
+
+    """
+    data, meta = get_demographics()
+    return {"data": data, "meta": meta}
+    json_response = json.dumps().encode('utf8')
+    compression_level = 6
+    compressed_json_cont = gzip.compress(json_response, compression_level)
+    return compressed_json_cont
 
 
 @memoize_db_results(db_file=resources_db)
-def get_resources_cached():
+@create_compressed_json()
+def get_resources_cached_and_compressed():
+    """Get resources data as compressed json string
+    """
     resources_result, display_result = resources.get_resources_and_display()
     return {"resources": resources_result, "display": display_result}
+    json_response = json.dumps({"resources": resources_result, "display": display_result}).encode('utf8')
+    compression_level = 6
+    compressed_json_cont = gzip.compress(json_response, compression_level)
+    return compressed_json_cont
