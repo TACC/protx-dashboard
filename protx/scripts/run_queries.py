@@ -16,7 +16,6 @@ def call_function_and_report(f):
     print(f"  {f.__name__} completed in {total_time} seconds")
 
 
-
 parser = argparse.ArgumentParser(description="Run cacheable functions to cache their results",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-c", "--clear-cache", action="store_true", help="empty cache before running functions")
