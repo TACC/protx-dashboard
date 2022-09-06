@@ -2,11 +2,7 @@ from flask import Flask, render_template
 from flask_restx import Api
 from protx.api import api as protx_api
 from protx.decorators import onboarded_user_setup_complete
-import logging
 import os
-
-
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 app = Flask(__name__)
 

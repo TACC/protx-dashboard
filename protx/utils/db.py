@@ -1,10 +1,7 @@
-import logging
-
 from protx.utils import demographics
+from protx.log import logger
 from werkzeug.exceptions import HTTPException
 
-
-logger = logging.getLogger(__name__)
 
 # TODO: single engine for django instance.
 

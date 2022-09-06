@@ -2,9 +2,7 @@ import sqlite3
 import json
 import pandas as pd
 import plotly.graph_objects as go
-import logging
-
-logger = logging.getLogger(__name__)
+from protx.log import logger
 
 db_name = '/protx-data/cooks.db'
 

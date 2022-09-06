@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
-from protx.log import logging
+
+from protx.log import logger
 from protx.decorators import onboarded_user_required
 from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
@@ -11,8 +12,6 @@ from protx.decorators import memoize_db_results
 
 
 api = Namespace("api", description="Data related operations", decorators=[onboarded_user_required])
-
-logger = logging.getLogger(__name__)
 
 
 @onboarded_user_required

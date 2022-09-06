@@ -2,13 +2,11 @@ from functools import wraps
 from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
-import logging
+from protx.log import logger
 from flask import request, redirect
 import requests
 from urllib.parse import urljoin
 
-
-logger = logging.getLogger(__name__)
 
 cache = Cache("database_cache", disk_min_file_size=0, eviction_policy="none")
 
