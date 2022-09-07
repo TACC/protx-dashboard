@@ -127,7 +127,7 @@ function DisplaySelectors({
           onChange={(event) => setGeography(event.target.value)}
           disabled={disableGeography}>
           <optgroup label="Select Areas">
-            <option value="dfps_region" disabled>
+            <option value="dfps_region">
               DFPS Regions
             </option>
             <option
@@ -136,6 +136,8 @@ function DisplaySelectors({
               Census Tracts
             </option>
             <option value="county">Counties</option>
+          </optgroup>
+          <optgroup label="Not currently available">
             <option value="cbsa" disabled>
               Core base statistical areas
             </option>
