@@ -8,7 +8,7 @@ def test_client():
         yield app.test_client()
 
 
-WORKBENCH_PATH = "/api/workbench/"
+WORKBENCH_PATH = "/api/workbench"
 
 
 @pytest.fixture
