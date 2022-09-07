@@ -1,9 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
-import gzip
 from flask import make_response
-import json
+
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
@@ -160,10 +159,6 @@ def get_demographics_cached_and_compressed():
     """
     data, meta = get_demographics()
     return {"data": data, "meta": meta}
-    json_response = json.dumps().encode('utf8')
-    compression_level = 6
-    compressed_json_cont = gzip.compress(json_response, compression_level)
-    return compressed_json_cont
 
 
 @memoize_db_results(db_file=resources_db)
@@ -173,7 +168,3 @@ def get_resources_cached_and_compressed():
     """
     resources_result, display_result = resources.get_resources_and_display()
     return {"resources": resources_result, "display": display_result}
-    json_response = json.dumps({"resources": resources_result, "display": display_result}).encode('utf8')
-    compression_level = 6
-    compressed_json_cont = gzip.compress(json_response, compression_level)
-    return compressed_json_cont
