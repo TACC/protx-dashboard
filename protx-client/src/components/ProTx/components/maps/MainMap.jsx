@@ -404,10 +404,12 @@ function MainMap({
             clickedGeographicFeature,
             highlightedStyle
           );
+          // Simple zoom to point clicked based on what type of region is being clicked
+          // (see https://jira.tacc.utexas.edu/browse/COOKS-290 and https://jira.tacc.utexas.edu/browse/COOKS-54)
           if (geography === 'county') {
-            // Simple zoom to point clicked and having fixed zoom level for counties
-            // See https://jira.tacc.utexas.edu/browse/COOKS-54
             map.setView(e.latlng, 9);
+          } else if (geography === 'dfps_region') {
+            map.setView(e.latlng, 8);
           } else {
             map.setView(e.latlng, 11);
           }

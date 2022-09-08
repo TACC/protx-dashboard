@@ -1,10 +1,7 @@
-import logging
-
 from protx.utils import demographics
+from protx.log import logger
 from werkzeug.exceptions import HTTPException
 
-
-logger = logging.getLogger(__name__)
 
 # TODO: single engine for django instance.
 
@@ -28,7 +25,13 @@ GROUP BY
     m.MALTREATMENT_NAME;
 '''
 
-DEMOGRAPHICS_QUERY = "SELECT * FROM demographics d WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'"
+DEMOGRAPHICS_QUERY = '''
+SELECT d.GEOID, d.GEOTYPE, d.YEAR, d.DEMOGRAPHICS_NAME, d.VALUE, d.UNITS
+FROM demographics d
+LEFT JOIN display_data i ON i.name = d.demographics_name
+WHERE (i.DISPLAY_DEMOGRAPHIC_COUNT = 1 OR i.DISPLAY_DEMOGRAPHIC_RATE = 1)
+      AND (d.GEOTYPE='county' OR d.GEOTYPE='tract' OR d.GEOTYPE='dfps_region')
+'''
 
 DEMOGRAPHICS_MIN_MAX_QUERY = '''
 SELECT
@@ -39,7 +42,9 @@ SELECT
     MIN(d.value) AS MIN,
     MAX(d.value) AS MAX
 FROM demographics d
-WHERE d.GEOTYPE='county' OR d.GEOTYPE='tract'
+LEFT JOIN display_data i ON i.name = d.demographics_name
+WHERE (i.DISPLAY_DEMOGRAPHIC_COUNT = 1 OR i.DISPLAY_DEMOGRAPHIC_RATE = 1)
+      AND (d.GEOTYPE='county' OR d.GEOTYPE='tract' OR d.GEOTYPE='dfps_region')
 GROUP BY
     d.GEOTYPE,
     d.UNITS,
