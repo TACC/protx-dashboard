@@ -4,6 +4,14 @@
   flex-direction: column;
 }
 
+.loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--max-height);
+}
+
 .error {
   display: flex;
   justify-content: center;
