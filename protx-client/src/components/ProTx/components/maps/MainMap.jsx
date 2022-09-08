@@ -96,7 +96,7 @@ function MainMap({
         refResourceLayers.current.forEach(resourceLayer => {
           if (
             resourceLayer.label === 'Child and Youth Services' ||
-            resourceLayer.label === "Cook Children's Locations"
+            resourceLayer.label === 'DFPS Locations'
           ) {
             currentMap.addLayer(resourceLayer.layer);
           }
