@@ -13,7 +13,7 @@ function DashboardDisplay() {
   // Map type and selected types (i.e. geography, year etc)
   // TODO: control of this state (county, year, feature etc) should be moved to redux/sagas (https://jira.tacc.utexas.edu/browse/COOKS-55)
   const [mapType, setMapType] = useState('maltreatment');
-  const [geography, setGeography] = useState('county');
+  const [geography, setGeographyState] = useState('county');
   const PRESELECTED_MALTREATMENT_CATEGORIES = [
     'ABAN',
     'EMAB',
@@ -42,6 +42,11 @@ function DashboardDisplay() {
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(state => state.protx);
   const protxRoute = '/protx/dash';
+
+  const setGeography = (geography) => {
+    setSelectedGeographicFeature('')
+    setGeographyState(geography);
+  }
 
   // Get systems and any other initial data we need from the backend.
   useEffect(() => {
@@ -92,7 +97,7 @@ function DashboardDisplay() {
 
   if (loading) {
     return (
-      <div className={styles.root}>
+      <div className={styles.loading}>
         <LoadingSpinner />
       </div>
     );

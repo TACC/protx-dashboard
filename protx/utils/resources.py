@@ -44,15 +44,23 @@ class Echo:
 def download_resources(naics_codes, area, geoid):
     """Get resources csv"""
     download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
+    supported_areas = {"county": {"table": "texas_counties", "geo_identifier": "geo_id", "name": "name"},
+                       "tract": {"table": "census_tracts_2019", "geo_identifier": "geoid", "name": "name"},
+                       "dfps_region": {"table": "dfps_regions", "geo_identifier": "sheet1__re", "name": "sheet1__re"}}
 
-    if area != "county":
-        # currently assuming county and query is hardcoded for "texas_counties"
-        abort(500, "Only downloading counties is supported")
+    if area not in supported_areas:
+        abort(500, f"Downloading {area} is not supported")
 
     connection = psycopg2.connect(database="postgres", user="postgres", password="postgres", host="protx_geospatial")
-    query = "select * from texas_counties where texas_counties.geo_id='{}'".format(geoid)
-    county_dataframe = geopandas.GeoDataFrame.from_postgis(query, connection, geom_col='geom')
-    county_name = county_dataframe.iloc[0]["name"]
+
+    area_table = supported_areas[area]["table"]
+    area_id_key = supported_areas[area]["geo_identifier"]
+    name_key = supported_areas[area]["name"]
+    query = f"select * from {area_table} where {area_table}.{area_id_key}='{geoid}'"
+    area_dataframe = geopandas.GeoDataFrame.from_postgis(query, connection, geom_col='geom')
+    area_name = area_dataframe.iloc[0][name_key]
+    area_name = area_name.replace(".", "_")  # tracts have the form like '2107.08'
+
     connection.close()
 
     def generate_csv_rows():
@@ -68,7 +76,7 @@ def download_resources(naics_codes, area, geoid):
             lat = r["LATITUDE"]
             if lat and long:  # some resources are missing position
                 point = shapely.geometry.Point(long, lat)
-                if county_dataframe.contains(point).any():
+                if area_dataframe.contains(point).any():
                     row = [r[key] for key in download_fields] + [naics_to_description[r["NAICS_CODE"]]]
                     yield row
 
@@ -81,7 +89,7 @@ def download_resources(naics_codes, area, geoid):
 
     # datetime object containing current date and time
     timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M")
-    filename = f"{county_name}_{area}_resources_{timestamp}.csv"
+    filename = f"{area_name}_{area}_resources_{timestamp}.csv"
     response.headers['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
 
     return response
