@@ -2,13 +2,12 @@ from functools import wraps
 from werkzeug.exceptions import Forbidden
 from diskcache import Cache
 import os
-import logging
+from protx.log import logger
 from flask import request, redirect
 import requests
 from urllib.parse import urljoin
-
-
-logger = logging.getLogger(__name__)
+import gzip
+import json
 
 cache = Cache("database_cache", disk_min_file_size=0, eviction_policy="none")
 
@@ -111,5 +110,22 @@ def memoize_db_results(db_file):
         @wraps(f)
         def wrapper(*args, **kwargs):
             return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+def create_compressed_json():
+    """Take functions returned dictionary and convert to compressed json
+
+    """
+
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            dict_result = f(*args, **kwargs)
+            json_response = json.dumps(dict_result).encode('utf8')
+            compression_level = 6
+            compressed_json_cont = gzip.compress(json_response, compression_level)
+            return compressed_json_cont
         return wrapper
     return decorator

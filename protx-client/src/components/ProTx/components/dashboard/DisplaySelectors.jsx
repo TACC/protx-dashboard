@@ -137,17 +137,6 @@ function DisplaySelectors({
             </option>
             <option value="county">Counties</option>
           </optgroup>
-          <optgroup label="Not currently available">
-            <option value="cbsa" disabled>
-              Core base statistical areas
-            </option>
-            <option value="urban_area" disabled>
-              Urban Areas
-            </option>
-            <option value="zcta" disabled>
-              Zip Codes
-            </option>
-          </optgroup>
         </DropdownSelector>
       </div>
       {setUnit && (
