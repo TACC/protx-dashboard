@@ -77,32 +77,26 @@ def timer_func(func):
 
 def create_dict_from_min_max(data, level_keys):
     def value_getter(row):
-        if "MAX" in row:
-            value_key = row["UNITS"]
-            if row["MIN"] is None or row["MAX"] is None:
-                # logger.debug("max/min problem with this row: {}".format(row))
-                return None, None
-            value = {key.lower(): int(row[key]) if value_key == "count" else row[key] for key in ["MAX", "MIN"]}
-        else:
-            raise HTTPException("Problem with this row: {}".format(row))
+        value_key = row["UNITS"]
+        if row["MIN"] is None or row["MAX"] is None:
+            # logger.debug("max/min problem with this row: {}".format(row))
+            return None, None
+        value = {key.lower(): int(row[key]) if value_key == "count" else row[key] for key in ["MAX", "MIN"]}
         return value, value_key
     return _create_dict(data, level_keys, value_getter)
 
 
 def create_dict_from_value(data, level_keys):
     def value_getter(row):
-        if "VALUE" in row:
-            value_key = row["UNITS"]
-            value = row["VALUE"]
+        value_key = row["UNITS"]
+        value = row["VALUE"]
 
-            if value is None:
-                return None, None
+        if value is None:
+            return None, None
 
-            # workaround as count values are stored as floats
-            if value_key == "count":
-                value = int(value)
-        else:
-            raise HTTPException("Problem with this row: {}".format(row))
+        # workaround as count values are stored as floats
+        if value_key == "count":
+            value = int(value)
         return value, value_key
     return _create_dict(data, level_keys, value_getter)
 
