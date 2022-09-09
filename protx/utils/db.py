@@ -60,8 +60,56 @@ SQLALCHEMY_RESOURCES_DATABASE_URL = 'sqlite:///{}'.format(resources_db)
 MALTREATMENT_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "MALTREATMENT_NAME", "GEOID"]
 DEMOGRAPHICS_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "DEMOGRAPHICS_NAME", "GEOID"]
 
+import time
 
-def create_dict(data, level_keys):
+def timer_func(func):
+    # This function shows the execution time of
+    # the function object passed
+    def wrap_func(*args, **kwargs):
+        t1 = time.time()
+        result = func(*args, **kwargs)
+        t2 = time.time()
+        print(f'Function {func.__name__!r} executed in {t2-t1}')
+        logger.info(f'Function {func.__name__!r} executed in {t2-t1}')
+        return result
+    return wrap_func
+
+
+def create_dict_from_min_max(data, level_keys):
+    def value_getter(row):
+        if "MAX" in row:
+            value_key = row["UNITS"]
+            if row["MIN"] is None or row["MAX"] is None:
+                # logger.debug("max/min problem with this row: {}".format(row))
+                return None, None
+            value = {key.lower(): int(row[key]) if value_key == "count" else row[key] for key in ["MAX", "MIN"]}
+        else:
+            raise HTTPException("Problem with this row: {}".format(row))
+        return value, value_key
+    return _create_dict(data, level_keys, value_getter)
+
+
+def create_dict_from_value(data, level_keys):
+    def value_getter(row):
+        if "VALUE" in row:
+            value_key = row["UNITS"]
+            value = row["VALUE"]
+
+            if value is None:
+                return None, None
+
+            # workaround as count values are stored as floats
+            if value_key == "count":
+                value = int(value)
+        else:
+            raise HTTPException("Problem with this row: {}".format(row))
+        return value, value_key
+    return _create_dict(data, level_keys, value_getter)
+
+
+
+@timer_func
+def _create_dict(data, level_keys, value_getter):
     """Create n-level hierarchical/nested dictionaries from search result
 
     Parameters
@@ -70,6 +118,7 @@ def create_dict(data, level_keys):
         data
     level_keys : str iterable
         List of column keys for each level of nested dictionaries.
+    value_getter : function to get value from row
 
     Returns
     -------
@@ -86,24 +135,9 @@ def create_dict(data, level_keys):
             current_level = current_level[row[k]]
 
         # the most nested dictionary is either the value for a unit or the min/max of that unit
-        if "MAX" in row:
-            value_key = row["UNITS"]
-            if row["MIN"] is None or row["MAX"] is None:
-                logger.debug("max/min problem with this row: {}".format(row))
-                continue
-            value = {key.lower(): int(row[key]) if value_key == "count" else row[key] for key in ["MAX", "MIN"]}
-        elif "VALUE" in row:
-            value_key = row["UNITS"]
-            value = row["VALUE"]
-
-            if value is None:
-                continue
-
-            # workaround as count values are stored as floats
-            if value_key == "count":
-                value = int(value)
-        else:
-            raise HTTPException("Problem with this row: {}".format(row))
+        value, value_key = value_getter(row)
+        if value is None:
+            continue
 
         values = {value_key: value}
 

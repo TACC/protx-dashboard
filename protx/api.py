@@ -6,7 +6,7 @@ from flask import make_response
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
+from protx.utils.db import (resources_db, create_dict_from_min_max, create_dict_from_value, SQLALCHEMY_DATABASE_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
 from protx.utils import demographics, maltreatment, resources
@@ -132,9 +132,9 @@ def get_maltreatment_cached():
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
         result = connection.execute(MALTREATMENT_QUERY)
-        data = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS)
+        data = create_dict_from_value(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS)
         result = connection.execute(MALTREATMENT_MIN_MAX_QUERY)
-        meta = create_dict(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
+        meta = create_dict_from_min_max(result, level_keys=MALTREATMENT_JSON_STRUCTURE_KEYS[:-1])
         return {"data": data, "meta": meta}
 
 
@@ -145,9 +145,9 @@ def get_demographics():
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
         result = connection.execute(DEMOGRAPHICS_QUERY)
-        data = create_dict(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS)
+        data = create_dict_from_value(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS)
         result = connection.execute(DEMOGRAPHICS_MIN_MAX_QUERY)
-        meta = create_dict(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS[:-1])
+        meta = create_dict_from_min_max(result, level_keys=DEMOGRAPHICS_JSON_STRUCTURE_KEYS[:-1])
         return data, meta
 
 
