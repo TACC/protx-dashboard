@@ -341,6 +341,16 @@ function MainMap({
   }, [layersControl, map, resources]);
 
   useEffect(() => {
+    if (map && selectedGeographicFeature === '') {
+      // if selected geographic feature gets unset, we should zoom out
+      const texasOutlineGeojson = L.geoJSON(data.texasBoundary);
+      const texasBounds = texasOutlineGeojson.getBounds(texasOutlineGeojson);
+      map.fitBounds(texasBounds);
+    }
+  }, [map, data, selectedGeographicFeature]);
+
+
+  useEffect(() => {
     const vectorTile = `${dataServer}/data-static/vector/${geography}/2019/{z}/{x}/{y}.pbf`;
 
     if (map && layersControl) {
