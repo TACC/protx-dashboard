@@ -14,10 +14,13 @@ function DemographicsDetails({
   data
 }) {
   const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
+  // TODO: Replace this FIPS specific method with a universal method to populate label for all geography types.
+  // TODO: Replicate use across other Chart *Details component views (or refactor *Details into a single component).
   const selectedGeographicFeatureName = getFipsIdName(
     selectedGeographicFeature
   );
   const geographyType = capitalizeString(geography);
+  console.log(geographyType, observedFeaturesLabel, selectedGeographicFeatureName);
 
   return (
     <>
