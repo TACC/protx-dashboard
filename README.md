@@ -54,15 +54,27 @@ In Django CMS admin (i.e. https://cep.dev/admin/`), you need to create three pag
 The iframe snippets that have the following markup:
 
 ```
-<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/demographics"></iframe></span></p>
+<body style="margin:0px;padding:0px;overflow:hidden">
+    <div style="position:relative;width:100vw;height:100vh;">
+        <iframe src="https://cep.dev/protx/dash/demographics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+    </div>
+</body>
 ```
 
 ```
-<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/maltreatment"></iframe></span></p>
+<body style="margin:0px;padding:0px;overflow:hidden">
+    <div style="position:relative;width:100vw;height:100vh;">
+        <iframe src="https://cep.dev/protx/dash/maltreatment" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+    </div>
+</body>
 ```
 
 ```
-<p><span style="color: #ffffff;"><iframe frameborder="0" height="1600" width="100%" src="https://cep.dev/protx/dash/analytics"></iframe></span></p>
+<body style="margin:0px;padding:0px;overflow:hidden">
+    <div style="position:relative;width:100vw;height:100vh;">
+        <iframe src="https://cep.dev/protx/dash/analytics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+    </div>
+</body>
 ```
 
 To create these pages/snippets:
