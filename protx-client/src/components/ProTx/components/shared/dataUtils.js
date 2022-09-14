@@ -29,26 +29,46 @@ const compareSimplifiedValueType = (observedFeature, valueType) => {
 /**
  * Get the county name for a given Geoid.
  * @param {String} currentGeoid
- * @returns {fipsIdName: string}
+ * @returns {geographyDisplayName: string}
  */
-const getFipsIdName = currentGeoid => {
-  const trimmedGeoid = currentGeoid.substring(currentGeoid.length - 3);
-  const countyObjects = PHR_MSA_COUNTIES[0];
+const getSelectedGeographyName = (geography, currentGeoid) => {
+  // console.log(currentGeoid);
+
+  let geographyName;
   let fipsIdName;
 
-  Object.keys(countyObjects).forEach(cty => {
-    const currentCounty = countyObjects[cty];
-    const baseCode = '000';
-    const countyCode = baseCode + currentCounty['FIPS Number']; // String.
-    const currentCountyCode = countyCode.slice(-3);
-    const currentCountyName = currentCounty['County Name'];
+  switch (geography) {
+    case 'county':
+      const trimmedGeoid = currentGeoid.substring(currentGeoid.length - 3);
+      const countyObjects = PHR_MSA_COUNTIES[0];
 
-    if (currentCountyCode === trimmedGeoid) {
-      fipsIdName = currentCountyName;
-    }
-  });
+      Object.keys(countyObjects).forEach(cty => {
+        const currentCounty = countyObjects[cty];
+        const baseCode = '000';
+        const countyCode = baseCode + currentCounty['FIPS Number']; // String.
+        const currentCountyCode = countyCode.slice(-3);
+        const currentCountyName = currentCounty['County Name'];
 
-  return fipsIdName;
+        if (currentCountyCode === trimmedGeoid) {
+          fipsIdName = currentCountyName;
+        }
+      });
+      geographyName = fipsIdName;
+      break;
+    case 'tract':
+      geographyName = 'tract_placeholder';
+      break;
+    case 'dfps_region':
+      // const regionLabel = currentGeoid.slice(2);
+      const regionLabel = currentGeoid.substring(currentGeoid.indexOf('-') + 1);
+      // geographyName = 'dfps_region__placeholder';
+      geographyName = regionLabel;
+      break;
+    default:
+      geographyName = '';
+  };
+
+  return geographyName;
 };
 
 /**
@@ -311,7 +331,7 @@ export {
   getMetaData,
   getObservedFeatureValue,
   getMaltreatmentAggregatedValue,
-  getFipsIdName,
+  getSelectedGeographyName,
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,

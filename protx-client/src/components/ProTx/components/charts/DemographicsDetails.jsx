@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  getFipsIdName,
+  getSelectedGeographyName,
   capitalizeString,
   getObservedFeaturesLabel
 } from '../shared/dataUtils';
@@ -14,10 +14,33 @@ function DemographicsDetails({
   data
 }) {
   const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
-  const selectedGeographicFeatureName = getFipsIdName(
-    selectedGeographicFeature
+  let selectedGeographicFeatureName = getSelectedGeographyName(
+    geography, selectedGeographicFeature
   );
-  const geographyType = capitalizeString(geography);
+  let geographyType;
+  let selectedGeographyTypeDisplayLabel;
+
+  switch (geography) {
+    case 'county':
+      selectedGeographyTypeDisplayLabel = 'FIPS';
+      geographyType = capitalizeString(geography);
+      break;
+    case 'tract':
+      selectedGeographyTypeDisplayLabel = 'Tract';
+      selectedGeographicFeatureName = '';
+      geographyType = '';
+      break;
+    case 'dfps_region':
+      selectedGeographyTypeDisplayLabel = 'DFPS Region';
+      selectedGeographicFeature = '';
+      geographyType = '';
+      break;
+    default:
+      selectedGeographyTypeDisplayLabel = '';
+      selectedGeographicFeature = '';
+      selectedGeographicFeatureName = '';
+      geographyType = '';
+  };
 
   return (
     <>
@@ -25,7 +48,7 @@ function DemographicsDetails({
         <div className="plot-details-section">
           <div className="plot-details-section-selected">
             <span className="plot-details-section-selected-label">
-              FIPS: {selectedGeographicFeature}
+              {selectedGeographyTypeDisplayLabel} {selectedGeographicFeature}
             </span>
             <span className="plot-details-section-selected-value">
               {selectedGeographicFeatureName} {geographyType}

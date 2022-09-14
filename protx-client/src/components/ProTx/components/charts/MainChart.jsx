@@ -8,7 +8,7 @@ import PredictiveFeaturesTable from './PredictiveFeaturesTable';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
-import { getFipsIdName, capitalizeString } from '../shared/dataUtils';
+import { getSelectedGeographyName, capitalizeString } from '../shared/dataUtils';
 import './MainChart.css';
 
 function MainChart({
@@ -129,8 +129,8 @@ function MainChart({
      * We should review the plotly server-side code and identify a way to use the geoid value rather than pass the munged string value for selectedArea.
      * NOTE: We should identify a phased process for integrating a new plot from jupyter into the portal api so it is less intensive per sprint, makes more manageable PRs and helps WMA manage development  expectations better.
      **/
-    const selectedGeographicFeatureName = getFipsIdName(
-      selectedGeographicFeature
+    const selectedGeographicFeatureName = getSelectedGeographyName(
+      geography, selectedGeographicFeature
     );
 
     const selectedGeographicFeatureNameComplete = `${selectedGeographicFeatureName} ${capitalizeString(

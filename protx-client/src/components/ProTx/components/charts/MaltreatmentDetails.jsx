@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  getFipsIdName,
+  getSelectedGeographyName,
   capitalizeString,
   getMaltreatmentTypeNames
 } from '../shared/dataUtils';
@@ -13,8 +13,7 @@ function MaltreatmentDetails({
   maltreatmentTypes,
   data
 }) {
-  const fipsIdValue = getFipsIdName(selectedGeographicFeature);
-
+  const fipsIdValue = getSelectedGeographyName(geography, selectedGeographicFeature);
   const geographyLabel = capitalizeString(geography);
   const maltreatmentTypesList = getMaltreatmentTypeNames(
     maltreatmentTypes,
