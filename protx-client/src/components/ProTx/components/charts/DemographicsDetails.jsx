@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  getFipsIdName,
+  getSelectedGeographyName,
   capitalizeString,
   getObservedFeaturesLabel
 } from '../shared/dataUtils';
@@ -13,17 +13,51 @@ function DemographicsDetails({
   selectedGeographicFeature,
   data
 }) {
-  const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
-  const selectedGeographicFeatureName = getFipsIdName(
-    selectedGeographicFeature
-  );
-  const geographyType = capitalizeString(geography);
-
   // TODO: Replace the getFipsIdName() FIPS specific method with a universal method to populate label for all geography types.
   // TODO: Handle types: County, Tract, Dfps_region
   // TODO: Place this logic in the dataUtils.js file, replacing use of getFipsIdName().
   // TODO: Replicate use across other Chart *Details component views (or refactor *Details into a single component).
-  console.log(geographyType, observedFeaturesLabel, selectedGeographicFeatureName);
+
+  // Code logic.
+  // - identify the geographyType (County, Tract, Dfps_region)
+  // - get label txt for selected geographic region (using dataUtils)
+  // - assign values to selectedGeographicFeature (based on geographyType) for both label and value spans.
+
+  console.log(geography, observedFeature, selectedGeographicFeature); //, geographyType, observedFeaturesLabel, selectedGeographicFeatureName);
+
+  const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
+  let selectedGeographicFeatureName = getSelectedGeographyName(
+    geography, selectedGeographicFeature
+  );
+  let geographyType;
+  let selectedGeographyTypeDisplayLabel;
+
+  switch (geography) {
+    case 'county':
+      selectedGeographyTypeDisplayLabel = 'FIPS';
+      // selectedGeographicFeature = '';
+      // selectedGeographicFeatureName = '';
+      geographyType = capitalizeString(geography);
+      break;
+    case 'tract':
+      selectedGeographyTypeDisplayLabel = 'Tract';
+      // selectedGeographicFeature = '';
+      selectedGeographicFeatureName = '';
+      geographyType = '';
+      break;
+    case 'dfps_region':
+      selectedGeographyTypeDisplayLabel = 'DFPS Region';
+      selectedGeographicFeature = '';
+      // selectedGeographicFeatureName = '';
+      // geographyType = capitalizeString(geography);
+      geographyType = '';
+      break;
+    default:
+      selectedGeographyTypeDisplayLabel = '';
+      selectedGeographicFeature = '';
+      selectedGeographicFeatureName = '';
+      geographyType = '';
+  };
 
   return (
     <>
@@ -31,7 +65,7 @@ function DemographicsDetails({
         <div className="plot-details-section">
           <div className="plot-details-section-selected">
             <span className="plot-details-section-selected-label">
-              FIPS: {selectedGeographicFeature}
+              {selectedGeographyTypeDisplayLabel} {selectedGeographicFeature}
             </span>
             <span className="plot-details-section-selected-value">
               {selectedGeographicFeatureName} {geographyType}

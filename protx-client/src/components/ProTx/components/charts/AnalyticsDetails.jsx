@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  getFipsIdName,
+  getSelectedGeographyName,
   capitalizeString,
   getObservedFeaturesLabel
 } from '../shared/dataUtils';
@@ -14,8 +14,8 @@ function AnalyticsDetails({
   data
 }) {
   const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
-  const selectedGeographicFeatureName = getFipsIdName(
-    selectedGeographicFeature
+  const selectedGeographicFeatureName = getSelectedGeographyName(
+    geography, selectedGeographicFeature
   );
   const geographyType = capitalizeString(geography);
 
