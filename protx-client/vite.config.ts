@@ -16,10 +16,10 @@ export default defineConfig({
     }
   },
   server: {
-    host: 'cep.dev',
+    host: 'cep.test',
     https: {
-      key: readFileSync('../conf/certificates/cep.dev.key'),
-      cert: readFileSync('../conf/certificates/cep.dev.crt')
+      key: readFileSync('../conf/certificates/cep.test.key'),
+      cert: readFileSync('../conf/certificates/cep.test.crt')
     }
   }
 });

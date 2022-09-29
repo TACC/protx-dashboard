@@ -48,7 +48,7 @@ Get access to Django CMS, run `docker exec -it core_portal_cms /bin/bash` and th
 python3 manage.py createsuperuser
 ```
 
-In Django CMS admin (i.e. https://cep.dev/admin/`), you need to create three pages (using three snippets).
+In Django CMS admin (i.e. https://cep.test/admin/`), you need to create three pages (using three snippets).
 
 
 The iframe snippets that have the following markup:
@@ -56,7 +56,7 @@ The iframe snippets that have the following markup:
 ```
 <body style="margin:0px;padding:0px;overflow:hidden">
     <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.dev/protx/dash/demographics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+        <iframe src="https://cep.test/protx/dash/demographics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
     </div>
 </body>
 ```
@@ -64,7 +64,7 @@ The iframe snippets that have the following markup:
 ```
 <body style="margin:0px;padding:0px;overflow:hidden">
     <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.dev/protx/dash/maltreatment" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+        <iframe src="https://cep.test/protx/dash/maltreatment" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
     </div>
 </body>
 ```
@@ -72,7 +72,7 @@ The iframe snippets that have the following markup:
 ```
 <body style="margin:0px;padding:0px;overflow:hidden">
     <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.dev/protx/dash/analytics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+        <iframe src="https://cep.test/protx/dash/analytics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
     </div>
 </body>
 ```
@@ -96,7 +96,7 @@ npm ci
 npm run dev
 ```
 
-Then go to either `https://cep.dev/`, `https://cep.dev/workbench`, `https://cep.dev/protx/dash/maltreatment`, `https://cep.dev/protx/dash/demographics` or `https://cep.dev/protx/dash/analytics`
+Then go to either `https://cep.test/`, `https://cep.test/workbench`, `https://cep.test/protx/dash/maltreatment`, `https://cep.test/protx/dash/demographics` or `https://cep.test/protx/dash/analytics`
 
 ## Testing
 
