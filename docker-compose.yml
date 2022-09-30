@@ -79,8 +79,8 @@ services:
       - ./conf/nginx/assets.location.conf:/etc/nginx/conf.d/assets.location.conf
       - ./conf/uwsgi/uwsgi_params:/etc/nginx/uwsgi_params
       - ./conf/certificates/dhparam.pem:/etc/ssl/dhparam.pem
-      - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
-      - ./conf/certificates/cep.dev.key/:/etc/ssl/private/portal.key
+      - ./conf/certificates/cep.test.crt:/etc/ssl/certs/portal.cer
+      - ./conf/certificates/cep.test.key/:/etc/ssl/private/portal.key
       - /var/www/portal/cms/static:/var/www/portal/cms/static
       - /var/www/portal/cms/media:/var/www/portal/cms/media
       - /var/www/portal/portal/media:/var/www/portal/portal/media
@@ -100,8 +100,8 @@ services:
   websockets:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
     volumes:
-      - ./conf/certificates/cep.dev.crt:/etc/ssl/certs/portal.cer
-      - ./conf/certificates/cep.dev.key/:/etc/ssl/private/portal.key
+      - ./conf/certificates/cep.test.crt:/etc/ssl/certs/portal.cer
+      - ./conf/certificates/cep.test.key/:/etc/ssl/private/portal.key
       - ./conf/portal/settings_secret.py:/srv/www/portal/server/portal/settings/settings_secret.py
       - ./conf/portal/settings_custom.py:/srv/www/portal/server/portal/settings/settings_custom.py
     container_name: core_portal_websockets

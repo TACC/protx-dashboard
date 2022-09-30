@@ -19,8 +19,8 @@ def get_host():
 
 def is_setup_complete() -> bool:
     host = get_host()
-    if host.endswith("cep.dev"):
-        # unable to access cep.dev (as actual site on web) so using docker service instead.  Note that staging/prod are
+    if host.endswith("cep.test"):
+        # unable to access cep.test (as actual site on web) so using docker service instead.  Note that staging/prod are
         # unable to use the service directly (https-requirement for uwsgi configs?)
         host = "http://core:6000"
     r = requests.get(urljoin(host, "/api/workbench"), cookies=request.cookies)
