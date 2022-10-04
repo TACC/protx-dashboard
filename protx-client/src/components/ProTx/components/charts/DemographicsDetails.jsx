@@ -27,7 +27,7 @@ function DemographicsDetails({
       break;
     case 'tract':
       selectedGeographyTypeDisplayLabel = 'Tract: ' ;
-      selectedGeographicFeature = selectedGeographicFeature.slice(-5);
+      selectedGeographicFeature = "(" + selectedGeographicFeature.slice(-6) + ")";
       selectedGeographicFeatureName = "TX - " + selectedGeographicFeatureName + " County";
       geographyType = '';
       break;
