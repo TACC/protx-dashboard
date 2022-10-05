@@ -22,7 +22,8 @@ function DemographicsDetails({
 
   switch (geography) {
     case 'county':
-      selectedGeographyTypeDisplayLabel = 'FIPS';
+      selectedGeographyTypeDisplayLabel = '';
+      selectedGeographicFeature = ''
       geographyType = capitalizeString(geography);
       break;
     case 'tract':

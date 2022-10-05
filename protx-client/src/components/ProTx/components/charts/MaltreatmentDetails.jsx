@@ -25,9 +25,6 @@ function MaltreatmentDetails({
       <div className="plot-details">
         <div className="plot-details-section">
           <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-label">
-              FIPS: {selectedGeographicFeature}
-            </span>
             <span className="plot-details-section-selected-value">
               {fipsIdValue} {geographyLabel}
             </span>
