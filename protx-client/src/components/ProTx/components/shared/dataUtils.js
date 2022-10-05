@@ -56,7 +56,21 @@ const getSelectedGeographyName = (geography, currentGeoid) => {
       geographyName = fipsIdName;
       break;
     case 'tract':
-      geographyName = 'tract_placeholder';
+      const trimmedTractGeoid = currentGeoid.slice(2, 5);
+      const tractObjects = PHR_MSA_COUNTIES[0];
+
+      Object.keys(tractObjects).forEach(cty => {
+        const currentCounty = tractObjects[cty];
+        const baseCode = '000';
+        const countyCode = baseCode + currentCounty['FIPS Number']; // String.
+        const currentCountyCode = countyCode.slice(-3);
+        const currentCountyName = currentCounty['County Name'];
+      
+        if (trimmedTractGeoid === currentCountyCode) {
+          fipsIdName = currentCountyName;
+        }
+      });
+      geographyName = fipsIdName;
       break;
     case 'dfps_region':
       // const regionLabel = currentGeoid.slice(2);
