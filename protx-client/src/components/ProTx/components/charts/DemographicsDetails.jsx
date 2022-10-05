@@ -34,7 +34,7 @@ function DemographicsDetails({
       break;
     case 'dfps_region':
       selectedGeographyTypeDisplayLabel = 'DFPS Region';
-      selectedGeographicFeature = '';
+      selectedGeographicFeature = selectedGeographicFeature.split('-', 1);
       geographyType = '';
       break;
     default:
