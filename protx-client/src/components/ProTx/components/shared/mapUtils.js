@@ -61,22 +61,22 @@ const getFeatureStyle = (
   }
   if (fillColor) {
     return {
+      color,
       fillColor,
       fill: true,
       fillOpacity: 0.5,
       stroke,
-      color,
-      weight,
+      weight
     };
   }
   // if no color/data, we return a transparent style in order to allow for feature selection.
   return {
-    fillColor: 'black',
-    fill: true,
-    stroke,
     color,
-    weight,
-    fillOpacity: 0.0
+    fill: true,
+    fillColor: 'black',
+    fillOpacity: 0.0,
+    stroke,
+    weight
   };
 };
 
