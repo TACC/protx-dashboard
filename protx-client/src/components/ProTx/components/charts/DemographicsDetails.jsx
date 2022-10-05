@@ -27,8 +27,9 @@ function DemographicsDetails({
       geographyType = capitalizeString(geography);
       break;
     case 'tract':
-      selectedGeographyTypeDisplayLabel = 'Tract';
-      selectedGeographicFeatureName = '';
+      selectedGeographyTypeDisplayLabel = 'Tract: ' ;
+      selectedGeographicFeature = "(" + selectedGeographicFeature.slice(-6) + ")";
+      selectedGeographicFeatureName = "TX - " + selectedGeographicFeatureName + " County";
       geographyType = '';
       break;
     case 'dfps_region':
