@@ -30,6 +30,9 @@ const getFeatureStyle = (
   maltreatmentTypes,
   unit
 ) => {
+  const stroke = geography == 'dfps_region' ? true : false;
+  const color = 'black';
+  const weight = 1;
   let fillColor;
   if (mapType === 'observedFeatures') {
     const featureValue = getObservedFeatureValue(
@@ -58,19 +61,22 @@ const getFeatureStyle = (
   }
   if (fillColor) {
     return {
+      color,
       fillColor,
       fill: true,
-      stroke: false,
-      fillOpacity: 0.5
+      fillOpacity: 0.5,
+      stroke,
+      weight
     };
   }
-  // if no color/data, we return a completely transparent style in order
-  // to allow for feature selection.
+  // if no color/data, we return a transparent style in order to allow for feature selection.
   return {
-    fillColor: 'black',
+    color,
     fill: true,
-    stroke: false,
-    fillOpacity: 0.0
+    fillColor: 'black',
+    fillOpacity: 0.0,
+    stroke,
+    weight
   };
 };
 
