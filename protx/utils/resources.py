@@ -43,7 +43,7 @@ class Echo:
 
 def download_resources(naics_codes, area, geoid):
     """Get resources csv"""
-    download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "LATITUDE", "LONGITUDE", "NAICS_CODE"]
+    download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "NAICS_CODE"]
     supported_areas = {"county": {"table": "texas_counties", "geo_identifier": "geo_id", "name": "name"},
                        "tract": {"table": "census_tracts_2019", "geo_identifier": "geoid", "name": "name"},
                        "dfps_region": {"table": "dfps_regions", "geo_identifier": "sheet1__re", "name": "sheet1__re"}}
