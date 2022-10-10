@@ -29,15 +29,16 @@ const compareSimplifiedValueType = (observedFeature, valueType) => {
 /**
  * Get the county name for a given trimmed Geoid.
  * @param {String} trimmedGeoid
- * @returns {county['County Name']: string}
+ * @returns {countyName: string}
  */
- const getCountyName = (trimmedGeoid) => {
-  const county = Object.values(PHR_MSA_COUNTIES).find((cty) => {
+const getCountyName = trimmedGeoid => {
+  const county = Object.values(PHR_MSA_COUNTIES).find(cty => {
     const baseCode = '000';
     const countyCode = (baseCode + cty['FIPS Number']).slice(-3);
     return countyCode === trimmedGeoid;
   });
-  return county['County Name'];
+  const countyName = county ? county['County Name'] : '';
+  return countyName;
 };
 
 /**
@@ -56,7 +57,7 @@ const getSelectedGeographyName = (geography, currentGeoid) => {
       break;
     case 'tract':
       trimmedGeoid = currentGeoid.slice(2, 5);
-      geographyName = getCountyName(trimmedGeoid)
+      geographyName = getCountyName(trimmedGeoid);
       break;
     case 'dfps_region':
       const regionLabel = currentGeoid.substring(currentGeoid.indexOf('-') + 1);
@@ -64,7 +65,7 @@ const getSelectedGeographyName = (geography, currentGeoid) => {
       break;
     default:
       geographyName = '';
-  };
+  }
 
   return geographyName;
 };
@@ -333,5 +334,5 @@ export {
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
-  getMapLegendLabel
+  getMapLegendLabel,
 };
