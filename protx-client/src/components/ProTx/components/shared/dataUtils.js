@@ -27,6 +27,20 @@ const compareSimplifiedValueType = (observedFeature, valueType) => {
 };
 
 /**
+ * Get the county name for a given trimmed Geoid.
+ * @param {String} trimmedGeoid
+ * @returns {county['County Name']: string}
+ */
+ const getCountyName = (trimmedGeoid) => {
+  const county = Object.values(PHR_MSA_COUNTIES).find((cty) => {
+    const baseCode = '000';
+    const countyCode = (baseCode + cty['FIPS Number']).slice(-3);
+    return countyCode === trimmedGeoid;
+  });
+  return county['County Name'];
+};
+
+/**
  * Get the county name for a given Geoid.
  * @param {String} currentGeoid
  * @returns {geographyDisplayName: string}
