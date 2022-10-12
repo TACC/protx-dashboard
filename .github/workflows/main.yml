@@ -70,3 +70,28 @@ jobs:
       run: |
         cd protx
         poetry run flake8
+
+  Client_Side_Unit_Tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js for use with actions
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: npm ci
+        run: |
+          cd protx-client
+          npm ci
+      - name: Client Side Unit Tests
+        run: |
+          cd protx-client
+          npm run test
