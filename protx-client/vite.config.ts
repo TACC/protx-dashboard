@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       _common: resolve(__dirname, 'src/components/_common'),
       utils: resolve(__dirname, 'src/utils') //,
+      styles: resolve(__dirname, 'src/styles'),
       // this is required for the SCSS modules
       // find: /^~(.*)$/,
       // replacement: '$1'
