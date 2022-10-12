@@ -37,7 +37,7 @@ const getCountyName = trimmedGeoid => {
     const countyCode = (baseCode + cty['FIPS Number']).slice(-3);
     return countyCode === trimmedGeoid;
   });
-  const countyName = county ? county['County Name'] : '';
+  const countyName = county ? county['County Name'] : 'Not Found';
   return countyName;
 };
 
