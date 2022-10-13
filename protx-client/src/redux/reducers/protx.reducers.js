@@ -90,3 +90,35 @@ export function protxMaltreatmentDistribution(
       return state;
   }
 }
+
+export const initialAnalyticsState = {
+  loading: false,
+  error: false,
+  data: null
+};
+
+export function protxAnalytics(
+  state = initialAnalyticsState,
+  action
+) {
+  switch (action.type) {
+    case 'PROTX_ANALYTICS_INIT':
+      return {
+        ...initialAnalyticsState,
+        loading: false
+      };
+    case 'PROTX_ANALYTICS_SUCCESS':
+      return {
+        ...state,
+        data: action.payload.data,
+        loading: false
+      };
+    case 'PROTX_ANALYTICS_FAILURE':
+      return {
+        ...initialAnalyticsState,
+        error: true
+      };
+    default:
+      return state;
+  }
+}

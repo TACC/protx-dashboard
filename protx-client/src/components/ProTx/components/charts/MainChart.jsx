@@ -21,9 +21,25 @@ function MainChart({
   unit,
   showInstructions
 }) {
+    const dispatch = useDispatch();
+
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
     if (selectedGeographicFeature && observedFeature) {
+      useEffect(() => {
+        dispatch({
+            type: 'FETCH_PROTX_ANALYTICS',
+            payload: {
+              area: geography,
+              selectedArea: selectedGeographicFeature,
+            }
+          }
+          );
+        }, [geography, selectedGeographicFeature]);
+
+      const analytics = useSelector(
+        state => state.protxAnalytics
+      );
       const showPlot = false; // Hide the plot while in dev.
 
       const plotState = {
@@ -62,8 +78,6 @@ function MainChart({
     const protxDemographicsDistribution = useSelector(
       state => state.protxDemographicsDistribution
     );
-
-    const dispatch = useDispatch();
 
     useEffect(() => {
       if (observedFeature === 'maltreatment') {
@@ -140,8 +154,6 @@ function MainChart({
     const protxMaltreatmentDistribution = useSelector(
       state => state.protxMaltreatmentDistribution
     );
-
-    const dispatch = useDispatch();
 
     useEffect(() => {
       if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
