@@ -331,6 +331,7 @@ export {
   getObservedFeatureValue,
   getMaltreatmentAggregatedValue,
   getSelectedGeographyName,
+  getCountyName,
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
