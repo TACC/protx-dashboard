@@ -6,7 +6,7 @@ from flask import make_response
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
+from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_ANALYTICS_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
                             MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
 from protx.utils import demographics, maltreatment, resources
@@ -90,7 +90,22 @@ class MaltreatmentPlotData(Resource):
         return {"result": result}
 
 
-@onboarded_user_required
+@api.route("/analytics/<area>/<geoid>/")
+class Analytics(Resource):
+    @api.doc("get_analytics_data")
+    def get(self, area, geoid):
+        """Get analytic information
+
+        For example, `/protx/api/analytics/county/48257/`
+
+        """
+        logger.info(f"Getting analytics plot data for {area} {geoid}")
+        engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
+        with engine.connect() as connection:
+            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID = {geoid}").one()
+            return {"result": dict(result)}
+
+
 @api.route("/display")
 class Display(Resource):
     @api.doc("get_display")

@@ -53,9 +53,11 @@ GROUP BY
 '''
 
 resources_db = '/protx-data/resources.db'
+analytics_db = '/protx-data/analytics.db'
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(demographics.db_name)
 SQLALCHEMY_RESOURCES_DATABASE_URL = 'sqlite:///{}'.format(resources_db)
+SQLALCHEMY_RESOURCES_ANALYTICS_URL = 'sqlite:///{}'.format(analytics_db)
 
 MALTREATMENT_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "MALTREATMENT_NAME", "GEOID"]
 DEMOGRAPHICS_JSON_STRUCTURE_KEYS = ["GEOTYPE", "YEAR", "DEMOGRAPHICS_NAME", "GEOID"]

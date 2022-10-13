@@ -135,3 +135,26 @@ def test_get_resources_download_unauthed(test_client, core_api_workbench_request
 def test_get_resources_download_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
     resp = test_client.get('/protx/api/download/county/48143/?naicsCode=9999')
     assert resp.status_code == 403
+
+
+@pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
+def test_get_analytics(test_client, core_api_workbench_request):
+    resp = test_client.get('/protx/api/analytics/county/48143/')
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data == {'result': {'GEOID': '48143', 'GEOTYPE': 'county',
+                               'demographic_feature_1': 'Feature 1',
+                               'demographic_feature_2': 'Feature 2',
+                               'demographic_feature_3': 'Feature 3',
+                               'risk': 0.5971562810162229,
+                               'risk_label': 'medium '}}
+
+
+def test_get_resources_download_unauthed(test_client, core_api_workbench_request_unauthed):
+    resp = test_client.get('/protx/api/analytics/county/48143/')
+    assert resp.status_code == 403
+
+
+def test_get_analytics_download_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
+    resp = test_client.get('/protx/api/analytics/county/48143/')
+    assert resp.status_code == 403
