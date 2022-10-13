@@ -69,7 +69,6 @@ maltreatment_plot = api.model('MaltreatmentPlot', {
 })
 
 
-@onboarded_user_required
 @api.route("/maltreatment-plot-distribution/")
 class MaltreatmentPlotData(Resource):
     @api.expect(maltreatment_plot)
@@ -112,7 +111,6 @@ class Display(Resource):
             return {"variables": result}
 
 
-@onboarded_user_required
 @api.route("/resources")
 class Resources(Resource):
     @api.doc("get_resources")
