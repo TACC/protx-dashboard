@@ -378,6 +378,15 @@ function MainMap({
         maxNativeZoom: 14 // All tiles generated up to 14 zoom level
       });
 
+      if( geography === 'dfps_region') {
+        // Add tooltip to show which is which region
+        newDataLayer.bindTooltip('', {sticky: true});
+        newDataLayer.on('mouseover', function(e) {
+          const dfpsRegionGeoid = e.layer.properties[GEOID_KEY[geography]];
+          newDataLayer.setTooltipContent('DFPS Region ' + dfpsRegionGeoid.replace('-', ' '));
+        });
+      }
+
       if (refDataLayer.current && layersControl) {
         // we will remove data layer from map
         refDataLayer.current.remove();
