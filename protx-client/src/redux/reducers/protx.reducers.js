@@ -105,7 +105,7 @@ export function protxAnalytics(
     case 'PROTX_ANALYTICS_INIT':
       return {
         ...initialAnalyticsState,
-        loading: false
+        loading: true
       };
     case 'PROTX_ANALYTICS_SUCCESS':
       return {
