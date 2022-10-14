@@ -42,9 +42,9 @@ const getCountyName = trimmedGeoid => {
 };
 
 /**
- * Get a pertinent geography name for a given Geoid and geography.
- * @param {String} currentGeoid
+ * Get a pertinent geography name for a given geography and Geoid.
  * @param {String} geography
+ * @param {String} currentGeoid
  * @returns {geographyName: string}
  */
 const getSelectedGeographyName = (geography, currentGeoid) => {
