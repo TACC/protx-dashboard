@@ -36,7 +36,7 @@ left join display_geotype g on
 join display_data u on
     d.MALTREATMENT_NAME = u.NAME
 where d.GEOTYPE = "{area}" and
-    g.DISPLAY_TEXT = "{focal_area}" and
+    d.geoid = "{geoid}" and
     d.MALTREATMENT_NAME in ({variables}) and
     d.units = "{units}";
 '''
@@ -115,13 +115,11 @@ def maltrt_stacked_bar(maltrt_data_dict):
     return fig
 
 
-#  TODO: switch to using the geoid value instead of the selectedArea string.
-
 def maltreatment_plot_figure(area, selectedArea, geoid, variables, unit):
     logger.info("Selected maltreatment variables are: {}".format(variables))
     user_select_data = {
         'area': area,
-        'focal_area': selectedArea,  # geoid,
+        'geoid': geoid,
         'units': unit,
         'variables': ','.join(['"{}"'.format(v) for v in variables])
     }
