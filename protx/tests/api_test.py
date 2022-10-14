@@ -143,7 +143,7 @@ def test_get_analytics(test_client, core_api_workbench_request):
     assert resp.status_code == 200
     data = resp.get_json()
     assert "result" in data
-    assert  data["result"]["48143"] == { 'demographic_feature_1': 'Feature 1',
+    assert data["result"]["48143"] == {'demographic_feature_1': 'Feature 1',
                                        'demographic_feature_2': 'Feature 2',
                                        'demographic_feature_3': 'Feature 3',
                                        'risk': 0.5971562810162229,
