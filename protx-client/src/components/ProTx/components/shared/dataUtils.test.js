@@ -47,7 +47,7 @@ describe('util functions: getSelectedGeographyName', () => {
       'Austin'
     );
   });
-  it("return an emptry string when provided an unexpected geography type (e.g. 'state').", () => {
+  it("return an empty string when provided an unexpected geography type (e.g. 'state').", () => {
     expect(getSelectedGeographyName('state', '48')).toEqual('');
   });
 });
