@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import ChartInstructions from './ChartInstructions';
-import AnalyticsDetails from './AnalyticsDetails';
-import PredictiveFeaturesTable from './PredictiveFeaturesTable';
+import AnalyticsPredictiveTable from './AnalyticsPredictiveTable';
+import AnalyticsStateDistribution from './AnalyticsStateDistribution';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
@@ -25,50 +25,13 @@ function MainChart({
 
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
-    if (selectedGeographicFeature && observedFeature) {
-      useEffect(() => {
-        dispatch({
-            type: 'FETCH_PROTX_ANALYTICS',
-            payload: {
-              area: geography,
-              selectedArea: selectedGeographicFeature,
-            }
-          }
-          );
-        }, [geography, selectedGeographicFeature]);
-
-      const analytics = useSelector(
-        state => state.protxAnalytics
-      );
-      const showPlot = false; // Hide the plot while in dev.
-
-      const plotState = {
-        data: [{ type: 'bar', x: [1, 2, 3], y: [1, 3, 2] }],
-        layout: { title: { text: 'Analytics' } }
-      };
-
+    if (selectedGeographicFeature) {
       return (
-        <div className="predictive-features-chart">
-          <div className="predictive-features-plot">
-            <div className="predictive-features-plot-layout">
-              <PredictiveFeaturesTable
-                selectedGeographicFeature={selectedGeographicFeature}
-              />
-              {showPlot && (
-                <>
-                  <AnalyticsDetails
-                    geography={geography}
-                    observedFeature={observedFeature}
-                    selectedGeographicFeature={selectedGeographicFeature}
-                    data={data}
-                  />
-                  <MainPlot plotState={plotState} />
-                </>
-              )}
-              <ChartInstructions currentReportType="hidden" />
-            </div>
-          </div>
-        </div>
+        <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
+      );
+    } else {
+      return (
+        <AnalyticsStateDistribution geography={geography}/>
       );
     }
   }
