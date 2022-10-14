@@ -90,19 +90,40 @@ class MaltreatmentPlotData(Resource):
         return {"result": result}
 
 
-@api.route("/analytics/<area>/<geoid>/")
+@api.route("/analytics/<area>/")
 class Analytics(Resource):
     @api.doc("get_analytics_data")
+    def get(self, area):
+        """Get analytic information for all of texas
+
+        For example, `/protx/api/analytics/county/`
+
+        """
+        logger.info(f"Getting analytics data for {area}")
+        engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
+        with engine.connect() as connection:
+            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOTYPE='{area}'")
+            data = {}
+            for row in result:
+                data[row["GEOID"]] = dict(row)
+                for key in ["GEOTYPE", "GEOID"]:
+                    del data[row["GEOID"]][key]
+            return {"result": data}
+
+
+@api.route("/analytics/<area>/<geoid>/")
+class AnalyticsSubset(Resource):
+    @api.doc("get_analytics_data_for_a_specific_area")
     def get(self, area, geoid):
-        """Get analytic information
+        """Get analytic information for a specific area (i.e. county) of texas
 
         For example, `/protx/api/analytics/county/48257/`
 
         """
-        logger.info(f"Getting analytics plot data for {area} {geoid}")
+        logger.info(f"Getting analytics data for {area} {geoid}")
         engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
         with engine.connect() as connection:
-            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID = {geoid}").one()
+            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
             return {"result": dict(result)}
 
 
