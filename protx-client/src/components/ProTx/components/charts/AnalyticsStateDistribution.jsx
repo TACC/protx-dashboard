@@ -10,6 +10,9 @@ function AnalyticsStateDistribution({geography}) {
   const dispatch = useDispatch();
   /*
       possibly need -> title or header?
+      need the bakcned route
+      need saga/reducer for that route
+      fix instructions?
    */
 
   const chartData = useSelector(
