@@ -2,14 +2,16 @@ from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
 from flask import make_response
+from werkzeug.exceptions import BadRequest
 
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
 from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_ANALYTICS_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
-                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
-from protx.utils import demographics, maltreatment, resources
+                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY,
+                            analytics_db)
+from protx.utils import demographics, maltreatment, resources, analytics
 
 
 api = Namespace("api", description="Data related operations", decorators=[onboarded_user_required])
@@ -127,18 +129,24 @@ class AnalyticsSubset(Resource):
             return {"result": dict(result)}
 
 
-@api.route("/analytics-chart/<area>/")
+@api.route("/analytics-chart/<area>/<analytics_type>/")
 class AnalyticsChart(Resource):
     @api.doc("get_analytics_chart")
-    def get(self, area):
+    def get(self, area, analytics_type):
         """Get analytic chart for the state of texas
 
-        For example, `/protx/api/analytics-chart/county/`
+        For example, `/protx/api/analytics-chart/county/risk/`
 
         """
         logger.info(f"Getting analytics chart for {area}")
-        fake_data = {"data": [{"x": ["placeholder1", "placeholder2"], "y": [20, 14], "type": "bar"}]}
-        return {"result": fake_data}
+        data = analytics.read_sqlite(analytics_db)
+        if analytics_type == "risk":
+            result = analytics.get_distribution_risk_plot(data)
+        elif analytics_type == "pred_per_100k":
+            result = analytics.get_distribution_prediction_plot_(data)
+        else:
+            raise BadRequest("Unsupported analytics_type")
+        return {"result": result}
 
 
 @api.route("/display")
