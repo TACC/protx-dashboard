@@ -182,3 +182,22 @@ def test_get_analytics_for_specific_area_unauthed(test_client, core_api_workbenc
 def test_get_analytics_for_specific_area_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
     resp = test_client.get('/protx/api/analytics/county/48143/')
     assert resp.status_code == 403
+
+
+@pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
+def test_get_analytics_chart(test_client, core_api_workbench_request):
+    fake_data = {"data": [{"x": ["placeholder1", "placeholder2"], "y": [20, 14], "type": "bar"}]}
+    resp = test_client.get('/protx/api/analytics-chart/county/')
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data == {'result': fake_data}
+
+
+def test_get_analytics_chart_unauthed(test_client, core_api_workbench_request_unauthed):
+    resp = test_client.get('/protx/api/analytics-chart/county/')
+    assert resp.status_code == 403
+
+
+def test_get_analytics_chart_complete_false(test_client, core_api_workbench_request_setup_complete_false):
+    resp = test_client.get('/protx/api/analytics-chart/county/')
+    assert resp.status_code == 403

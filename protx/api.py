@@ -127,6 +127,20 @@ class AnalyticsSubset(Resource):
             return {"result": dict(result)}
 
 
+@api.route("/analytics-chart/<area>/")
+class AnalyticsChart(Resource):
+    @api.doc("get_analytics_chart")
+    def get(self, area):
+        """Get analytic chart for the state of texas
+
+        For example, `/protx/api/analytics-chart/county/`
+
+        """
+        logger.info(f"Getting analytics chart for {area}")
+        fake_data = {"data": [{"x": ["placeholder1", "placeholder2"], "y": [20, 14], "type": "bar"}]}
+        return {"result": fake_data}
+
+
 @api.route("/display")
 class Display(Resource):
     @api.doc("get_display")
