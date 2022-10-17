@@ -80,9 +80,9 @@ class MaltreatmentPlotData(Resource):
         variables = api.payload["variables"]
         unit = api.payload["unit"]
         logger.info("Getting maltreatment plot data for {} {} {} on the variables: {}".format(area,
-                                                                                                 unit,
-                                                                                                 geoid,
-                                                                                                 variables))
+                                                                                              unit,
+                                                                                              geoid,
+                                                                                              variables))
         result = maltreatment.maltreatment_plot_figure(area=area, geoid=geoid, variables=variables, unit=unit)
         return {"result": result}
 
