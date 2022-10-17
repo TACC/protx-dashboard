@@ -129,42 +129,42 @@ function MainChart({
      * We should review the plotly server-side code and identify a way to use the geoid value rather than pass the munged string value for selectedArea.
      * NOTE: We should identify a phased process for integrating a new plot from jupyter into the portal api so it is less intensive per sprint, makes more manageable PRs and helps WMA manage development  expectations better.
      **/
-    const selectedGeographicFeatureName = getSelectedGeographyName(
-      geography, selectedGeographicFeature
-    );
-
-    const selectedGeographicFeatureNameComplete = `${selectedGeographicFeatureName} ${capitalizeString(
-      geography
-    )}`;
-
-    const protxMaltreatmentDistribution = useSelector(
-      state => state.protxMaltreatmentDistribution
-    );
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-      if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
-        dispatch({
-          type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
-          payload: {
-            area: geography,
-            selectedArea: selectedGeographicFeatureNameComplete,
-            geoid: selectedGeographicFeature,
-            unit,
-            variables: maltreatmentTypes
-          }
-        });
-      }
-    }, [
-      geography,
-      selectedGeographicFeatureNameComplete,
-      selectedGeographicFeature,
-      unit,
-      maltreatmentTypes
-    ]);
-
     if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
+      const selectedGeographicFeatureName = getSelectedGeographyName(
+        geography, selectedGeographicFeature
+      );
+  
+      const selectedGeographicFeatureNameComplete = `${selectedGeographicFeatureName} ${capitalizeString(
+        geography
+      )}`;
+  
+      const protxMaltreatmentDistribution = useSelector(
+        state => state.protxMaltreatmentDistribution
+      );
+  
+      const dispatch = useDispatch();
+  
+      useEffect(() => {
+        if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
+          dispatch({
+            type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
+            payload: {
+              area: geography,
+              selectedArea: selectedGeographicFeatureNameComplete,
+              geoid: selectedGeographicFeature,
+              unit,
+              variables: maltreatmentTypes
+            }
+          });
+        }
+      }, [
+        geography,
+        selectedGeographicFeatureNameComplete,
+        selectedGeographicFeature,
+        unit,
+        maltreatmentTypes
+      ]);
+      
       if (protxMaltreatmentDistribution.error) {
         return (
           <div className="data-error-message">
