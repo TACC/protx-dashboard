@@ -57,7 +57,7 @@ export const PHR_MSA_COUNTY_DEFINITIONS = [
   }
 ];
 
-export const PHR_MSA_COUNTIES = [
+export const PHR_MSA_COUNTIES = 
   {
     '0': {
       'County Name': 'Anderson',
@@ -3615,5 +3615,4 @@ export const PHR_MSA_COUNTIES = [
       'Border 32 (La Paz Agreement)': 'Border',
       'Border 15': 'Non-Border'
     }
-  }
-];
+  };
