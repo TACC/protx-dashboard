@@ -16,20 +16,18 @@ function AnalyticsStateDistribution({geography}) {
    */
 
   const chartData = useSelector(
-    state => state.protxDemographicsDistribution
+    state => state.protxAnalyticsStateDistribution
   );
 
   useEffect(() => {
       dispatch({
-        type: 'FETCH_PROTX_DEMOGRAPHICS_DISTRIBUTION',
+        type: 'FETCH_PROTX_ANALYTICS_STATE_DISTRIBUTION',
         payload: {
-          area: 'county',
-          selectedArea: 48257,
-          variable: 'CROWD',
-          unit: 'percent'
+          area: geography,
+          analytics_type: 'pred_per_100k',
         }
       });
-    }, []);
+    }, [geography]);
 
   if (chartData.error) {
     return (
@@ -50,7 +48,7 @@ function AnalyticsStateDistribution({geography}) {
   return (
     <div>
       <MainPlot plotState={chartData.data} />
-      <ChartInstructions currentReportType="hidden" />
+      <ChartInstructions currentReportType="analytics" />
     </div>
   );
 }
