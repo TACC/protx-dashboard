@@ -1,4 +1,4 @@
-import IntervalColorScale from '../shared/colorsUtils';
+import { IntervalColorScale, CategoryColorScale} from '../shared/colorsUtils';
 import { colorbrewerClassYlOrBr } from '../data/colors';
 
 describe('IntervalColorScale', () => {
@@ -7,14 +7,6 @@ describe('IntervalColorScale', () => {
     const colorScale = new IntervalColorScale(meta)
     expect(colorScale.numberIntervals).toEqual(1);
     expect(colorScale.intervalLabels).toEqual(['1']);
-    const value = 1;
-    const binValue = Math.min(
-      Math.floor(
-        colorScale.numberIntervals *
-        ((value - colorScale.meta.min) / (colorScale.meta.max - colorScale.meta.min))
-      ),
-      colorScale.numberIntervals - 1
-    );
     expect(colorScale.getColor(1)).toEqual(colorbrewerClassYlOrBr[1][0]);
   });
   it('handle 2 integer classes', () => {
@@ -67,23 +59,51 @@ describe('IntervalColorScale', () => {
     expect(colorScale.getColor(5)).toEqual(colorbrewerClassYlOrBr[6][4]);
     expect(colorScale.getColor(6)).toEqual(colorbrewerClassYlOrBr[6][5]);
   });
+
   it('handle normal 6 class range', () => {
-    const meta = {min:0, max:60};
+    const meta = {min:0.0, max:60.0};
     const colorScale = new IntervalColorScale(meta);
     expect(colorScale.numberIntervals).toEqual(6);
     expect(colorScale.intervalLabels).toEqual(['0 - 10', '10 - 20', '20 - 30', '30 - 40', '40 - 50', '50 - 60']);
     expect(colorScale.getColor(0.0)).toEqual(colorbrewerClassYlOrBr[6][0]);
     expect(colorScale.getColor(9.9)).toEqual(colorbrewerClassYlOrBr[6][0]);
+    expect(colorScale.getColor(9.9)).toEqual('#ffffcc');
 
     expect(colorScale.getColor(10)).toEqual(colorbrewerClassYlOrBr[6][1]);
     expect(colorScale.getColor(19.9)).toEqual(colorbrewerClassYlOrBr[6][1]);
+    expect(colorScale.getColor(19.9)).toEqual('#fee391');
 
     expect(colorScale.getColor(20)).toEqual(colorbrewerClassYlOrBr[6][2]);
+    expect(colorScale.getColor(20)).toEqual('#fec44f');
+
     expect(colorScale.getColor(30)).toEqual(colorbrewerClassYlOrBr[6][3]);
+    expect(colorScale.getColor(30)).toEqual('#fe9929');
+
     expect(colorScale.getColor(40)).toEqual(colorbrewerClassYlOrBr[6][4]);
+    expect(colorScale.getColor(40)).toEqual('#d95f0e');
+
 
     expect(colorScale.getColor(50)).toEqual(colorbrewerClassYlOrBr[6][5]);
+    expect(colorScale.getColor(50)).toEqual('#993404');
     expect(colorScale.getColor(60)).toEqual(colorbrewerClassYlOrBr[6][5]);
 
+  });
+});
+
+describe('CategoryColorScale', () => {
+  it('handle for analytics', () => {
+    const categories = [
+      {key: 'low', label: 'Low'},
+      {key:'medium', label:'Medium'},
+      {key: 'high', label: 'High'}];
+    const missingLabel = "No forecast";
+    const colorScale = new CategoryColorScale(categories, missingLabel);
+    expect(colorScale.numberIntervals).toEqual(4);
+    expect(colorScale.intervalLabels).toEqual(['No forecast', 'Low', 'Medium', 'High']);
+    expect(colorScale.getColor(null)).toEqual(colorbrewerClassYlOrBr[4][0]);
+    expect(colorScale.getColor("low")).toEqual(colorbrewerClassYlOrBr[4][1]);
+    expect(colorScale.getColor("medium")).toEqual(colorbrewerClassYlOrBr[4][2]);
+    expect(colorScale.getColor("high")).toEqual(colorbrewerClassYlOrBr[4][3]);
+    expect(() => { colorScale.getColor("foo"); }).toThrow(Error);
   });
 });

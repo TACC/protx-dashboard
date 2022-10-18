@@ -333,10 +333,29 @@ const getMapLegendLabel = (
 ) => {
   if (mapType === 'maltreatment') {
     return getMaltreatmentLabel(maltreatmentTypes, unit);
+  } else if ( mapType === 'observedFeatures') {
+    // For demographics (i.e. observed feature)
+    const suffix = unit === `percent` ? ' (Percentages)' : ' (Totals)';
+    return getObservedFeaturesLabel(observedFeature, data) + suffix;
+  } else {
+    return "Risk Category";
   }
-  // For demographics (i.e. observed feature)
-  const suffix = unit === `percent` ? ' (Percentages)' : ' (Totals)';
-  return getObservedFeaturesLabel(observedFeature, data) + suffix;
+};
+
+
+/**
+ * Get analytics risk label
+ * @param {Object} data
+ * @param {Number} geoid
+ * @returns {String} risk label (null if no value exists)
+ */
+const getAnalyticsRiskLabel = (
+  data,
+  geoid
+) => {
+  const hasRiskLabel = geoid in data.analytics;
+  const riskLabel = hasRiskLabel ? data.analytics[geoid].risk_label : null;
+  return riskLabel;
 };
 
 export {
@@ -349,5 +368,6 @@ export {
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
-  getMapLegendLabel
+  getMapLegendLabel,
+  getAnalyticsRiskLabel
 };
