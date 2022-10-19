@@ -100,7 +100,7 @@ function DisplaySelectors({
   const valueRadioBtn1 =
     mapType === 'maltreatment' ? 'rate_per_100k_under17' : 'count';
   const display = useSelector(state => state.protx.data.display);
-  const analyticsCategories = [{name: 'risk', display_text: 'Risk Level'}, {name: 'pred_per_100k', display_text: 'Frequency Prediction'}]
+  const analyticsCategories = [{name: 'risk', display_text: 'Relative Risk'}, {name: 'pred_per_100k', display_text: 'Predicted Number of Cases'}]
 
   const changeUnit = newUnit => {
     if (mapType === 'observedFeatures') {
