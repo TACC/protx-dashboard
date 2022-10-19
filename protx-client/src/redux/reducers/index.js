@@ -2,11 +2,13 @@ import { combineReducers } from 'redux';
 import {
   protx,
   protxDemographicsDistribution,
-  protxMaltreatmentDistribution
+  protxMaltreatmentDistribution,
+  protxAnalytics
 } from './protx.reducers';
 
 export default combineReducers({
   protx,
   protxDemographicsDistribution,
-  protxMaltreatmentDistribution
+  protxMaltreatmentDistribution,
+  protxAnalytics
 });

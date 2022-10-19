@@ -2,14 +2,16 @@ from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
 from flask import make_response
+from werkzeug.exceptions import BadRequest
 
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL,
+from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_ANALYTICS_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
-                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
-from protx.utils import demographics, maltreatment, resources
+                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY,
+                            analytics_db)
+from protx.utils import demographics, maltreatment, resources, analytics
 
 
 api = Namespace("api", description="Data related operations", decorators=[onboarded_user_required])
@@ -68,7 +70,6 @@ maltreatment_plot = api.model('MaltreatmentPlot', {
 })
 
 
-@onboarded_user_required
 @api.route("/maltreatment-plot-distribution/")
 class MaltreatmentPlotData(Resource):
     @api.expect(maltreatment_plot)
@@ -87,7 +88,63 @@ class MaltreatmentPlotData(Resource):
         return {"result": result}
 
 
-@onboarded_user_required
+@api.route("/analytics/<area>/")
+class Analytics(Resource):
+    @api.doc("get_analytics_data")
+    def get(self, area):
+        """Get analytic information for all of texas
+
+        For example, `/protx/api/analytics/county/`
+
+        """
+        logger.info(f"Getting analytics data for {area}")
+        engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
+        with engine.connect() as connection:
+            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOTYPE='{area}'")
+            data = {}
+            for row in result:
+                data[row["GEOID"]] = dict(row)
+                for key in ["GEOTYPE", "GEOID"]:
+                    del data[row["GEOID"]][key]
+            return {"result": data}
+
+
+@api.route("/analytics/<area>/<geoid>/")
+class AnalyticsSubset(Resource):
+    @api.doc("get_analytics_data_for_a_specific_area")
+    def get(self, area, geoid):
+        """Get analytic information for a specific area (i.e. county) of texas
+
+        For example, `/protx/api/analytics/county/48257/`
+
+        """
+        logger.info(f"Getting analytics data for {area} {geoid}")
+        engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
+        with engine.connect() as connection:
+            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
+            return {"result": dict(result)}
+
+
+@api.route("/analytics-chart/<area>/<analytics_type>/")
+class AnalyticsChart(Resource):
+    @api.doc("get_analytics_chart")
+    def get(self, area, analytics_type):
+        """Get analytic chart for the state of texas
+
+        For example, `/protx/api/analytics-chart/county/risk/`
+
+        """
+        logger.info(f"Getting analytics chart for {area}")
+        data = analytics.read_sqlite(analytics_db)
+        if analytics_type == "risk":
+            result = analytics.get_distribution_risk_plot(data)
+        elif analytics_type == "pred_per_100k":
+            result = analytics.get_distribution_prediction_plot_(data)
+        else:
+            raise BadRequest("Unsupported analytics_type")
+        return {"result": result}
+
+
 @api.route("/display")
 class Display(Resource):
     @api.doc("get_display")
@@ -108,7 +165,6 @@ class Display(Resource):
             return {"variables": result}
 
 
-@onboarded_user_required
 @api.route("/resources")
 class Resources(Resource):
     @api.doc("get_resources")
