@@ -92,7 +92,7 @@ export function protxMaltreatmentDistribution(
 }
 
 export const initialAnalyticsState = {
-  loading: false,
+  loading: true,
   error: false,
   data: null
 };
@@ -116,6 +116,7 @@ export function protxAnalytics(
     case 'PROTX_ANALYTICS_FAILURE':
       return {
         ...initialAnalyticsState,
+        loading: false,
         error: true
       };
     default:
