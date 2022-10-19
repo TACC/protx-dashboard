@@ -258,12 +258,14 @@ DisplaySelectors.propTypes = {
   geography: PropTypes.string.isRequired,
   maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   observedFeature: PropTypes.string.isRequired,
+  analyticsType: PropTypes.string,
   year: PropTypes.string.isRequired,
   unit: PropTypes.string.isRequired,
   selectedGeographicFeature: PropTypes.string.isRequired,
   setGeography: PropTypes.func,
   setMaltreatmentTypes: PropTypes.func.isRequired,
   setObservedFeature: PropTypes.func.isRequired,
+  setAnalyticsType: PropTypes.func,
   setYear: PropTypes.func,
   setUnit: PropTypes.func,
   limitToTopObservedFeatureFields: PropTypes.bool,
@@ -271,7 +273,9 @@ DisplaySelectors.propTypes = {
 };
 
 DisplaySelectors.defaultProps = {
+  analyticsType: null,
   setGeography: null,
+  setAnalyticsType: null,
   setYear: null,
   setUnit: null,
   limitToTopObservedFeatureFields: false

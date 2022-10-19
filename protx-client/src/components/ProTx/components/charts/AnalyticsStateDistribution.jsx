@@ -57,6 +57,7 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
 
 AnalyticsStateDistribution.propTypes = {
   geography: PropTypes.string.isRequired,
+  analyticsType: PropTypes.string.isRequired
 };
 
 export default AnalyticsStateDistribution;
