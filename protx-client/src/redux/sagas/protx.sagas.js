@@ -122,21 +122,21 @@ export function* fetchProtxAnalytics(action) {
   }
 }
 
-export function* fetchProtxAnalyticsStateDistribution(action) {
-  yield put({ type: 'PROTX_ANALYTICS_STATE_DISTRIBUTION_INIT' });
+export function* fetchProtxAnalyticsStatewideDistribution(action) {
+  yield put({ type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_INIT' });
   try {
     const data = yield call(fetchUtil, {
       url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analyticsType}/`
     });
     yield put({
-      type: 'PROTX_ANALYTICS_STATE_DISTRIBUTION_SUCCESS',
+      type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS',
       payload: {
         data: data.result
       }
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_ANALYTICS_STATE_DISTRIBUTION_FAILURE'
+      type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE'
     });
   }
 }
@@ -166,9 +166,9 @@ export function* watchProtxAnalytics() {
   );
 }
 
-export function* watchProtxAnalyticsStateDistribution() {
+export function* watchProtxAnalyticsStatewideDistribution() {
   yield takeLeading(
-    'FETCH_PROTX_ANALYTICS_STATE_DISTRIBUTION',
-    fetchProtxAnalyticsStateDistribution
+    'FETCH_PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION',
+    fetchProtxAnalyticsStatewideDistribution
   );
 }

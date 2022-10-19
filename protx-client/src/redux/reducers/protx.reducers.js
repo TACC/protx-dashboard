@@ -123,30 +123,30 @@ export function protxAnalytics(
   }
 }
 
-export const initialAnalyticsStateDistributionState = {
+export const initialAnalyticsStatewideDistributionState = {
   loading: true,
   error: false,
   data: null
 };
 
-export function protxAnalyticsStateDistribution(
-  state = initialAnalyticsStateDistributionState,
+export function protxAnalyticsStatewideDistribution(
+  state = initialAnalyticsStatewideDistributionState,
   action
 ) {
   switch (action.type) {
-    case 'PROTX_ANALYTICS_STATE_DISTRIBUTION_INIT':
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_INIT':
       return {
-        ...initialAnalyticsStateDistributionState,
+        ...initialAnalyticsStatewideDistributionState,
       };
-    case 'PROTX_ANALYTICS_STATE_DISTRIBUTION_SUCCESS':
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS':
       return {
         ...state,
         data: action.payload.data,
         loading: false
       };
-    case 'PROTX_ANALYTICS_FAILURE':
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE':
       return {
-        ...initialAnalyticsStateDistributionState,
+        ...initialAnalyticsStatewideDistributionState,
         error: true
       };
     default:

@@ -9,20 +9,14 @@ import './PlotDetails.css';
 
 function AnalyticsStateDistribution({geography, analyticsType}) {
   const dispatch = useDispatch();
-  /*
-      possibly need -> title or header?
-      need the bakcned route
-      need saga/reducer for that route
-      fix instructions?
-   */
 
   const chartData = useSelector(
-    state => state.protxAnalyticsStateDistribution
+    state => state.protxAnalyticsStatewideDistribution
   );
 
   useEffect(() => {
       dispatch({
-        type: 'FETCH_PROTX_ANALYTICS_STATE_DISTRIBUTION',
+        type: 'FETCH_PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION',
         payload: {
           area: geography,
           analyticsType: analyticsType,

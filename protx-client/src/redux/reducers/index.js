@@ -4,7 +4,7 @@ import {
   protxDemographicsDistribution,
   protxMaltreatmentDistribution,
   protxAnalytics,
-  protxAnalyticsStateDistribution,
+  protxAnalyticsStatewideDistribution,
 } from './protx.reducers';
 
 export default combineReducers({
@@ -12,5 +12,5 @@ export default combineReducers({
   protxDemographicsDistribution,
   protxMaltreatmentDistribution,
   protxAnalytics,
-  protxAnalyticsStateDistribution,
+  protxAnalyticsStatewideDistribution,
 });
