@@ -25,7 +25,6 @@ def test_get_maltreatment_setup_complete_false(test_client, core_api_workbench_r
 maltreatment_plot_data = {
     "area": "county",
     "geoid": "48035",
-    "selectedArea": "Bosque County",
     "unit": "percent",
     "variables": ["ABAN", "EMAB", "LBTR", "MDNG", "NSUP", "PHAB", "PHNG", "RAPR", "SXAB", "SXTR"]
 }
