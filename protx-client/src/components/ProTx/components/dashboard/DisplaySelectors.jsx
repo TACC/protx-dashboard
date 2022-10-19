@@ -166,7 +166,7 @@ function DisplaySelectors({
           />
         </div>
       )}
-      {(mapType === 'observedFeatures') && (
+      {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
         <>
           <div className={styles["control"]}>
             <span className={styles["label"]}>Demographic</span>
@@ -206,7 +206,7 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      {(mapType === 'predictiveFeatures') && (
+      {(mapType === 'analytics') && (
         <>
           <div className={styles["control"]}>
             <span className={styles["label"]}>Projections</span>
