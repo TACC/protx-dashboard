@@ -6,7 +6,7 @@ import MainPlot from './MainPlot';
 import ChartInstructions from "./ChartInstructions";
 
 
-function AnalyticsStateDistribution({geography}) {
+function AnalyticsStateDistribution({geography, analyticsType}) {
   const dispatch = useDispatch();
   /*
       possibly need -> title or header?
@@ -24,10 +24,10 @@ function AnalyticsStateDistribution({geography}) {
         type: 'FETCH_PROTX_ANALYTICS_STATE_DISTRIBUTION',
         payload: {
           area: geography,
-          analytics_type: 'pred_per_100k',
+          analyticsType: analyticsType,
         }
       });
-    }, [geography]);
+    }, [geography, analyticsType]);
 
   if (chartData.error) {
     return (

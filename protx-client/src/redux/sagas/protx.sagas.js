@@ -121,7 +121,7 @@ export function* fetchProtxAnalyticsStateDistribution(action) {
   yield put({ type: 'PROTX_ANALYTICS_STATE_DISTRIBUTION_INIT' });
   try {
     const data = yield call(fetchUtil, {
-      url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analytics_type}/`
+      url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analyticsType}/`
     });
     yield put({
       type: 'PROTX_ANALYTICS_STATE_DISTRIBUTION_SUCCESS',

@@ -78,12 +78,14 @@ function DisplaySelectors({
   geography,
   maltreatmentTypes,
   observedFeature,
+  analyticsType,
   year,
   unit,
   selectedGeographicFeature,
   setGeography,
   setMaltreatmentTypes,
   setObservedFeature,
+  setAnalyticsType,
   setYear,
   setUnit,
   limitToTopObservedFeatureFields,
@@ -98,6 +100,7 @@ function DisplaySelectors({
   const valueRadioBtn1 =
     mapType === 'maltreatment' ? 'rate_per_100k_under17' : 'count';
   const display = useSelector(state => state.protx.data.display);
+  const analyticsCategories = [{name: 'risk', display_text: 'Risk Level'}, {name: 'pred_per_100k', display_text: 'Frequency Prediction'}]
 
   const changeUnit = newUnit => {
     if (mapType === 'observedFeatures') {
@@ -163,7 +166,7 @@ function DisplaySelectors({
           />
         </div>
       )}
-      {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
+      {(mapType === 'observedFeatures') && (
         <>
           <div className={styles["control"]}>
             <span className={styles["label"]}>Demographic</span>
@@ -198,6 +201,24 @@ function DisplaySelectors({
                       {f.DISPLAY_TEXT}
                     </option>
                   ))}
+              </optgroup>
+            </DropdownSelector>
+          </div>
+        </>
+      )}
+      {(mapType === 'predictiveFeatures') && (
+        <>
+          <div className={styles["control"]}>
+            <span className={styles["label"]}>Projections</span>
+            <DropdownSelector
+              value={analyticsType}
+              onChange={(event) => setAnalyticsType(event.target.value)}>
+              <optgroup label="Select projection type">
+                {analyticsCategories.map(type => (
+                  <option key={type.name} value={type.name}>
+                    {type.display_text}
+                  </option>
+                ))}
               </optgroup>
             </DropdownSelector>
           </div>
