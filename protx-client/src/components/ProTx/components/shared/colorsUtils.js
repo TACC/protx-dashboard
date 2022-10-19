@@ -8,7 +8,7 @@ import { colorbrewerClassYlOrBr } from '../data/colors';
  */
 class IntervalColorScale {
   constructor(meta) {
-    this.meta = meta;
+    this._meta = meta;
     let singleValueClasses = false;
 
     if (
@@ -28,18 +28,18 @@ class IntervalColorScale {
     const intervalValues = [];
     if (singleValueClasses) {
       for (let i = 0; i < this.numberIntervals; i += 1) {
-        intervalValues.push(this.meta.min + i);
+        intervalValues.push(this._meta.min + i);
       }
-      intervalValues.push(this.meta.max);
+      intervalValues.push(this._meta.max);
     } else {
-      intervalValues.push(this.meta.min);
+      intervalValues.push(this._meta.min);
       for (let i = 1; i < this.numberIntervals; i += 1) {
         intervalValues.push(
-          this.meta.min +
-            (i * (this.meta.max - this.meta.min)) / this.numberIntervals
+          this._meta.min +
+            (i * (this._meta.max - this._meta.min)) / this.numberIntervals
         );
       }
-      intervalValues.push(this.meta.max);
+      intervalValues.push(this._meta.max);
     }
 
     this.intervalLabels = [];
@@ -61,7 +61,7 @@ class IntervalColorScale {
         : Math.min(
             Math.floor(
               this.numberIntervals *
-                ((value - this.meta.min) / (this.meta.max - this.meta.min))
+                ((value - this._meta.min) / (this._meta.max - this._meta.min))
             ),
             this.numberIntervals - 1
           );
@@ -69,4 +69,56 @@ class IntervalColorScale {
   }
 }
 
-export default IntervalColorScale;
+/** Category color scale
+
+ Translate categorys to color.
+
+ categories contain both a key and label
+ `nullCategory` is what is shown if null value is provided
+
+ */
+class CategoryColorScale {
+  constructor(categories, nullCategory) {
+    this._nullCategory = nullCategory;
+    this._categories = categories;
+    this.numberIntervals = categories.length;
+
+    // todo rename to just labels
+    this.intervalLabels = categories.map(c => c.label);
+
+    if( nullCategory ) {
+      this.numberIntervals += 1;
+      // add null
+      this.intervalLabels.unshift(nullCategory);
+    }
+
+    if(this.numberIntervals > 6 || this.numberIntervals < 1) {
+      throw new Error("Unsupported number of categories")
+    }
+
+    this.colors = colorbrewerClassYlOrBr[this.numberIntervals];
+  }
+
+  getColor(value) {
+    if (!value) {
+      if (this._nullCategory) {
+        return this.colors[0]
+      } else {
+        return null;
+      }
+    } else {
+      const categoryIndex = this._categories.findIndex((c) => c.key === value);
+      if (categoryIndex === -1) {
+        throw new Error("Unsupported category")
+      }
+      const colorIndex = this._nullCategory ? categoryIndex + 1 : categoryIndex;
+      return this.colors[colorIndex];
+    }
+  }
+}
+
+
+export {
+  IntervalColorScale,
+  CategoryColorScale
+};

@@ -1,6 +1,7 @@
 import {
   getObservedFeatureValue,
-  getMaltreatmentAggregatedValue
+  getMaltreatmentAggregatedValue,
+  getAnalyticsRiskLabel
 } from './dataUtils';
 
 /**
@@ -31,8 +32,6 @@ const getFeatureStyle = (
   unit
 ) => {
   const stroke = geography == 'dfps_region' ? true : false;
-  const color = 'black';
-  const weight = 1;
   let fillColor;
   if (mapType === 'observedFeatures') {
     const featureValue = getObservedFeatureValue(
@@ -46,7 +45,7 @@ const getFeatureStyle = (
     if (featureValue && colorScale) {
       fillColor = colorScale.getColor(featureValue);
     }
-  } else {
+  } else if (mapType === 'maltreatment' ) {
     const featureValue = getMaltreatmentAggregatedValue(
       data,
       geography,
@@ -58,25 +57,28 @@ const getFeatureStyle = (
     if (featureValue !== 0 && colorScale) {
       fillColor = colorScale.getColor(featureValue);
     }
+  } else {
+    const riskLabel = getAnalyticsRiskLabel(data, geoid);
+    fillColor = colorScale.getColor(riskLabel);
   }
   if (fillColor) {
     return {
-      color,
+      color: 'black',
       fillColor,
       fill: true,
-      fillOpacity: 0.5,
+      fillOpacity: 1.0,
       stroke,
-      weight
+      weight: 1
     };
   }
   // if no color/data, we return a transparent style in order to allow for feature selection.
   return {
-    color,
+    color: 'black',
     fill: true,
     fillColor: 'black',
     fillOpacity: 0.0,
     stroke,
-    weight
+    weight: 1
   };
 };
 
