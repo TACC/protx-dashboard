@@ -27,60 +27,45 @@ const compareSimplifiedValueType = (observedFeature, valueType) => {
 };
 
 /**
- * Get the county name for a given Geoid.
+ * Get the county name for a given trimmed Geoid.
+ * @param {String} trimmedGeoid
+ * @returns {countyName: string}
+ */
+const getCountyName = trimmedGeoid => {
+  const county = Object.values(PHR_MSA_COUNTIES).find(cty => {
+    const baseCode = '000';
+    const countyCode = (baseCode + cty['FIPS Number']).slice(-3);
+    return countyCode === trimmedGeoid;
+  });
+  const countyName = county ? county['County Name'] : 'Not Found';
+  return countyName;
+};
+
+/**
+ * Get a pertinent geography name for a given geography and Geoid.
+ * @param {String} geography
  * @param {String} currentGeoid
- * @returns {geographyDisplayName: string}
+ * @returns {geographyName: string}
  */
 const getSelectedGeographyName = (geography, currentGeoid) => {
-  // console.log(currentGeoid);
-
-  let geographyName;
-  let fipsIdName;
+  let geographyName, trimmedGeoid;
 
   switch (geography) {
     case 'county':
-      const trimmedGeoid = currentGeoid.substring(currentGeoid.length - 3);
-      const countyObjects = PHR_MSA_COUNTIES[0];
-
-      Object.keys(countyObjects).forEach(cty => {
-        const currentCounty = countyObjects[cty];
-        const baseCode = '000';
-        const countyCode = baseCode + currentCounty['FIPS Number']; // String.
-        const currentCountyCode = countyCode.slice(-3);
-        const currentCountyName = currentCounty['County Name'];
-
-        if (currentCountyCode === trimmedGeoid) {
-          fipsIdName = currentCountyName;
-        }
-      });
-      geographyName = fipsIdName;
+      trimmedGeoid = currentGeoid.substring(currentGeoid.length - 3);
+      geographyName = getCountyName(trimmedGeoid);
       break;
     case 'tract':
-      const trimmedTractGeoid = currentGeoid.slice(2, 5);
-      const tractObjects = PHR_MSA_COUNTIES[0];
-
-      Object.keys(tractObjects).forEach(cty => {
-        const currentCounty = tractObjects[cty];
-        const baseCode = '000';
-        const countyCode = baseCode + currentCounty['FIPS Number']; // String.
-        const currentCountyCode = countyCode.slice(-3);
-        const currentCountyName = currentCounty['County Name'];
-      
-        if (trimmedTractGeoid === currentCountyCode) {
-          fipsIdName = currentCountyName;
-        }
-      });
-      geographyName = fipsIdName;
+      trimmedGeoid = currentGeoid.slice(2, 5);
+      geographyName = getCountyName(trimmedGeoid);
       break;
     case 'dfps_region':
-      // const regionLabel = currentGeoid.slice(2);
       const regionLabel = currentGeoid.substring(currentGeoid.indexOf('-') + 1);
-      // geographyName = 'dfps_region__placeholder';
       geographyName = regionLabel;
       break;
     default:
       geographyName = '';
-  };
+  }
 
   return geographyName;
 };
@@ -365,6 +350,7 @@ export {
   getObservedFeatureValue,
   getMaltreatmentAggregatedValue,
   getSelectedGeographyName,
+  getCountyName,
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
