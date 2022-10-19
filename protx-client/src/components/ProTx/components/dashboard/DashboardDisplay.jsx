@@ -226,11 +226,11 @@ function DashboardDisplay() {
         <Route
           path={`${protxRoute}/analytics`}
           render={() => {
-            setMapType('predictiveFeatures');
+            setMapType('analytics'); //todo; see DisplaySelectors
             return (
               <>
                 <DisplaySelectors
-                  mapType={mapType}
+                  mapType="observedFeatures"
                   geography={geography}
                   maltreatmentTypes={maltreatmentTypes}
                   observedFeature={observedFeature}

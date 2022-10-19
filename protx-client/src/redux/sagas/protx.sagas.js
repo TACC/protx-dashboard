@@ -11,7 +11,8 @@ export function* fetchProtx(action) {
       demographics,
       texasBoundary,
       display,
-      resources
+      resources,
+      analytics
     } = yield all({
       maltreatment: call(fetchUtil, {
         url: `/protx/api/maltreatment`
@@ -27,6 +28,9 @@ export function* fetchProtx(action) {
       }),
       resources: call(fetchUtil, {
         url: `/protx/api/resources`
+      }),
+      analytics: call(fetchUtil, {
+        url: `/protx/api/analytics/county/`
       })
     });
     yield put({
@@ -39,7 +43,8 @@ export function* fetchProtx(action) {
         texasBoundary,
         display,
         resources: resources.resources,
-        resourcesMeta: resources.display
+        resourcesMeta: resources.display,
+        analytics: analytics.result
       }
     });
   } catch (error) {

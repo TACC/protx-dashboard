@@ -120,8 +120,6 @@ function MainChart({
         state => state.protxMaltreatmentDistribution
       );
   
-      const dispatch = useDispatch();
-  
       useEffect(() => {
         if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
           dispatch({
