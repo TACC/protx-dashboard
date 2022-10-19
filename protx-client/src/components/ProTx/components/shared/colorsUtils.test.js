@@ -67,7 +67,7 @@ describe('IntervalColorScale', () => {
     expect(colorScale.intervalLabels).toEqual(['0 - 10', '10 - 20', '20 - 30', '30 - 40', '40 - 50', '50 - 60']);
     expect(colorScale.getColor(0.0)).toEqual(colorbrewerClassYlOrBr[6][0]);
     expect(colorScale.getColor(9.9)).toEqual(colorbrewerClassYlOrBr[6][0]);
-    expect(colorScale.getColor(9.9)).toEqual('#ffffcc');
+    expect(colorScale.getColor(9.9)).toEqual('#ffffd4');
 
     expect(colorScale.getColor(10)).toEqual(colorbrewerClassYlOrBr[6][1]);
     expect(colorScale.getColor(19.9)).toEqual(colorbrewerClassYlOrBr[6][1]);
