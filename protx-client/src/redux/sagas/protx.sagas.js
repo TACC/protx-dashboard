@@ -112,7 +112,8 @@ export function* fetchProtxAnalytics(action) {
     yield put({
       type: 'PROTX_ANALYTICS_SUCCESS',
       payload: {
-        data: data.result
+        data: data.result,
+        chartData: data.chartData
       }
     });
   } catch (error) {
@@ -131,7 +132,7 @@ export function* fetchProtxAnalyticsStatewideDistribution(action) {
     yield put({
       type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS',
       payload: {
-        data: data.result
+        data: data.result,
       }
     });
   } catch (error) {

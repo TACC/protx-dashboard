@@ -92,9 +92,10 @@ export function protxMaltreatmentDistribution(
 }
 
 export const initialAnalyticsState = {
-  loading: false,
+  loading: true,
   error: false,
-  data: null
+  data: null,
+  chartData: null
 };
 
 export function protxAnalytics(
@@ -111,6 +112,7 @@ export function protxAnalytics(
       return {
         ...state,
         data: action.payload.data,
+        chartData: action.payload.chartData,
         loading: false
       };
     case 'PROTX_ANALYTICS_FAILURE':
@@ -126,7 +128,7 @@ export function protxAnalytics(
 export const initialAnalyticsStatewideDistributionState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
 export function protxAnalyticsStatewideDistribution(

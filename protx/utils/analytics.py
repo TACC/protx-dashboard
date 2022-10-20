@@ -69,7 +69,7 @@ def get_distribution_risk_plot(data):
     return json.loads(fig.to_json())
 
 
-def get_distribution_prediction_plot_(data):
+def get_distribution_prediction_plot_(data, predictedNum=None):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column pred_per_100k column
 
     The pred_per_100k columns represents what our models predicted as the number of cases per 100K people
@@ -82,6 +82,8 @@ def get_distribution_prediction_plot_(data):
     fig = go.Figure()
     fig.add_vline(x=mean+std, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
+    if predictedNum:
+        fig.add_vline(x=predictedNum, line_width=3, line_color="red")
 
     fig.add_histogram(x=data['predictions']['pred_per_100k'],
                       # nbinsx=50,

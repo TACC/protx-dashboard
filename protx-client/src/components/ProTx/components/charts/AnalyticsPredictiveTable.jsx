@@ -26,11 +26,6 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   );
   const showPlot = false; // Hide the plot while in dev.
 
-  const plotState = {
-    data: [{ type: 'bar', x: [1, 2, 3], y: [1, 3, 2] }],
-    layout: { title: { text: 'Analytics' } }
-  };
-
   if(analytics.error) {
     return (
       <div>something went wrong</div>
@@ -58,7 +53,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
     </div>
   );
   */
-
+  console.log(analytics.chartData)
   return (
     <div className="predictive-features-chart">
       <div className="predictive-features-plot">
@@ -66,17 +61,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
           <PredictiveFeaturesTable
             selectedGeographicFeature={selectedGeographicFeature}
           />
-          {showPlot && (
-            <>
-              <AnalyticsDetails
-                geography={geography}
-                observedFeature={observedFeature}
-                selectedGeographicFeature={selectedGeographicFeature}
-                data={data}
-              />
-              <MainPlot plotState={plotState} />
-            </>
-          )}
+          <MainPlot plotState={analytics.chartData} />
           <ChartInstructions currentReportType="hidden" />
         </div>
       </div>
