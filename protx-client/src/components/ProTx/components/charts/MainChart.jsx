@@ -32,7 +32,7 @@ function MainChart({
       );
     } else {
       return (
-        <AnalyticsStateDistribution geography={geography} analyticsType={analyticsType}/>
+        <AnalyticsStateDistribution geography={geography}/>
       );
     }
   }

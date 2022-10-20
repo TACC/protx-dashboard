@@ -78,14 +78,12 @@ function DisplaySelectors({
   geography,
   maltreatmentTypes,
   observedFeature,
-  analyticsType,
   year,
   unit,
   selectedGeographicFeature,
   setGeography,
   setMaltreatmentTypes,
   setObservedFeature,
-  setAnalyticsType,
   setYear,
   setUnit,
   limitToTopObservedFeatureFields,
@@ -100,7 +98,6 @@ function DisplaySelectors({
   const valueRadioBtn1 =
     mapType === 'maltreatment' ? 'rate_per_100k_under17' : 'count';
   const display = useSelector(state => state.protx.data.display);
-  const analyticsCategories = [{name: 'risk', display_text: 'Relative Risk'}, {name: 'pred_per_100k', display_text: 'Predicted Number of Cases'}]
 
   const changeUnit = newUnit => {
     if (mapType === 'observedFeatures') {
@@ -206,24 +203,6 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      {(mapType === 'analytics') && (
-        <>
-          <div className={styles["control"]}>
-            <span className={styles["label"]}>Projections</span>
-            <DropdownSelector
-              value={analyticsType}
-              onChange={(event) => setAnalyticsType(event.target.value)}>
-              <optgroup label="Select projection type">
-                {analyticsCategories.map(type => (
-                  <option key={type.name} value={type.name}>
-                    {type.display_text}
-                  </option>
-                ))}
-              </optgroup>
-            </DropdownSelector>
-          </div>
-        </>
-      )}
       <div className={styles["control"]}>
         <span className={styles["label"]}>Years</span>
         <DropdownSelector
@@ -258,14 +237,12 @@ DisplaySelectors.propTypes = {
   geography: PropTypes.string.isRequired,
   maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   observedFeature: PropTypes.string.isRequired,
-  analyticsType: PropTypes.string,
   year: PropTypes.string.isRequired,
   unit: PropTypes.string.isRequired,
   selectedGeographicFeature: PropTypes.string.isRequired,
   setGeography: PropTypes.func,
   setMaltreatmentTypes: PropTypes.func.isRequired,
   setObservedFeature: PropTypes.func.isRequired,
-  setAnalyticsType: PropTypes.func,
   setYear: PropTypes.func,
   setUnit: PropTypes.func,
   limitToTopObservedFeatureFields: PropTypes.bool,
@@ -273,9 +250,7 @@ DisplaySelectors.propTypes = {
 };
 
 DisplaySelectors.defaultProps = {
-  analyticsType: null,
   setGeography: null,
-  setAnalyticsType: null,
   setYear: null,
   setUnit: null,
   limitToTopObservedFeatureFields: false
