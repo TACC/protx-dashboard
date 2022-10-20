@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
+from sqlalchemy.orm.exc import NoResultFound
 from flask import make_response
 from werkzeug.exceptions import BadRequest
 
@@ -125,8 +126,11 @@ class AnalyticsSubset(Resource):
         logger.info(f"Getting analytics data for {area} {geoid}")
         engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
         with engine.connect() as connection:
-            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
-            return {"result": dict(result)}
+            try:
+                result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
+                return {"result": dict(result)}
+            except NoResultFound:
+                return {"result": {"GEOID": int(geoid)}}
 
 
 @api.route("/analytics-chart/<area>/<analytics_type>/")
