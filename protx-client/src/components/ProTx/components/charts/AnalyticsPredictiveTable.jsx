@@ -9,9 +9,6 @@ import {
 } from '../shared/dataUtils';
 import ChartInstructions from './ChartInstructions';
 import './PredictiveFeaturesTable.css';
-
-
-
 function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const dispatch = useDispatch();
 
@@ -57,17 +54,32 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   }
 
   const countyName = getSelectedGeographyName(geography, analytics.data.GEOID.toString());
-  const observedFeaturesLabel_1 = analytics.data.demographic_feature_1? getObservedFeaturesLabel(analytics.data.demographic_feature_1, data) : '--No Data--'
+
+  const observedFeaturesLabel_1 = analytics.data.demographic_feature_1 ? getObservedFeaturesLabel(analytics.data.demographic_feature_1, data) : '--No Data--'
   const observedFeaturesLabel_2 = analytics.data.demographic_feature_2 ? getObservedFeaturesLabel(analytics.data.demographic_feature_2, data) : '--No Data--'
   const observedFeaturesLabel_3 = analytics.data.demographic_feature_3 ? getObservedFeaturesLabel(analytics.data.demographic_feature_3, data) : '--No Data--'
+  
   const correlation_1 = analytics.data.correlation_1 ? capitalizeString(analytics.data.correlation_1) : '--No Data--';
   const correlation_2 = analytics.data.correlation_2 ? capitalizeString(analytics.data.correlation_2) : '--No Data--';
   const correlation_3 = analytics.data.correlation_3 ? capitalizeString(analytics.data.correlation_3) : '--No Data--';
 
-  const chartSubtitle = 'Table 1';
-  const chartTitle = "Top 3 Demographic Risk Factors for " + countyName + " County";          
-  const noteText = 'Top three demographic features related to changes in the county-level child total maltreatment counts. Ranking indicates features that are most influential. Correlation indicates the nature of the relationship between the demographic feature and total maltreatment counts. A positive correlation implies that an increase in the demographic feature results in an increase in total maltreatment counts and vice versa. A negative correlation means an increase in the demographic feature results in a decrease in total maltreatment counts.';
+  const chartSubtitle = 'Table 1';    
   
+  const analyticsFeatureTitle = () => {
+    return (
+      <div className="feature-table-chart-selection">
+        <div className="feature-table-chart-title">
+        Top Three Maltreatment Factors for {countyName} County
+          <span className="feature-table-chart-subtitle">
+            ({chartSubtitle})
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  const analyticsChartTitle = analyticsFeatureTitle();  
+
   const analyticsFeatureHeaderRow  = () => {
     return (
       <tr>
@@ -79,36 +91,14 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
           Correlation to Increased Maltreatment</th>  
       </tr>
     );
-    };
+  };
 
   const analyticsFeatureTableHeader = analyticsFeatureHeaderRow();
 
-  const analyticsFeatureTableAnnotations = () => {
-    const notePrefix = 'Table 1'
-    const noteText = 'Top three demographic features related to changes in the county-level child total maltreatment counts. Ranking indicates features that are most influential. Correlation indicates the nature of the relationship between the demographic feature and total maltreatment counts. A positive correlation implies that an increase in the demographic feature results in an increase in total maltreatment counts and vice versa. A negative correlation means an increase in the demographic feature results in a decrease in total maltreatment counts.';
     return (
-      <div className="feature-table-annotation">
-        <span className="feature-table-annotation-prefix">
-          {notePrefix}
-        </span>
-        <span className="feature-table-annotation-text">
-          {noteText}
-        </span>
-      </div>
-    );
-  };
-
-  const analyticsFeatureAnnotation = analyticsFeatureTableAnnotations();
-
-    return (
-        <div className="feature-table">
-          <div className="feature-table-chart-selection">
-            <div className="feature-table-chart-title">
-              {chartTitle}
-              <span className="feature-table-chart-subtitle">
-                ({chartSubtitle})
-              </span>
-            </div>
+      <div className="feature-table">
+        <div className="feature-table-chart-selection">
+          <div> {analyticsChartTitle} 
             <table>
               <thead>{analyticsFeatureTableHeader}</thead>
               <tbody>
@@ -135,12 +125,12 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
                 </tr>
               </tbody>
             </table>
-            </div>
-          <div>{analyticsFeatureAnnotation}</div>
-          <ChartInstructions currentReportType="hidden"></ChartInstructions>
+          </div>
         </div>
-      );
-
+          <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
+          <ChartInstructions currentReportType="hidden"></ChartInstructions>
+      </div>
+    );
   };
 
 
