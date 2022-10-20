@@ -96,6 +96,14 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const analyticsFeatureTableHeader = analyticsFeatureHeaderRow();
 
     return (
+      <div>
+        <div className="plot-details-section">
+          <div className="plot-details-section-selected">
+            <span className="plot-details-section-selected-value">
+              {countyName} County
+            </span>
+          </div>
+        </div>
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div> {analyticsChartTitle} 
@@ -130,6 +138,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
           <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
           <ChartInstructions currentReportType="hidden"></ChartInstructions>
       </div>
+    </div>
     );
   };
 
