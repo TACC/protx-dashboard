@@ -10,6 +10,14 @@ import json
 from pandas import read_sql_query
 import plotly.graph_objects as go
 
+_low_risk_label = "Low <br>Risk"
+_medium_risk_label = "Medium <br>Risk"
+_high_risk_label = "High <br>Risk"
+
+_low_risk_color = "green"
+_medium_risk_color = "yellow"
+_high_risk_color = "red"
+
 
 def read_sqlite(dbfile):
     with sqlite3.connect(dbfile) as dbcon:
@@ -35,20 +43,26 @@ def get_distribution_risk_plot(data):
             'xanchor': 'center',
             'yanchor': 'top'},
         xaxis_title="Relative Risk",
-        yaxis_title="Frequency")
+        yaxis_title="Frequency",
+        font=dict(
+            family="Times New Roman, monospace",
+            size=18,
+            color="Black"
+        )
+    )
 
     fig.add_annotation(x=-3, y=30,
-                       text="Low Risk",
+                       text=_low_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'green'})
+                       font={'size': 20, 'color': _low_risk_color})
     fig.add_annotation(x=-0, y=30,
-                       text="Medium Risk ",
+                       text=_medium_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'yellow'})
+                       font={'size': 20, 'color': _medium_risk_color})
     fig.add_annotation(x=3, y=30,
-                       text="High Risk",
+                       text=_high_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'red'})
+                       font={'size': 20, 'color': _high_risk_color})
     return json.loads(fig.to_json())
 
 
@@ -76,19 +90,25 @@ def get_distribution_prediction_plot_(data):
             'xanchor': 'center',
             'yanchor': 'top'},
         xaxis_title="Predicted Number of Cases per 100K persons",
-        yaxis_title="Frequency")
+        yaxis_title="Frequency",
+        font=dict(
+            family="Times New Roman, monospace",
+            size=18,
+            color="Black"
+        )
+    )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
     fig.add_annotation(x=30,
                        y=30,
-                       text="Low Risk",
+                       text=_low_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'green'})
+                       font={'size': 20, 'color': _low_risk_color})
     fig.add_annotation(x=mean-0*std, y=30,
-                       text="Medium Risk ",
+                       text=_medium_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'yellow'})
+                       font={'size': 20, 'color': _medium_risk_color})
     fig.add_annotation(x=mean+2*std, y=30,
-                       text="High Risk",
+                       text=_high_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'red'})
+                       font={'size': 20, 'color': _high_risk_color})
     return json.loads(fig.to_json())
