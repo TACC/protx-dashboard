@@ -230,7 +230,7 @@ function DashboardDisplay() {
             return (
               <>
                 <DisplaySelectors
-                  mapType="observedFeatures"
+                  mapType={mapType}
                   geography={geography}
                   maltreatmentTypes={maltreatmentTypes}
                   observedFeature={observedFeature}
