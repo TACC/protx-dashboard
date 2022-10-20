@@ -203,21 +203,22 @@ function DisplaySelectors({
           </div>
         </>
       )}
-      <div className={styles["control"]}>
-        <span className={styles["label"]}>Years</span>
-        <DropdownSelector
-          value={year}
-          onChange={(event) => setYear(event.target.value)}
-          disabled={disabledYear}>
-          <optgroup label="Select year" />
-          {SUPPORTED_YEARS.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </DropdownSelector>
-      </div>
-
+      {(mapType !== 'analytics') && (
+        <div className={styles["control"]}>
+          <span className={styles["label"]}>Years</span>
+          <DropdownSelector
+            value={year}
+            onChange={(event) => setYear(event.target.value)}
+            disabled={disabledYear}>
+            <optgroup label="Select year" />
+            {SUPPORTED_YEARS.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </DropdownSelector>
+        </div>
+      )}
       {selectedGeographicFeature && (
         <Button
           onClick={downloadResources}
