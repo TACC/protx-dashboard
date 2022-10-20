@@ -65,6 +65,7 @@ def get_distribution_risk_plot(data):
                        text=_high_risk_label,
                        showarrow=False,
                        font={'size': 20, 'color': _high_risk_color})
+    fig.update_traces(marker_color=_histogram_color)
     return json.loads(fig.to_json())
 
 
@@ -115,4 +116,5 @@ def get_distribution_prediction_plot_(data):
                        text=_high_risk_label,
                        showarrow=False,
                        font={'size': 20, 'color': _high_risk_color})
+    fig.update_traces(marker_color=_histogram_color)
     return json.loads(fig.to_json())
