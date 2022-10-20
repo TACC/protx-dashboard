@@ -122,3 +122,34 @@ export function protxAnalytics(
       return state;
   }
 }
+
+export const initialAnalyticsStatewideDistributionState = {
+  loading: true,
+  error: false,
+  data: null
+};
+
+export function protxAnalyticsStatewideDistribution(
+  state = initialAnalyticsStatewideDistributionState,
+  action
+) {
+  switch (action.type) {
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_INIT':
+      return {
+        ...initialAnalyticsStatewideDistributionState,
+      };
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS':
+      return {
+        ...state,
+        data: action.payload.data,
+        loading: false
+      };
+    case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE':
+      return {
+        ...initialAnalyticsStatewideDistributionState,
+        error: true
+      };
+    default:
+      return state;
+  }
+}

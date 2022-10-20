@@ -4,32 +4,25 @@ import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
 import ChartInstructions from "./ChartInstructions";
+import './PlotDetails.css';
 
 
-function AnalyticsStateDistribution({geography}) {
+function AnalyticsStateDistribution({geography, analyticsType}) {
   const dispatch = useDispatch();
-  /*
-      possibly need -> title or header?
-      need the bakcned route
-      need saga/reducer for that route
-      fix instructions?
-   */
 
   const chartData = useSelector(
-    state => state.protxDemographicsDistribution
+    state => state.protxAnalyticsStatewideDistribution
   );
 
   useEffect(() => {
       dispatch({
-        type: 'FETCH_PROTX_DEMOGRAPHICS_DISTRIBUTION',
+        type: 'FETCH_PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION',
         payload: {
-          area: 'county',
-          selectedArea: 48257,
-          variable: 'CROWD',
-          unit: 'percent'
+          area: geography,
+          analyticsType: analyticsType,
         }
       });
-    }, []);
+    }, [geography, analyticsType]);
 
   if (chartData.error) {
     return (
@@ -49,14 +42,22 @@ function AnalyticsStateDistribution({geography}) {
 
   return (
     <div>
+      <div className="plot-details-section">
+        <div className="plot-details-section-selected">
+          <span className="plot-details-section-selected-value">
+            Texas Statewide Data
+          </span>
+        </div>
+      </div>
       <MainPlot plotState={chartData.data} />
-      <ChartInstructions currentReportType="hidden" />
+      <ChartInstructions currentReportType="analytics" />
     </div>
   );
 }
 
 AnalyticsStateDistribution.propTypes = {
   geography: PropTypes.string.isRequired,
+  analyticsType: PropTypes.string.isRequired
 };
 
 export default AnalyticsStateDistribution;
