@@ -22,9 +22,6 @@ def get_distribution_risk_plot(data):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column 'risk'
     """
     fig = go.Figure()
-    fig.add_vrect(x0=1, x1=4, line_width=0, fillcolor="red", opacity=0.05)
-    fig.add_vrect(x0=-1, x1=1, line_width=0, fillcolor="yellow", opacity=0.05)
-    fig.add_vrect(x0=-4, x1=-1, line_width=0, fillcolor="green", opacity=0.05)
     fig.add_vline(x=1, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=-1, line_width=3, line_dash="dash", line_color="black")
 
@@ -62,21 +59,10 @@ def get_distribution_prediction_plot_(data):
 
     """
 
-    # compute thresholds
     mean = data['predictions'].pred_per_100k.mean()
     std = data['predictions'].pred_per_100k.std()
 
-    # instantiate figure
     fig = go.Figure()
-    fig.add_vrect(x0=mean+std,
-                  x1=data['predictions'].pred_per_100k.max()+50,
-                  line_width=0, fillcolor="red", opacity=0.05)
-    fig.add_vrect(x0=mean-std,
-                  x1=mean+std,
-                  line_width=0, fillcolor="yellow", opacity=0.05)
-    fig.add_vrect(x0=data['predictions'].pred_per_100k.min()-50,
-                  x1=mean-std,
-                  line_width=0, fillcolor="green", opacity=0.05)
     fig.add_vline(x=mean+std, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
 
