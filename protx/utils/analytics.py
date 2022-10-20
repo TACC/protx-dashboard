@@ -80,7 +80,10 @@ def get_distribution_prediction_plot_(data):
     fig.add_vline(x=mean+std, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
 
-    fig.add_histogram(x=data['predictions']['pred_per_100k'], nbinsx=20)
+    fig.add_histogram(x=data['predictions']['pred_per_100k'],
+                      # nbinsx=50,
+                      xbins=go.histogram.XBins(size=50)
+                      )
 
     fig.update_layout(
         title={
