@@ -32,13 +32,6 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
     state => state.protx.data
   );
 
-  const showPlot = true; // Hide the plot while in dev.
-
-  const plotState = {
-    data: [{ type: 'bar', x: [1, 2, 3], y: [1, 3, 2] }],
-    layout: { title: { text: 'Analytics' } }
-  };
-
   if(analytics.error) {
     return (
       <div>something went wrong</div>
