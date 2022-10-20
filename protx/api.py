@@ -130,8 +130,7 @@ class AnalyticsSubset(Resource):
                 result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
                 return {"result": dict(result)}
             except NoResultFound:
-                return {"result": {"GEOID":int(geoid)}}
-            
+                return {"result": {"GEOID": int(geoid)}}
 
 
 @api.route("/analytics-chart/<area>/<analytics_type>/")
