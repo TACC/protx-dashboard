@@ -6,6 +6,7 @@
 """
 
 import sqlite3
+import json
 from pandas import read_sql_query
 import plotly.graph_objects as go
 
@@ -51,7 +52,7 @@ def get_distribution_risk_plot(data):
                        text="High Risk",
                        showarrow=False,
                        font={'size': 16, 'color': 'red'})
-    return fig.to_json()
+    return json.loads(fig.to_json())
 
 
 def get_distribution_prediction_plot_(data):
@@ -104,4 +105,4 @@ def get_distribution_prediction_plot_(data):
                        text="High Risk",
                        showarrow=False,
                        font={'size': 16, 'color': 'red'})
-    return fig.to_json()
+    return json.loads(fig.to_json())

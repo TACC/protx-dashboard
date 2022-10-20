@@ -142,7 +142,7 @@ class AnalyticsChart(Resource):
         For example, `/protx/api/analytics-chart/county/risk/`
 
         """
-        logger.info(f"Getting analytics chart for {area}")
+        logger.info(f"Getting analytics chart for area: {area} and analytics_type: {analytics_type}")
         data = analytics.read_sqlite(analytics_db)
         if analytics_type == "risk":
             result = analytics.get_distribution_risk_plot(data)

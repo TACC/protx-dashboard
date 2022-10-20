@@ -4,7 +4,8 @@ import {
   watchProtx,
   watchProtxDemographicsDistribution,
   watchProtxMaltreatmentDistribution,
-  watchProtxAnalytics
+  watchProtxAnalytics,
+  watchProtxAnalyticsStatewideDistribution,
 } from './protx.sagas';
 
 export default function* rootSaga() {
@@ -12,6 +13,7 @@ export default function* rootSaga() {
     watchProtx(),
     watchProtxDemographicsDistribution(),
     watchProtxMaltreatmentDistribution(),
-    watchProtxAnalytics()
+    watchProtxAnalytics(),
+    watchProtxAnalyticsStatewideDistribution(),
   ]);
 }

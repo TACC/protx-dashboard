@@ -19,7 +19,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 import { getMetaData, getMapLegendLabel } from '../shared/dataUtils';
 import getFeatureStyle from '../shared/mapUtils';
-import IntervalColorScale from '../shared/colorsUtils';
+import { IntervalColorScale, CategoryColorScale } from '../shared/colorsUtils';
 
 let mapContainer;
 
@@ -186,20 +186,31 @@ function MainMap({
         legendControl.remove();
       }
 
-      const meta = getMetaData(
-        data,
-        mapType,
-        geography,
-        year,
-        observedFeature,
-        maltreatmentTypes,
-        unit
-      );
+      let newColorScale;
 
-      const intervalColorScale = meta ? new IntervalColorScale(meta) : null;
-      setColorScale(intervalColorScale);
+      if(mapType === "analytics") {
+        const categories = [
+          {key: 'low', label: 'Low'},
+          {key:'medium ', label:'Medium'}, // 'medium ' with space; check DB
+          {key: 'high', label: 'High'}];
+        const missingLabel = "No forecast";
+        newColorScale = new CategoryColorScale(categories, missingLabel);
+      } else {
+        const meta = getMetaData(
+          data,
+          mapType,
+          geography,
+          year,
+          observedFeature,
+          maltreatmentTypes,
+          unit
+        );
+        newColorScale = meta ? new IntervalColorScale(meta) : null;
+      }
 
-      if (intervalColorScale) {
+      setColorScale(newColorScale);
+
+      if (newColorScale) {
         const label = getMapLegendLabel(
           mapType,
           maltreatmentTypes,
@@ -215,8 +226,8 @@ function MainMap({
           div.innerHTML += `<div class="legend-title">${label}</div>`;
           // get numeric values between intervals
           // loop through our density intervals and generate a label with a colored square for each interval
-          for (let i = 0; i < intervalColorScale.numberIntervals; i += 1) {
-            div.innerHTML += `<div class="scale-value"><i style="background:${intervalColorScale.colors[i]}"></i> <span>${intervalColorScale.intervalLabels[i]}</span></div><br>`;
+          for (let i = 0; i < newColorScale.numberIntervals; i += 1) {
+            div.innerHTML += `<div class="scale-value"><i style="background:${newColorScale.colors[i]}"></i> <span>${newColorScale.intervalLabels[i]}</span></div><br>`;
           }
           return div;
         };
