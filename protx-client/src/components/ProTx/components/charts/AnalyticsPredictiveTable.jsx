@@ -88,48 +88,38 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const analyticsFeatureTableHeader = analyticsFeatureHeaderRow();
 
     return (
-      <div>
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {countyName} County
-            </span>
+      <div className="feature-table">
+        <div className="feature-table-chart-selection">
+          <div className="plot-detai"> {analyticsChartTitle}
+            <table>
+              <thead>{analyticsFeatureTableHeader}</thead>
+              <tbody>
+                <tr>
+                  <td>{"1"}</td>
+                  <td className="ensemble-rank-value">
+                    {observedFeaturesLabel_1}
+                  </td>
+                  <td>{correlation_1}</td>
+                </tr>
+                <tr>
+                  <td>{"2"}</td>
+                  <td className="ensemble-rank-value">
+                    {observedFeaturesLabel_2}
+                  </td>
+                  <td>{correlation_2}</td>
+                </tr>
+                <tr>
+                  <td>{"3"}</td>
+                  <td className="ensemble-rank-value">
+                    {observedFeaturesLabel_3}
+                  </td>
+                  <td>{correlation_3}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div className="feature-table">
-          <div className="feature-table-chart-selection">
-            <div className="plot-detai"> {analyticsChartTitle} 
-              <table>
-                <thead>{analyticsFeatureTableHeader}</thead>
-                <tbody>
-                  <tr>
-                    <td>{"1"}</td>
-                    <td className="ensemble-rank-value">
-                      {observedFeaturesLabel_1}
-                    </td>
-                    <td>{correlation_1}</td>
-                  </tr>
-                  <tr>
-                    <td>{"2"}</td>
-                    <td className="ensemble-rank-value">
-                      {observedFeaturesLabel_2}
-                    </td>
-                    <td>{correlation_2}</td>
-                  </tr>
-                  <tr>
-                    <td>{"3"}</td>
-                    <td className="ensemble-rank-value">
-                      {observedFeaturesLabel_3}
-                    </td>
-                    <td>{correlation_3}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
-          <ChartInstructions currentReportType="hidden"></ChartInstructions>
-        </div>
+        <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
       </div>
     );
   };
