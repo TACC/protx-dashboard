@@ -9,6 +9,7 @@ import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
 import './MainChart.css';
+import {getSelectedGeographyName} from "../shared/dataUtils";
 
 function MainChart({
   chartType,
@@ -25,14 +26,24 @@ function MainChart({
 
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
+    const plotDetailSectionTitle = selectedGeographicFeature ? `${getSelectedGeographyName(geography, selectedGeographicFeature)}  County`: "Texas Statewide Data";
     return (
       <div>
-        {selectedGeographicFeature &&
-          <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
-        }
+        <div className="plot-details-section">
+          <div className="plot-details-section-selected">
+            <span className="plot-details-section-selected-value">
+              {plotDetailSectionTitle}
+            </span>
+          </div>
+        </div>
         <AnalyticsStateDistribution
           geography={geography}
           selectedGeographicFeature={selectedGeographicFeature}/>
+        {selectedGeographicFeature &&
+          <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
+        }
+
+        <ChartInstructions currentReportType={selectedGeographicFeature ? "hidden" : "analytics"}/>
       </div>);
   }
 

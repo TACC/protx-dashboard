@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
-import ChartInstructions from "./ChartInstructions";
 import './PlotDetails.css';
 
 
@@ -42,17 +41,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
   }
 
   return (
-    <div>
-      <div className="plot-details-section">
-        <div className="plot-details-section-selected">
-          <span className="plot-details-section-selected-value">
-            Texas Statewide Data
-          </span>
-        </div>
-      </div>
-      <MainPlot plotState={chartData.data} />
-      <ChartInstructions currentReportType="analytics" />
-    </div>
+    <MainPlot plotState={chartData.data} />
   );
 }
 
