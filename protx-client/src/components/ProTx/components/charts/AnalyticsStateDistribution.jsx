@@ -67,11 +67,13 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
               Definition of Risk Levels
               <span className="feature-table-chart-subtitle">
               (Figure 1)
+              </span>
             </div>
           </div>
         </div>
       </div>
       <MainPlot plotState={chartData.data} />
+      <FigureCaption label={plotLabel} captionText={plotCaptionText} />
     </div>
   );
 }
