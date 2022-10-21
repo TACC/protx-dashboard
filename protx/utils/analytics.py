@@ -57,12 +57,11 @@ def get_distribution_prediction_plot(data, geoid=None):
     fig.add_histogram(x=data['predictions']['pred_per_100k'],
                       xbins=go.histogram.XBins(size=50)
                       )
-
     fig.update_layout(
         height=300,
-        xaxis_title="Predicted Number of Cases per 100K persons",
-        yaxis_title="Frequency",
-        font=dict(size=15, color="Black", family="Roboto"),
+        xaxis_title="<b><i>Predicted Number of Cases per 100K Persons</b><i>",
+        yaxis_title="<b><i>Frequency</i></b>",
+        font=dict(size=13, color="Black",  family="Roboto"),
         margin=dict(l=10, r=10, t=10, b=10)
     )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
