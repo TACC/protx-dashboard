@@ -147,11 +147,9 @@ class AnalyticsChart(Resource):
 
         data = analytics.read_sqlite(analytics_db)
         if analytics_type == "risk":
-            if selected_geoid:
-                raise BadRequest("Displaying selected area on chart is not supported yet")
-            result = analytics.get_distribution_risk_plot(data)
+            raise BadRequest("Displaying risk chart is not supported yet")
         elif analytics_type == "pred_per_100k":
-            result = analytics.get_distribution_prediction_plot_(data, geoid=selected_geoid)
+            result = analytics.get_distribution_prediction_plot(data, geoid=selected_geoid)
         else:
             raise BadRequest("Unsupported analytics_type")
         return {"result": result}

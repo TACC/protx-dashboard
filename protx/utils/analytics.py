@@ -32,47 +32,7 @@ def read_sqlite(dbfile):
     return out
 
 
-def get_distribution_risk_plot(data):
-    """ Get plot of for distribution of risk and levels for high, medium, low risk based on column 'risk'
-    """
-    fig = go.Figure()
-    fig.add_vline(x=1, line_width=3, line_dash="dash", line_color="black")
-    fig.add_vline(x=-1, line_width=3, line_dash="dash", line_color="black")
-
-    fig.add_histogram(x=data['predictions']['risk'], nbinsx=20)
-
-    fig.update_layout(
-        title={
-            'text': "Definition of Risk Levels",
-            'y': 0.9,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        xaxis_title="Relative Risk",
-        yaxis_title="Frequency",
-        font=dict(
-            size=15,
-            color="Black"
-        )
-    )
-
-    fig.add_annotation(x=-3, y=30,
-                       text=_low_risk_label,
-                       showarrow=False,
-                       font={'size': 20, 'color': _low_risk_color})
-    fig.add_annotation(x=-0, y=30,
-                       text=_medium_risk_label,
-                       showarrow=False,
-                       font={'size': 20, 'color': _medium_risk_color})
-    fig.add_annotation(x=3, y=30,
-                       text=_high_risk_label,
-                       showarrow=False,
-                       font={'size': 20, 'color': _high_risk_color})
-    fig.update_traces(marker_color=_histogram_color)
-    return json.loads(fig.to_json())
-
-
-def get_distribution_prediction_plot_(data, geoid=None):
+def get_distribution_prediction_plot(data, geoid=None):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column pred_per_100k column
 
     The pred_per_100k columns represents what our models predicted as the number of cases per 100K people
