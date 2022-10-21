@@ -26,15 +26,16 @@ function MainChart({
 
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
-    if (selectedGeographicFeature) {
-      return (
-        <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
-      );
-    } else {
-      return (
-        <AnalyticsStateDistribution geography={geography} analyticsType={analyticsType}/>
-      );
-    }
+    return (
+      <div>
+        {selectedGeographicFeature &&
+          <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
+        }
+        <AnalyticsStateDistribution
+          geography={geography}
+          analyticsType={analyticsType}
+          selectedGeographicFeature={selectedGeographicFeature}/>
+      </div>);
   }
 
   // DEMOGRAPHICS PLOT.
