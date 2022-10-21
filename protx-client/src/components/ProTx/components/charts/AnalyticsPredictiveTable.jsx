@@ -119,7 +119,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
               </tbody>
             </table>
 
-          <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
+        <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
           </div>
         </div>
     );

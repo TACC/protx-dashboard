@@ -1,0 +1,17 @@
+.plot-annotation, .plot-annotation * {
+    font-family: var(--font-type-roboto-condensed);
+    font-size: var(--font-size-xs);
+    margin-bottom: 1.5rem;
+    font-weight: var(--font-weight-light);
+  }
+ .plot-annotation {
+    margin-left: 3rem;
+    margin-right: 3rem;
+ } 
+ .annotation-label {
+    font-style: italic;
+    font-weight: var(--font-weight-normal-plus);
+ }
+ .annotation-text-bold {
+    font-weight: var(--font-weight-normal-plus);
+ }
