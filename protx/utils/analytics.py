@@ -19,9 +19,9 @@ _high_risk_label = "High <br>Risk"
 # colors should eventually match colors in 4 classes in frontend (specificaly data/colors.js
 # but see https://jira.tacc.utexas.edu/browse/COOKS-329 for details but currently in css overrides
 # in ProtxColors.css
-_low_risk_color = "#c6e8b0"
-_medium_risk_color = "#8fcca1"
-_high_risk_color = "#62ad9c"
+_low_risk_color = "#ffffd4"
+_medium_risk_color = "#eff5d6"
+_high_risk_color = "#8fcca1"
 _histogram_color = "#26547a"
 
 
