@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
 import { FigureCaption } from './FigureCaption';
-import ChartInstructions from "./ChartInstructions";
-import './PlotDetails.css';
 
 
-function AnalyticsStateDistribution({geography, analyticsType}) {
+
+function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
   const dispatch = useDispatch();
 
   const chartData = useSelector(
@@ -25,10 +24,11 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
         type: 'FETCH_PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION',
         payload: {
           area: geography,
-          analyticsType: analyticsType,
+          analyticsType: 'pred_per_100k',
+          geoid: selectedGeographicFeature
         }
       });
-    }, [geography, analyticsType]);
+    }, [geography, selectedGeographicFeature]);
 
   if (chartData.error) {
     return (
@@ -47,24 +47,13 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
   }
 
   return (
-    <div>
-      <div className="plot-details-section">
-        <div className="plot-details-section-selected">
-          <span className="plot-details-section-selected-value">
-            Texas Statewide Data
-          </span>
-        </div>
-      </div>
-      <MainPlot plotState={chartData.data} />
-      <FigureCaption label={plotLabel} captionText={plotCaptionText} />
-      <ChartInstructions currentReportType="analytics" />
-    </div>
+    <MainPlot plotState={chartData.data} />
   );
 }
 
 AnalyticsStateDistribution.propTypes = {
   geography: PropTypes.string.isRequired,
-  analyticsType: PropTypes.string.isRequired
+  selectedGeographicFeature: PropTypes.string.isRequired,
 };
 
 export default AnalyticsStateDistribution;

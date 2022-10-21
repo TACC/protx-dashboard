@@ -25,7 +25,6 @@ def test_get_maltreatment_setup_complete_false(test_client, core_api_workbench_r
 maltreatment_plot_data = {
     "area": "county",
     "geoid": "48035",
-    "selectedArea": "Bosque County",
     "unit": "percent",
     "variables": ["ABAN", "EMAB", "LBTR", "MDNG", "NSUP", "PHAB", "PHNG", "RAPR", "SXAB", "SXTR"]
 }
@@ -186,7 +185,7 @@ def test_get_analytics_for_specific_area_setup_complete_false(test_client, core_
 
 @pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
 def test_get_analytics_chart(test_client, core_api_workbench_request):
-    resp = test_client.get('/protx/api/analytics-chart/county/risk/')
+    resp = test_client.get('/protx/api/analytics-chart/county/risk')
     assert resp.status_code == 200
     data = resp.get_json()
     assert "result" in data
@@ -194,10 +193,10 @@ def test_get_analytics_chart(test_client, core_api_workbench_request):
 
 
 def test_get_analytics_chart_unauthed(test_client, core_api_workbench_request_unauthed):
-    resp = test_client.get('/protx/api/analytics-chart/county/risk/')
+    resp = test_client.get('/protx/api/analytics-chart/county/risk')
     assert resp.status_code == 403
 
 
 def test_get_analytics_chart_complete_false(test_client, core_api_workbench_request_setup_complete_false):
-    resp = test_client.get('/protx/api/analytics-chart/county/risk/')
+    resp = test_client.get('/protx/api/analytics-chart/county/risk')
     assert resp.status_code == 403

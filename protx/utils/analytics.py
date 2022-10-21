@@ -11,6 +11,20 @@ from pandas import read_sql_query
 import plotly.graph_objects as go
 
 
+_low_risk_label = "Low <br>Risk"
+_medium_risk_label = "Medium <br>Risk"
+_high_risk_label = "High <br>Risk"
+
+
+# colors should eventually match colors in 4 classes in frontend (specificaly data/colors.js
+# but see https://jira.tacc.utexas.edu/browse/COOKS-329 for details but currently in css overrides
+# in ProtxColors.css
+_low_risk_color = "#ffffd4"
+_medium_risk_color = "#eff5d6"
+_high_risk_color = "#8fcca1"
+_histogram_color = "#26547a"
+
+
 def read_sqlite(dbfile):
     with sqlite3.connect(dbfile) as dbcon:
         tables = list(read_sql_query("SELECT name FROM sqlite_master WHERE type='table';", dbcon)['name'])
@@ -22,9 +36,6 @@ def get_distribution_risk_plot(data):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column 'risk'
     """
     fig = go.Figure()
-    fig.add_vrect(x0=1, x1=4, line_width=0, fillcolor="red", opacity=0.05)
-    fig.add_vrect(x0=-1, x1=1, line_width=0, fillcolor="yellow", opacity=0.05)
-    fig.add_vrect(x0=-4, x1=-1, line_width=0, fillcolor="green", opacity=0.05)
     fig.add_vline(x=1, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=-1, line_width=3, line_dash="dash", line_color="black")
 
@@ -38,49 +49,54 @@ def get_distribution_risk_plot(data):
             'xanchor': 'center',
             'yanchor': 'top'},
         xaxis_title="Relative Risk",
-        yaxis_title="Frequency")
+        yaxis_title="Frequency",
+        font=dict(
+            size=15,
+            color="Black"
+        )
+    )
 
     fig.add_annotation(x=-3, y=30,
-                       text="Low Risk",
+                       text=_low_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'green'})
+                       font={'size': 20, 'color': _low_risk_color})
     fig.add_annotation(x=-0, y=30,
-                       text="Medium Risk ",
+                       text=_medium_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'yellow'})
+                       font={'size': 20, 'color': _medium_risk_color})
     fig.add_annotation(x=3, y=30,
-                       text="High Risk",
+                       text=_high_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'red'})
+                       font={'size': 20, 'color': _high_risk_color})
+    fig.update_traces(marker_color=_histogram_color)
     return json.loads(fig.to_json())
 
 
-def get_distribution_prediction_plot_(data):
+def get_distribution_prediction_plot_(data, geoid=None):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column pred_per_100k column
 
     The pred_per_100k columns represents what our models predicted as the number of cases per 100K people
 
     """
 
-    # compute thresholds
     mean = data['predictions'].pred_per_100k.mean()
     std = data['predictions'].pred_per_100k.std()
 
-    # instantiate figure
     fig = go.Figure()
-    fig.add_vrect(x0=mean+std,
-                  x1=data['predictions'].pred_per_100k.max()+50,
-                  line_width=0, fillcolor="red", opacity=0.05)
-    fig.add_vrect(x0=mean-std,
-                  x1=mean+std,
-                  line_width=0, fillcolor="yellow", opacity=0.05)
-    fig.add_vrect(x0=data['predictions'].pred_per_100k.min()-50,
-                  x1=mean-std,
-                  line_width=0, fillcolor="green", opacity=0.05)
     fig.add_vline(x=mean+std, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
 
-    fig.add_histogram(x=data['predictions']['pred_per_100k'], nbinsx=20)
+    if geoid:
+        match = data['predictions'].loc[data['predictions'].GEOID == int(geoid)]
+        if not match.empty:
+            # if we have a match in the data set we are able to draw the line
+            fig.add_vline(x=match.iloc[0]['pred_per_100k'],
+                          line_width=3,
+                          line_color="red")
+
+    fig.add_histogram(x=data['predictions']['pred_per_100k'],
+                      xbins=go.histogram.XBins(size=50)
+                      )
 
     fig.update_layout(
         title={
@@ -90,19 +106,25 @@ def get_distribution_prediction_plot_(data):
             'xanchor': 'center',
             'yanchor': 'top'},
         xaxis_title="Predicted Number of Cases per 100K persons",
-        yaxis_title="Frequency")
+        yaxis_title="Frequency",
+        font=dict(
+            size=15,
+            color="Black"
+        )
+    )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
     fig.add_annotation(x=30,
                        y=30,
-                       text="Low Risk",
+                       text=_low_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'green'})
+                       font={'size': 20, 'color': _low_risk_color})
     fig.add_annotation(x=mean-0*std, y=30,
-                       text="Medium Risk ",
+                       text=_medium_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'yellow'})
+                       font={'size': 20, 'color': _medium_risk_color})
     fig.add_annotation(x=mean+2*std, y=30,
-                       text="High Risk",
+                       text=_high_risk_label,
                        showarrow=False,
-                       font={'size': 16, 'color': 'red'})
+                       font={'size': 20, 'color': _high_risk_color})
+    fig.update_traces(marker_color=_histogram_color)
     return json.loads(fig.to_json())

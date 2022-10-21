@@ -84,7 +84,6 @@ export function* fetchProtxMaltreatmentDistribution(action) {
       method: 'PATCH',
       body: JSON.stringify({
         area: action.payload.area,
-        selectedArea: action.payload.selectedArea,
         geoid: action.payload.geoid,
         variables: action.payload.variables,
         unit: action.payload.unit
@@ -125,8 +124,10 @@ export function* fetchProtxAnalytics(action) {
 export function* fetchProtxAnalyticsStatewideDistribution(action) {
   yield put({ type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_INIT' });
   try {
+
     const data = yield call(fetchUtil, {
-      url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analyticsType}/`
+      url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analyticsType}`,
+      params: action.payload.geoid ? {geoid: action.payload.geoid} : null
     });
     yield put({
       type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS',

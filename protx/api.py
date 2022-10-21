@@ -65,7 +65,6 @@ class DemographicsDistributionPlotData(Resource):
 
 maltreatment_plot = api.model('MaltreatmentPlot', {
     "area": fields.String(),
-    "selectedArea": fields.String(),
     "geoid": fields.String(),
     "variables": fields.String(),
     "unit": fields.String()
@@ -79,17 +78,14 @@ class MaltreatmentPlotData(Resource):
     def patch(self):
         """Get maltreatment distribution data for plotting"""
         area = api.payload["area"]
-        selectedArea = api.payload["selectedArea"]
         geoid = api.payload["geoid"]
         variables = api.payload["variables"]
         unit = api.payload["unit"]
-        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
-                                                                                                 selectedArea,
-                                                                                                 unit,
-                                                                                                 geoid,
-                                                                                                 variables))
-        result = maltreatment.maltreatment_plot_figure(area=area, selectedArea=selectedArea,
-                                                       geoid=geoid, variables=variables, unit=unit)
+        logger.info("Getting maltreatment plot data for {} {} {} on the variables: {}".format(area,
+                                                                                              unit,
+                                                                                              geoid,
+                                                                                              variables))
+        result = maltreatment.maltreatment_plot_figure(area=area, geoid=geoid, variables=variables, unit=unit)
         return {"result": result}
 
 
@@ -133,21 +129,29 @@ class AnalyticsSubset(Resource):
                 return {"result": {"GEOID": int(geoid)}}
 
 
-@api.route("/analytics-chart/<area>/<analytics_type>/")
+@api.route("/analytics-chart/<area>/<analytics_type>")
 class AnalyticsChart(Resource):
     @api.doc("get_analytics_chart")
     def get(self, area, analytics_type):
         """Get analytic chart for the state of texas
 
-        For example, `/protx/api/analytics-chart/county/risk/`
+        For example, `/protx/api/analytics-chart/county/risk/1234`
+
+        If geoid query parameter is provided, then try to show the value of that area
+        on the chart.
 
         """
-        logger.info(f"Getting analytics chart for area: {area} and analytics_type: {analytics_type}")
+        selected_geoid = request.args.get("geoid")
+
+        logger.info(f"Getting analytics chart for area: {area} and analytics_type: {analytics_type}  selected geoid:{selected_geoid}")
+
         data = analytics.read_sqlite(analytics_db)
         if analytics_type == "risk":
+            if selected_geoid:
+                raise BadRequest("Displaying selected area on chart is not supported yet")
             result = analytics.get_distribution_risk_plot(data)
         elif analytics_type == "pred_per_100k":
-            result = analytics.get_distribution_prediction_plot_(data)
+            result = analytics.get_distribution_prediction_plot_(data, geoid=selected_geoid)
         else:
             raise BadRequest("Unsupported analytics_type")
         return {"result": result}

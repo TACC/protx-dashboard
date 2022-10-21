@@ -8,8 +8,8 @@ import AnalyticsStateDistribution from './AnalyticsStateDistribution';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
-import { getSelectedGeographyName, capitalizeString } from '../shared/dataUtils';
 import './MainChart.css';
+import {getSelectedGeographyName} from "../shared/dataUtils";
 
 function MainChart({
   chartType,
@@ -26,15 +26,25 @@ function MainChart({
 
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
-    if (selectedGeographicFeature) {
-      return (
-        <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
-      );
-    } else {
-      return (
-        <AnalyticsStateDistribution geography={geography} analyticsType={analyticsType}/>
-      );
-    }
+    const plotDetailSectionTitle = selectedGeographicFeature ? `${getSelectedGeographyName(geography, selectedGeographicFeature)}  County`: "Texas Statewide Data";
+    return (
+      <div>
+        <div className="plot-details-section">
+          <div className="plot-details-section-selected">
+            <span className="plot-details-section-selected-value">
+              {plotDetailSectionTitle}
+            </span>
+          </div>
+        </div>
+        <AnalyticsStateDistribution
+          geography={geography}
+          selectedGeographicFeature={selectedGeographicFeature}/>
+        {selectedGeographicFeature &&
+          <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
+        }
+
+        <ChartInstructions currentReportType={selectedGeographicFeature ? "hidden" : "analytics"}/>
+      </div>);
   }
 
   // DEMOGRAPHICS PLOT.
@@ -98,24 +108,7 @@ function MainChart({
 
   // MALTEATMENT PLOT.
   if (chartType === 'maltreatment') {
-    /**
-     * TODO: Use geoid value instead of selectedArea string value on backend.
-     * Description: The python maltreatment code on the backend renders the plot off the selectedArea string value instead of the geoid value.
-     * Note: we are passing the geoid to the back end already.
-     * Currently we pass along a munged string for the selectedArea (by looking up the geoid and appending the capitalized geogrpahy type with a space) to be used as the key value in the plotly rendering code.
-     * This is the way Kelly coded it.
-     * We should review the plotly server-side code and identify a way to use the geoid value rather than pass the munged string value for selectedArea.
-     * NOTE: We should identify a phased process for integrating a new plot from jupyter into the portal api so it is less intensive per sprint, makes more manageable PRs and helps WMA manage development  expectations better.
-     **/
     if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
-      const selectedGeographicFeatureName = getSelectedGeographyName(
-        geography, selectedGeographicFeature
-      );
-  
-      const selectedGeographicFeatureNameComplete = `${selectedGeographicFeatureName} ${capitalizeString(
-        geography
-      )}`;
-  
       const protxMaltreatmentDistribution = useSelector(
         state => state.protxMaltreatmentDistribution
       );
@@ -126,7 +119,6 @@ function MainChart({
             type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
             payload: {
               area: geography,
-              selectedArea: selectedGeographicFeatureNameComplete,
               geoid: selectedGeographicFeature,
               unit,
               variables: maltreatmentTypes
@@ -135,7 +127,6 @@ function MainChart({
         }
       }, [
         geography,
-        selectedGeographicFeatureNameComplete,
         selectedGeographicFeature,
         unit,
         maltreatmentTypes
