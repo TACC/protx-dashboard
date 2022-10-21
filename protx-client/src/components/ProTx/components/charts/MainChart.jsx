@@ -28,14 +28,16 @@ function MainChart({
   if (chartType === 'analytics') {
     const plotDetailSectionTitle = selectedGeographicFeature ? `${getSelectedGeographyName(geography, selectedGeographicFeature)}  County`: "Texas Statewide Data";
     return (
-      <div>
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {plotDetailSectionTitle}
-            </span>
-          </div>
-        </div>
+      <div className="analytics-chart">
+        <div className="analytics-types-plot">
+          <div className="analytics-types-plot-layout">
+            <div className="plot-details-section">
+              <div className="plot-details-section-selected">
+                <span className="plot-details-section-selected-value">
+                {plotDetailSectionTitle}
+                </span>
+              </div>
+            </div>
         <AnalyticsStateDistribution
           geography={geography}
           selectedGeographicFeature={selectedGeographicFeature}/>
@@ -44,6 +46,8 @@ function MainChart({
         }
 
         <ChartInstructions currentReportType={selectedGeographicFeature ? "hidden" : "analytics"}/>
+          </div>
+        </div>
       </div>);
   }
 

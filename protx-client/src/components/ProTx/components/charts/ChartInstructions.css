@@ -6,6 +6,8 @@
   font-style: italic;
   text-align: center;
 }
+
+.report-instructions-hidden
 .report-instructions * {
   font-family: var(--font-type-roboto);
   margin: 0.5rem;
@@ -60,4 +62,13 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-x-light);
   font-style: italic;
+}
+
+.report-instructions-footer-annotation,
+.report-instructions-footer-annotation-text {
+  font-weight: var(--font-weight-light);
+  font-style: italic;
+}
+.report-instructions-footer-annotation-prefix {
+  font-weight: var(--font-weight-normal-plus);
 }
