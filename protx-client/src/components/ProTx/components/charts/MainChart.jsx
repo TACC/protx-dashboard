@@ -16,7 +16,6 @@ function MainChart({
   geography,
   maltreatmentTypes,
   observedFeature,
-  analyticsType,
   selectedGeographicFeature,
   data,
   unit,

@@ -40,8 +40,24 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     );
   }
 
+
+
   return (
-    <MainPlot plotState={chartData.data} />
+    <div class="maltreatment-types-plot-layout">
+      <div className="feature-table">
+        <div className="feature-table-chart-selection">
+          <div className="plot-details">
+            <div className="feature-table-chart-title">
+              Definition of Risk Levels
+              <span className="feature-table-chart-subtitle">
+              (Figure 1)
+          </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <MainPlot plotState={chartData.data} />
+    </div>
   );
 }
 
