@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
+import { FigureCaption } from './FigureCaption';
 import ChartInstructions from "./ChartInstructions";
 import './PlotDetails.css';
 
@@ -13,6 +14,11 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
   const chartData = useSelector(
     state => state.protxAnalyticsStatewideDistribution
   );
+  
+  const plotLabel = 'Figure 1.';
+  const plotCaptionText = `Distribution of projected number of cases across counties in Texas. 
+  Black vertical lines indicate thresholds used to define high, medium and low risk regions for heat map 
+  on the left.`;
 
   useEffect(() => {
       dispatch({
@@ -50,6 +56,7 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
         </div>
       </div>
       <MainPlot plotState={chartData.data} />
+      <FigureCaption label={plotLabel} captionText={plotCaptionText} />
       <ChartInstructions currentReportType="analytics" />
     </div>
   );
