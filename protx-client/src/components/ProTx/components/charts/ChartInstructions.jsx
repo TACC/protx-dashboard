@@ -99,7 +99,7 @@ function ChartInstructions({ currentReportType }) {
     instructions.type = 'analytics';
     instructions.title = 'Analytics Reporting Tool Instructions';
     instructions.description =
-      'The Analytics Reporting Tool is designed to view predictive features and compare them across geographic regions along side current resources. This tool is currently restricted to the top seven predictive features.';
+      'The Analytics Reporting Tool is designed to view predictive features and compare them across geographic regions along side current resources.';
     instructions.selections.subtitle = 'Using the Analytics Reporting Tool';
     // instructions.selections.steps = [
     //   'Select a geographic region type from the Area dropdown menu (located above the map).',
@@ -129,6 +129,25 @@ function ChartInstructions({ currentReportType }) {
         <span className="icon icon-globe report-instructions-icon-globe" /> in
         the top-left corner of the map to clear the current region selection,
         center on Texas and display the instructions again.
+      </div>
+    );
+  }
+
+  if (currentReportType === 'analyticsCountyFeatureChart') {
+    return (
+      <div className="feature-table-chart-selection">
+        <div className='report-instructions-description'>
+          <td className="feature-table-annotation-prefix">
+            Table 1</td>
+          <div className="feature-table-annotation-text">
+          Top three demographic features related to changes in the county-level child 
+          total maltreatment counts. Ranking indicates features that are most influential. 
+          Correlation indicates the nature of the relationship between the demographic 
+          feature and total maltreatment counts. A positive correlation implies that an 
+          increase in the demographic feature results in an increase in total maltreatment 
+          counts and vice versa. A negative correlation means an increase in the demographic 
+          feature results in a decrease in total maltreatment counts.</div>
+        </div>
       </div>
     );
   }

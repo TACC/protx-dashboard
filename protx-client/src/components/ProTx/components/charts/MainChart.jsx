@@ -15,6 +15,7 @@ function MainChart({
   geography,
   maltreatmentTypes,
   observedFeature,
+  analyticsType,
   selectedGeographicFeature,
   data,
   unit,
@@ -30,7 +31,7 @@ function MainChart({
       );
     } else {
       return (
-        <AnalyticsStateDistribution geography={geography}/>
+        <AnalyticsStateDistribution geography={geography} analyticsType={analyticsType}/>
       );
     }
   }

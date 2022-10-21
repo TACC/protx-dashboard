@@ -31,6 +31,7 @@ function DashboardDisplay() {
     PRESELECTED_MALTREATMENT_CATEGORIES
   );
   const [observedFeature, setObservedFeature] = useState('AGE17');
+  const [analtyicsType, setAnalyticsType] = useState('risk');
   const [year, setYear] = useState(DEFAULT_YEAR);
   const [selectedGeographicFeature, setSelectedGeographicFeature] = useState(
     ''
@@ -225,20 +226,21 @@ function DashboardDisplay() {
         <Route
           path={`${protxRoute}/analytics`}
           render={() => {
-            setMapType('observedFeatures');
+            setMapType('analytics'); //todo; see DisplaySelectors
             return (
               <>
                 <DisplaySelectors
-                  mapType={mapType}
+                  mapType="observedFeatures"
                   geography={geography}
                   maltreatmentTypes={maltreatmentTypes}
                   observedFeature={observedFeature}
+                  analyticsType={analtyicsType}
                   year={year}
                   unit={unit}
                   selectedGeographicFeature={selectedGeographicFeature}
                   setMaltreatmentTypes={setMaltreatmentTypes}
                   setObservedFeature={setObservedFeature}
-                  setYear={setYear}
+                  setAnalyticsType={setAnalyticsType}
                   downloadResources={handleDownloadResources}
                 />
                 <div className="display-layout-root">
@@ -267,6 +269,7 @@ function DashboardDisplay() {
                       geography={geography}
                       maltreatmentTypes={maltreatmentTypes}
                       observedFeature={observedFeature}
+                      analyticsType={analtyicsType}
                       year={year}
                       selectedGeographicFeature={selectedGeographicFeature}
                       data={data}
