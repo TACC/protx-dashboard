@@ -59,15 +59,10 @@ def get_distribution_prediction_plot(data, geoid=None):
                       )
 
     fig.update_layout(
-        title={
-            'text': "Definition of Risk Levels",
-            'y': 0.9,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
         xaxis_title="Predicted Number of Cases per 100K persons",
         yaxis_title="Frequency",
-        font=dict(size=15, color="Black", family="Roboto")
+        font=dict(size=15, color="Black", family="Roboto"),
+        margin=dict(l = 10, r = 10, t = 10, b = 10)
     )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
     fig.add_annotation(x=30,
