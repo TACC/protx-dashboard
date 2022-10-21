@@ -51,7 +51,7 @@ def get_distribution_risk_plot(data):
         xaxis_title="Relative Risk",
         yaxis_title="Frequency",
         font=dict(
-            size=18,
+            size=15,
             color="Black"
         )
     )
@@ -108,7 +108,7 @@ def get_distribution_prediction_plot_(data, geoid=None):
         xaxis_title="Predicted Number of Cases per 100K persons",
         yaxis_title="Frequency",
         font=dict(
-            size=18,
+            size=15,
             color="Black"
         )
     )
