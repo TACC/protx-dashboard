@@ -99,9 +99,8 @@ function ChartInstructions({ currentReportType }) {
 
   if (currentReportType === 'analytics') {
     instructions.type = 'analytics';
-    instructions.title = 'Analytics Reporting Tool Instructions';
-    instructions.description =
-      'The Analytics Reporting Tool is designed to view predictive features and compare them across geographic regions along side current resources.';
+    instructions.title = '';
+    instructions.description = '';
     instructions.selections.subtitle = 'Using the Analytics Reporting Tool';
     // instructions.selections.steps = [
     //   'Select a geographic region type from the Area dropdown menu (located above the map).',
