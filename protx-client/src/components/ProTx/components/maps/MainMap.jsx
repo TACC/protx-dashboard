@@ -193,8 +193,7 @@ function MainMap({
           {key: 'low', label: 'Low'},
           {key:'medium ', label:'Medium'}, // 'medium ' with space; check DB
           {key: 'high', label: 'High'}];
-        const missingLabel = "No forecast";
-        newColorScale = new CategoryColorScale(categories, missingLabel);
+        newColorScale = new CategoryColorScale(categories);
       } else {
         const meta = getMetaData(
           data,

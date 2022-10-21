@@ -46,12 +46,13 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
     );
   }
 
+  //Gets human-readable string from DB
   const countyName = getSelectedGeographyName(geography, analytics.data.GEOID.toString());
 
   const observedFeaturesLabel_1 = analytics.data.demographic_feature_1 ? getObservedFeaturesLabel(analytics.data.demographic_feature_1, data) : '--No Data--'
   const observedFeaturesLabel_2 = analytics.data.demographic_feature_2 ? getObservedFeaturesLabel(analytics.data.demographic_feature_2, data) : '--No Data--'
   const observedFeaturesLabel_3 = analytics.data.demographic_feature_3 ? getObservedFeaturesLabel(analytics.data.demographic_feature_3, data) : '--No Data--'
-  
+
   const correlation_1 = analytics.data.correlation_1 ? capitalizeString(analytics.data.correlation_1) : '--No Data--';
   const correlation_2 = analytics.data.correlation_2 ? capitalizeString(analytics.data.correlation_2) : '--No Data--';
   const correlation_3 = analytics.data.correlation_3 ? capitalizeString(analytics.data.correlation_3) : '--No Data--';
@@ -60,14 +61,12 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   
   const analyticsFeatureTitle = () => {
     return (
-      <div className="feature-table-chart-selection">
         <div className="feature-table-chart-title">
         Top Three Maltreatment Factors for {countyName} County
           <span className="feature-table-chart-subtitle">
             ({chartSubtitle})
           </span>
         </div>
-      </div>
     );
   };
 
@@ -97,41 +96,41 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
             </span>
           </div>
         </div>
-      <div className="feature-table">
-        <div className="feature-table-chart-selection">
-          <div> {analyticsChartTitle} 
-            <table>
-              <thead>{analyticsFeatureTableHeader}</thead>
-              <tbody>
-                <tr>
-                  <td>{"1"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_1}
-                  </td>
-                  <td>{correlation_1}</td>
-                </tr>
-                <tr>
-                  <td>{"2"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_2}
-                  </td>
-                  <td>{correlation_2}</td>
-                </tr>
-                <tr>
-                  <td>{"3"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_3}
-                  </td>
-                  <td>{correlation_3}</td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="feature-table">
+          <div className="feature-table-chart-selection">
+            <div className="plot-detai"> {analyticsChartTitle} 
+              <table>
+                <thead>{analyticsFeatureTableHeader}</thead>
+                <tbody>
+                  <tr>
+                    <td>{"1"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_1}
+                    </td>
+                    <td>{correlation_1}</td>
+                  </tr>
+                  <tr>
+                    <td>{"2"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_2}
+                    </td>
+                    <td>{correlation_2}</td>
+                  </tr>
+                  <tr>
+                    <td>{"3"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_3}
+                    </td>
+                    <td>{correlation_3}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
           <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
           <ChartInstructions currentReportType="hidden"></ChartInstructions>
+        </div>
       </div>
-    </div>
     );
   };
 

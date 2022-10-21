@@ -32,7 +32,6 @@ function MainChart({
         }
         <AnalyticsStateDistribution
           geography={geography}
-          analyticsType={analyticsType}
           selectedGeographicFeature={selectedGeographicFeature}/>
       </div>);
   }
