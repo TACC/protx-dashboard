@@ -67,24 +67,21 @@ def get_distribution_prediction_plot(data, geoid=None):
             'yanchor': 'top'},
         xaxis_title="Predicted Number of Cases per 100K persons",
         yaxis_title="Frequency",
-        font=dict(
-            size=15,
-            color="Black"
-        )
+        font=dict(size=15, color="Black", family="Roboto")
     )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
     fig.add_annotation(x=30,
                        y=30,
                        text=_low_risk_label,
                        showarrow=False,
-                       font={'size': 20, 'color': _low_risk_color})
+                       font={'size': 20, 'color': _low_risk_color, 'family': 'Roboto'})
     fig.add_annotation(x=mean-0*std, y=30,
                        text=_medium_risk_label,
                        showarrow=False,
-                       font={'size': 20, 'color': _medium_risk_color})
+                       font={'size': 20, 'color': _medium_risk_color, 'family': 'Roboto'})
     fig.add_annotation(x=mean+2*std, y=30,
                        text=_high_risk_label,
                        showarrow=False,
-                       font={'size': 20, 'color': _high_risk_color})
+                       font={'size': 20, 'color': _high_risk_color, 'family': 'Roboto'})
     fig.update_traces(marker_color=_histogram_color)
     return json.loads(fig.to_json())
