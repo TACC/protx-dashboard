@@ -137,10 +137,8 @@ function ChartInstructions({ currentReportType }) {
 
   if (currentReportType === 'analyticsCountyFeatureChart') {
     return (
-      <div className='report-instructions-description'>
-        <div className="feature-table-annotation-prefix">
-          Table 1</div>
-        <div className="feature-table-annotation-text">
+        <div className="report-instructions-footer-annotation-text">
+          <span className="report-instructions-footer-annotation-prefix">Table 1</span>
         Top three demographic features related to changes in the county-level child 
         total maltreatment counts. Ranking indicates features that are most influential. 
         Correlation indicates the nature of the relationship between the demographic 
@@ -148,7 +146,7 @@ function ChartInstructions({ currentReportType }) {
         increase in the demographic feature results in an increase in total maltreatment 
         counts and vice versa. A negative correlation means an increase in the demographic 
         feature results in a decrease in total maltreatment counts.</div>
-      </div>
+
     );
   }
 
