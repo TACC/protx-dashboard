@@ -90,19 +90,36 @@ def get_distribution_prediction_plot_(data, predictedNum=None):
                       xbins=go.histogram.XBins(size=50)
                       )
 
+    if predictedNum is None:
+        fig.update_layout(
+            title={
+                'text': "Definition of Risk Levels",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
+            )
+    elif predictedNum == 'no data':
+        fig.update_layout(
+            title={
+                'text': "No Data Available",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
+            )
+    else:
+        fig.update_layout(
+            margin=dict(t=25)
+        )
+
     fig.update_layout(
-        title={
-            'text': "Definition of Risk Levels",
-            'y': 0.9,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
         xaxis_title="Predicted Number of Cases per 100K persons",
         yaxis_title="Frequency",
         font=dict(
             size=18,
             color="Black"
-        )
+        ),
     )
     fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
     fig.add_annotation(x=30,

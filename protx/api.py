@@ -133,7 +133,7 @@ class AnalyticsSubset(Resource):
                 chartData = analytics.get_distribution_prediction_plot_(data, pred_per_100k)
                 return {"result": dict(result), "chartData": chartData}
             except NoResultFound:
-                chartData = analytics.get_distribution_prediction_plot_(data)
+                chartData = analytics.get_distribution_prediction_plot_(data, 'no data')
                 return {"result": {"GEOID": int(geoid)}, "chartData": chartData}
 
 
