@@ -5,6 +5,7 @@ import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
 import { FigureCaption } from './FigureCaption';
 import {getSelectedGeographyName} from "../shared/dataUtils";
+import './PlotDetails.css';
 
 
 
@@ -55,11 +56,23 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     );
   }
 
+
+
   return (
-    <>
+    <div class="maltreatment-types-plot-layout">
+      <div className="feature-table">
+        <div className="feature-table-chart-selection">
+          <div className="plot-details">
+            <div className="feature-table-chart-title">
+              Definition of Risk Levels
+              <span className="feature-table-chart-subtitle">
+              (Figure 1)
+            </div>
+          </div>
+        </div>
+      </div>
       <MainPlot plotState={chartData.data} />
-      <FigureCaption label={plotLabel} captionText={plotCaptionText} />
-    </>
+    </div>
   );
 }
 
