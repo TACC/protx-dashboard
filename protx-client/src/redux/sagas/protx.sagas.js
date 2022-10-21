@@ -84,7 +84,6 @@ export function* fetchProtxMaltreatmentDistribution(action) {
       method: 'PATCH',
       body: JSON.stringify({
         area: action.payload.area,
-        selectedArea: action.payload.selectedArea,
         geoid: action.payload.geoid,
         variables: action.payload.variables,
         unit: action.payload.unit

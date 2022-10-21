@@ -65,7 +65,6 @@ class DemographicsDistributionPlotData(Resource):
 
 maltreatment_plot = api.model('MaltreatmentPlot', {
     "area": fields.String(),
-    "selectedArea": fields.String(),
     "geoid": fields.String(),
     "variables": fields.String(),
     "unit": fields.String()
@@ -79,17 +78,14 @@ class MaltreatmentPlotData(Resource):
     def patch(self):
         """Get maltreatment distribution data for plotting"""
         area = api.payload["area"]
-        selectedArea = api.payload["selectedArea"]
         geoid = api.payload["geoid"]
         variables = api.payload["variables"]
         unit = api.payload["unit"]
-        logger.info("Getting maltreatment plot data for {} {} {} {} on the variables: {}".format(area,
-                                                                                                 selectedArea,
-                                                                                                 unit,
-                                                                                                 geoid,
-                                                                                                 variables))
-        result = maltreatment.maltreatment_plot_figure(area=area, selectedArea=selectedArea,
-                                                       geoid=geoid, variables=variables, unit=unit)
+        logger.info("Getting maltreatment plot data for {} {} {} on the variables: {}".format(area,
+                                                                                              unit,
+                                                                                              geoid,
+                                                                                              variables))
+        result = maltreatment.maltreatment_plot_figure(area=area, geoid=geoid, variables=variables, unit=unit)
         return {"result": result}
 
 

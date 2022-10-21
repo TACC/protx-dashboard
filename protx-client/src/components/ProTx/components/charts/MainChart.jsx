@@ -8,7 +8,6 @@ import AnalyticsStateDistribution from './AnalyticsStateDistribution';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
-import { getSelectedGeographyName, capitalizeString } from '../shared/dataUtils';
 import './MainChart.css';
 
 function MainChart({
@@ -99,24 +98,7 @@ function MainChart({
 
   // MALTEATMENT PLOT.
   if (chartType === 'maltreatment') {
-    /**
-     * TODO: Use geoid value instead of selectedArea string value on backend.
-     * Description: The python maltreatment code on the backend renders the plot off the selectedArea string value instead of the geoid value.
-     * Note: we are passing the geoid to the back end already.
-     * Currently we pass along a munged string for the selectedArea (by looking up the geoid and appending the capitalized geogrpahy type with a space) to be used as the key value in the plotly rendering code.
-     * This is the way Kelly coded it.
-     * We should review the plotly server-side code and identify a way to use the geoid value rather than pass the munged string value for selectedArea.
-     * NOTE: We should identify a phased process for integrating a new plot from jupyter into the portal api so it is less intensive per sprint, makes more manageable PRs and helps WMA manage development  expectations better.
-     **/
     if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
-      const selectedGeographicFeatureName = getSelectedGeographyName(
-        geography, selectedGeographicFeature
-      );
-  
-      const selectedGeographicFeatureNameComplete = `${selectedGeographicFeatureName} ${capitalizeString(
-        geography
-      )}`;
-  
       const protxMaltreatmentDistribution = useSelector(
         state => state.protxMaltreatmentDistribution
       );
@@ -127,7 +109,6 @@ function MainChart({
             type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
             payload: {
               area: geography,
-              selectedArea: selectedGeographicFeatureNameComplete,
               geoid: selectedGeographicFeature,
               unit,
               variables: maltreatmentTypes
@@ -136,7 +117,6 @@ function MainChart({
         }
       }, [
         geography,
-        selectedGeographicFeatureNameComplete,
         selectedGeographicFeature,
         unit,
         maltreatmentTypes
