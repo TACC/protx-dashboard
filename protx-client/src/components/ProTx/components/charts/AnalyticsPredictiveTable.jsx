@@ -90,7 +90,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
     return (
       <div className="feature-table">
         <div className="feature-table-chart-selection">
-          <div className="plot-detai"> {analyticsChartTitle}
+          <div className="plot-detail"> {analyticsChartTitle}
             <table>
               <thead>{analyticsFeatureTableHeader}</thead>
               <tbody>
