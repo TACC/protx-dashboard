@@ -9,6 +9,7 @@ import sqlite3
 import json
 from pandas import read_sql_query
 import plotly.graph_objects as go
+from protx.log import logger
 
 _low_risk_label = "Low <br>Risk"
 _medium_risk_label = "Medium <br>Risk"
@@ -69,7 +70,7 @@ def get_distribution_risk_plot(data):
     return json.loads(fig.to_json())
 
 
-def get_distribution_prediction_plot_(data):
+def get_distribution_prediction_plot_(data, geoid=None):
     """ Get plot of for distribution of risk and levels for high, medium, low risk based on column pred_per_100k column
 
     The pred_per_100k columns represents what our models predicted as the number of cases per 100K people
@@ -83,8 +84,15 @@ def get_distribution_prediction_plot_(data):
     fig.add_vline(x=mean+std, line_width=3, line_dash="dash", line_color="black")
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
 
+    if geoid:
+        match = data['predictions'].loc[data['predictions'].GEOID==int(geoid)]
+        if not match.empty:
+            # if we have a match in the data set we are able to draw the line
+            fig.add_vline(x=match.iloc[0]['pred_per_100k'],
+                          line_width=3,
+                          line_color="red")
+
     fig.add_histogram(x=data['predictions']['pred_per_100k'],
-                      # nbinsx=50,
                       xbins=go.histogram.XBins(size=50)
                       )
 

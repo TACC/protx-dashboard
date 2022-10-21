@@ -7,7 +7,7 @@ import ChartInstructions from "./ChartInstructions";
 import './PlotDetails.css';
 
 
-function AnalyticsStateDistribution({geography, analyticsType}) {
+function AnalyticsStateDistribution({geography, analyticsType, selectedGeographicFeature}) {
   const dispatch = useDispatch();
 
   const chartData = useSelector(
@@ -20,9 +20,10 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
         payload: {
           area: geography,
           analyticsType: analyticsType,
+          geoid: selectedGeographicFeature
         }
       });
-    }, [geography, analyticsType]);
+    }, [geography, analyticsType, selectedGeographicFeature]);
 
   if (chartData.error) {
     return (
@@ -57,6 +58,7 @@ function AnalyticsStateDistribution({geography, analyticsType}) {
 
 AnalyticsStateDistribution.propTypes = {
   geography: PropTypes.string.isRequired,
+  selectedGeographicFeature: PropTypes.string.isRequired,
   analyticsType: PropTypes.string.isRequired
 };
 
