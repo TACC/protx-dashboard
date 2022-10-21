@@ -118,6 +118,7 @@ export function protxAnalytics(
     case 'PROTX_ANALYTICS_FAILURE':
       return {
         ...initialAnalyticsState,
+        loading: false,
         error: true
       };
     default:

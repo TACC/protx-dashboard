@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from sqlalchemy import create_engine
+from sqlalchemy.orm.exc import NoResultFound
 from flask import make_response
 from werkzeug.exceptions import BadRequest
 
@@ -126,10 +127,14 @@ class AnalyticsSubset(Resource):
         data = analytics.read_sqlite(analytics_db)
         engine = create_engine(SQLALCHEMY_RESOURCES_ANALYTICS_URL, connect_args={'check_same_thread': False})
         with engine.connect() as connection:
-            result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
-            pred_per_100k = result['pred_per_100k']
-            chartData = analytics.get_distribution_prediction_plot_(data, pred_per_100k)
-            return {"result": dict(result), "chartData": chartData}
+            try:
+                result = connection.execute(f"SELECT * FROM predictions p WHERE p.GEOID={geoid} AND p.GEOTYPE='{area}'").one()
+                pred_per_100k = result['pred_per_100k']
+                chartData = analytics.get_distribution_prediction_plot_(data, pred_per_100k)
+                return {"result": dict(result), "chartData": chartData}
+            except NoResultFound:
+                chartData = analytics.get_distribution_prediction_plot_(data)
+                return {"result": {"GEOID": int(geoid)}, "chartData": chartData}
 
 
 @api.route("/analytics-chart/<area>/<analytics_type>/")
