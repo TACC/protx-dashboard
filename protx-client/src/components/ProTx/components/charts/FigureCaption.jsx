@@ -4,8 +4,8 @@ import './PredictiveFeaturesTable.css';
 import './FigureCaption.css';
 
 export const FigureCaption = ({label, captionText}) =>
-    <div className="plot-caption">
-        <span className="caption-label">{label}</span>
+    <div className="plot-annotation">
+        <span className="annotation-label">{label}</span>
         {' '}
         {captionText}
     </div>

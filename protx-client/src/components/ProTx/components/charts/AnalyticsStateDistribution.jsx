@@ -15,13 +15,18 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     state => state.protxAnalyticsStatewideDistribution
   );
   
+  let countyName;
+  if (selectedGeographicFeature) {
+    countyName = getSelectedGeographyName(geography, selectedGeographicFeature)
+  }
+
   const plotLabel = 'Figure 1.';
   const plotCaptionText = selectedGeographicFeature ? 
   [`Distribution of projected number of cases across counties in Texas. Black vertical lines indicate thresholds used to define high, 
-  medium and low risk regions for heat map on the left. The red vertical line indicates where `, `${getSelectedGeographyName(selectedGeographicFeature)}`, ` County falls on this distribution.`] 
-  : `Distribution of projected number of cases across counties in Texas. 
+  medium and low risk regions for heat map on the left. The red vertical line indicates where `, <span className='annotation-text-bold'>{countyName} County</span>, ` falls on this distribution.`] 
+  : [`Distribution of projected number of cases across counties in Texas. 
   Black vertical lines indicate thresholds used to define high, medium and low risk regions for heat map 
-  on the left.`;
+  on the left.`];
 
   useEffect(() => {
       dispatch({
