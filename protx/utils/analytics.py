@@ -9,11 +9,12 @@ import sqlite3
 import json
 from pandas import read_sql_query
 import plotly.graph_objects as go
-from protx.log import logger
+
 
 _low_risk_label = "Low <br>Risk"
 _medium_risk_label = "Medium <br>Risk"
 _high_risk_label = "High <br>Risk"
+
 
 # colors should eventually match colors in 4 classes in frontend (specificaly data/colors.js
 # but see https://jira.tacc.utexas.edu/browse/COOKS-329 for details but currently in css overrides
@@ -21,7 +22,8 @@ _high_risk_label = "High <br>Risk"
 _low_risk_color = "#c6e8b0"
 _medium_risk_color = "#8fcca1"
 _high_risk_color = "#62ad9c"
-_histogram_color = "#26547a" # "#924e8c"
+_histogram_color = "#26547a"
+
 
 def read_sqlite(dbfile):
     with sqlite3.connect(dbfile) as dbcon:
@@ -85,7 +87,7 @@ def get_distribution_prediction_plot_(data, geoid=None):
     fig.add_vline(x=mean-std, line_width=3, line_dash="dash", line_color="black")
 
     if geoid:
-        match = data['predictions'].loc[data['predictions'].GEOID==int(geoid)]
+        match = data['predictions'].loc[data['predictions'].GEOID == int(geoid)]
         if not match.empty:
             # if we have a match in the data set we are able to draw the line
             fig.add_vline(x=match.iloc[0]['pred_per_100k'],
