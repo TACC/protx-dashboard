@@ -9,6 +9,7 @@ function ChartInstructions({ currentReportType }) {
     type: '',
     title: 'Reporting Tool Instructions',
     description: 'Description of the selected reporting tool.',
+    condensed: false,
     selections: {
       subtitle: 'Using the Reporting Tool',
       steps: [
@@ -101,6 +102,7 @@ function ChartInstructions({ currentReportType }) {
     instructions.type = 'analytics';
     instructions.title = '';
     instructions.description = '';
+    instructions.condensed = true;
     instructions.selections.subtitle = 'Using the Analytics Reporting Tool';
     // instructions.selections.steps = [
     //   'Select a geographic region type from the Area dropdown menu (located above the map).',
@@ -150,15 +152,15 @@ function ChartInstructions({ currentReportType }) {
   }
 
   return (
-    <div className="report-instructions">
+    <div className={instructions.condensed ? "report-instructions-condensed" : "report-instructions"}>
       <div className="report-instructions-title">{instructions.title}</div>
       <div className="report-instructions-description">
         {instructions.description}
       </div>
-      <div className="report-instructions-subtitle">
+      <div className={instructions.condensed ? "report-instructions-subtitle-condensed" : "report-instructions-subtitle"}>
         {instructions.selections.subtitle}
       </div>
-      <div className="report-instructions-steps-group">
+      <div className={instructions.condensed ? "report-instructions-steps-group-condensed" : "report-instructions-steps-group"}>
         <ul className="report-instructions-steps">
           {/*
           {instructions.selections.steps.map(step => (
