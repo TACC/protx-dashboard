@@ -14,6 +14,5 @@
   font-family: var(--font-type-roboto-condensed);
 }
 .main-plot {
-  margin: 0 1vw;
-  width: 100%;
+  margin: 1vh 1vw 3.7vh;
 }
