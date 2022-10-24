@@ -17,20 +17,21 @@ _medium_risk_label = "Medium <br>Risk"
 _high_risk_label = "High <br>Risk"
 
 
-# colors should eventually match colors in 4 classes in frontend (specificallly data/colors.js
+# colors should eventually match colors in 4 classes in frontend (specifically data/colors.js
 # but see https://jira.tacc.utexas.edu/browse/COOKS-329 for details but currently in css overrides
 # in ProtxColors.css
 _low_risk_color = "#eff5d6"
 _medium_risk_color = "#8fcca1"
 _high_risk_color = "#3c7d8a"
 
-#https://www.rapidtables.com/convert/color/hex-to-rgb.html
+# https://www.rapidtables.com/convert/color/hex-to-rgb.html is used to convert colors above to rgba
 _low_risk_color_tr = 'rgb(239, 245, 214, 0.5)'
 _medium_risk_color_tr = 'rgb(143, 204, 161, 0.5)'
 _high_risk_color_tr = 'rgb(60, 125, 138, 0.5)'
 
 
 _histogram_color = "#26547a"
+
 
 def read_sqlite(dbfile):
     with sqlite3.connect(dbfile) as dbcon:
@@ -48,27 +49,32 @@ def get_distribution_prediction_plot(data, geoid=None):
 
     mean = data['predictions'].pred_per_100k.mean()
     std = data['predictions'].pred_per_100k.std()
-    maxh =100
+    maxh = 100
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # box for medium risk
-    fig1 = go.Scatter(x=[mean+std,mean+std,mean-std,mean-std], y=[0,maxh,maxh,0], fill="toself",
-                      fillcolor=_medium_risk_color_tr,  # change color to match heat map
-                      showlegend=False,line=go.scatter.Line(color='rgba(50,205,50,0.2)'))
+    fig1 = go.Scatter(x=[mean+std, mean+std, mean-std, mean-std],
+                      y=[0, maxh, maxh, 0],
+                      fill="toself",
+                      fillcolor=_medium_risk_color_tr,
+                      showlegend=False, line=go.scatter.Line(color='rgba(50,205,50,0.2)'))
     # box for high risk
-    fig0 = go.Scatter(x=[mean+std,mean+std,700,700], y=[0,maxh,maxh,0], fill="toself",
-                      fillcolor=_high_risk_color_tr,   # change color to match heat map
-                      showlegend=False,line=go.scatter.Line(color='rgba(0,100,0,0.2)'))
+    fig0 = go.Scatter(x=[mean+std, mean+std, 700, 700], y=[0, maxh, maxh, 0],
+                      fill="toself",
+                      fillcolor=_high_risk_color_tr,
+                      showlegend=False,
+                      line=go.scatter.Line(color='rgba(0,100,0,0.2)'))
 
     # box for low risk
-    fig3 = go.Scatter(x=[mean-std,mean-std,mean-3*std,mean-3*std], y=[0,maxh,maxh,0], fill="toself",
-                      fillcolor=_low_risk_color_tr,   # change color to match heat map
-                      showlegend=False,line=go.scatter.Line(color='rgba(144,238,144,0.2)'))
+    fig3 = go.Scatter(x=[mean-std, mean-std, mean-3*std, mean-3*std], y=[0, maxh, maxh, 0], fill="toself",
+                      fillcolor=_low_risk_color_tr,
+                      showlegend=False,
+                      line=go.scatter.Line(color='rgba(144,238,144,0.2)'))
 
     # histogram
     fig2 = go.Histogram(x=data['predictions']['pred_per_100k'], xbins=go.histogram.XBins(size=50),
-                        showlegend=False, marker_color=_histogram_color )
+                        showlegend=False, marker_color=_histogram_color)
 
     fig.add_trace(fig2, secondary_y=True)
     fig.add_trace(fig1)
@@ -87,19 +93,17 @@ def get_distribution_prediction_plot(data, geoid=None):
                           line_color="red")
 
     # update y-axis so they are on consisten scales
-    fig.update_yaxes( rangemode='tozero', tickvals=[],
-                      scaleanchor='y', scaleratio=1, constraintoward='bottom',
-                      secondary_y=True)
-    fig.update_yaxes( rangemode='tozero',
-                      #  nticks=0, # updates
-                      #  tickvals=[],
-                      scaleanchor='y2',
-                      scaleratio=1,
-                      constraintoward='bottom',
-                      secondary_y=False)
+    fig.update_yaxes(rangemode='tozero', tickvals=[],
+                     scaleanchor='y', scaleratio=1, constraintoward='bottom',
+                     secondary_y=True)
+    fig.update_yaxes(rangemode='tozero',
+                     scaleanchor='y2',
+                     scaleratio=1,
+                     constraintoward='bottom',
+                     secondary_y=False)
 
     # update x axis range
-    fig.update_xaxes(range=[0,data['predictions'].pred_per_100k.max()+50])
+    fig.update_xaxes(range=[0, data['predictions'].pred_per_100k.max()+50])
 
     fig.add_annotation(x=30,
                        y=30,
@@ -131,8 +135,8 @@ def get_distribution_prediction_plot(data, geoid=None):
                        opacity=1)
 
     fig.update_layout(
-        xaxis={'range':[0,700]},
-        yaxis={'range':[0.,55.]},
+        xaxis={'range': [0, 700]},
+        yaxis={'range': [0., 55.]},
         height=300,
         xaxis_title="<b><i>Predicted Number of Cases per 100K Persons</b><i>",
         yaxis_title="<b><i>Frequency</i></b>",
