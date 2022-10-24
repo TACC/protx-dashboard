@@ -58,7 +58,7 @@ def get_distribution_prediction_plot(data, geoid=None):
                       xbins=go.histogram.XBins(size=50)
                       )
     fig.update_layout(
-        height=300,
+        height=250,
         xaxis_title="<b><i>Predicted Number of Cases per 100K Persons</b><i>",
         yaxis_title="<b><i>Frequency</i></b>",
         font=dict(size=13, color="Black",  family="Roboto"),
