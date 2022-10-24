@@ -15,19 +15,15 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
   const chartData = useSelector(
     state => state.protxAnalyticsStatewideDistribution
   );
+
+  const analytics = useSelector(
+    state => state.protxAnalytics
+  );
   
   let countyName;
   if (selectedGeographicFeature) {
     countyName = getSelectedGeographyName(geography, selectedGeographicFeature)
   }
-
-  const plotLabel = 'Figure 1.';
-  const plotCaptionText = selectedGeographicFeature ? 
-  [`Distribution of projected number of cases across counties in Texas. Black vertical lines indicate thresholds used to define high, 
-  medium and low risk regions for heat map on the left. The red vertical line indicates where `, <span className='annotation-text-bold'>{countyName} County</span>, ` falls on this distribution.`] 
-  : [`Distribution of projected number of cases across counties in Texas. 
-  Black vertical lines indicate thresholds used to define high, medium and low risk regions for heat map 
-  on the left.`];
 
   useEffect(() => {
       dispatch({
@@ -38,9 +34,9 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
           geoid: selectedGeographicFeature
         }
       });
-    }, [geography, selectedGeographicFeature]);
+  }, [geography, selectedGeographicFeature]);
 
-  if (chartData.error) {
+  if (chartData.error || analytics.error) {
     return (
       <div className="data-error-message">
         There was a problem loading the data.
@@ -48,7 +44,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     );
   }
 
-  if (chartData.loading) {
+  if (chartData.loading || (selectedGeographicFeature && analytics.loading)) {
     return (
       <div className="loading-spinner">
         <LoadingSpinner />
@@ -56,7 +52,21 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     );
   }
 
+  const plotLabel = 'Figure 1.';
+  let plotCaptionText = [`Distribution of projected number of cases across counties in Texas. 
+  Black vertical lines indicate thresholds used to define high, 
+  medium and low risk regions for heat map on the left.`]
 
+  if (selectedGeographicFeature) {
+    if (analytics.data.pred_per_100k) {
+        plotCaptionText.push([`The red vertical line indicates 
+        where `, <span className='annotation-text-bold'>{countyName} County</span>, ` falls on this distribution.`]);
+    } else {
+      plotCaptionText.push([
+        <span className='annotation-text-bold'> Note: There is no data for {countyName} County.</span>,
+      ]);
+    }
+  }
 
   return (
     <div class="maltreatment-types-plot-layout">

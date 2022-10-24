@@ -17,12 +17,21 @@
   border-top: 1px solid var(--color-gray-dark);
   padding: 1rem 0 0;
 }
+.report-instructions-condensed {
+  margin: 2rem 1.5rem;
+  border-top: 1px solid var(--color-gray-dark);
+  padding: 0rem 0 0;
+}
 .report-instructions-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-heavy);
 }
 .report-instructions-subtitle {
   font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-heavy);
+}
+.report-instructions-subtitle-condensed {
+  font-size: var(--font-size-normal);
   font-weight: var(--font-weight-heavy);
 }
 .report-instructions-description {
@@ -33,6 +42,11 @@
 .report-instructions-steps-group * {
   padding: 0.1rem 0;
   font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-light);
+}
+.report-instructions-steps-group-condensed * {
+  padding: 0.1rem 0;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-light);
 }
 .report-instructions-steps-group {

@@ -12,6 +12,6 @@ export const FigureCaption = ({label, captionText}) =>
 
 FigureCaption.propTypes = {
     label: PropTypes.string.isRequired,
-    captionText: PropTypes.string.isRequired,
+    captionText: PropTypes.array.isRequired,
 };
   
