@@ -15,7 +15,7 @@ const colorbrewerClassYlOrBr = {
   5: ['#ffffd4', '#fee391', '#fec44f', '#fe9929', '#993404'],
 
   4: ['#ffffd4', '#fee391', '#fe9929', '#993404'],
-  3: [`#ffffd4`, `#fec44f`, `#993404`],
+  3: [`#ffffd4`, `#fec44f`, `#d95f0e`],
   2: [`#ffffd4`, `#993404`],
   1: [`#ffffd4`]
 };
