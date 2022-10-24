@@ -36,7 +36,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
       });
   }, [geography, selectedGeographicFeature]);
 
-  if (chartData.error) {
+  if (chartData.error || analytics.error) {
     return (
       <div className="data-error-message">
         There was a problem loading the data.
@@ -44,7 +44,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
     );
   }
 
-  if (chartData.loading) {
+  if (chartData.loading || (selectedGeographicFeature && analytics.loading)) {
     return (
       <div className="loading-spinner">
         <LoadingSpinner />
@@ -58,7 +58,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
   medium and low risk regions for heat map on the left.`]
 
   if (selectedGeographicFeature) {
-    if (analytics.data && analytics.data.pred_per_100k) {
+    if (analytics.data.pred_per_100k) {
         plotCaptionText.push([`The red vertical line indicates 
         where `, <span className='annotation-text-bold'>{countyName} County</span>, ` falls on this distribution.`]);
     } else {
