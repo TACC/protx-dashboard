@@ -6,6 +6,7 @@ from protx.log import logger
 
 db_name = '/protx-data/cooks.db'
 
+# TODO.  this should be a mapping that doesn't use display names https://jira.tacc.utexas.edu/browse/COOKS-336
 maltrt_palette = {
     'Abandonment': '#001e2e',
     'Emotional abuse': '#003b5c',
@@ -14,7 +15,7 @@ maltrt_palette = {
     'Neglectful supervision': '#41748d',
     'Physical abuse': '#a9c47f',
     'Physical neglect': '#b9d3dc',
-    'Refusal to accept parental responsibility': '#d4ec8e',
+    'Parental Responsibility Refused': '#d4ec8e',
     'Sexual abuse': '#CCCC99',
     'Sex trafficking': '#eaf6c7'
 }
