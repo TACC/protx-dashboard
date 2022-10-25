@@ -68,11 +68,9 @@ sup {
   padding-left: 2vw;
   text-align: left;
 }
-
 .feature-table-chart-label {
   width: 20%;
 }
-
 .feature-table-chart-cell {
   width: 5%;
 }
@@ -88,15 +86,13 @@ sup {
   border: 1px solid var(--color-black);
 }
 .feature-table-annotation {
-  font-size: var(--font-size-xxs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-light);
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-
 }
 .feature-table-annotation-prefix,
 .feature-table-annotation-text {
-  font-size: var(--font-size-xxs);
   margin: 0;
 }
 .feature-table-annotation-prefix {

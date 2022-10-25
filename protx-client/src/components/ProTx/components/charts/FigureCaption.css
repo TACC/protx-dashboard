@@ -1,6 +1,6 @@
 .plot-annotation, .plot-annotation * {
     font-family: var(--font-type-roboto-condensed);
-    font-size: var(--font-size-xxs);
+    font-size: var(--font-size-xs);
     margin-bottom: 1.5rem;
     font-weight: var(--font-weight-light);
   }

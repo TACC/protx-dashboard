@@ -137,7 +137,7 @@ def get_distribution_prediction_plot(data, geoid=None):
     fig.update_layout(
         xaxis={'range': [0, 700]},
         yaxis={'range': [0., 55.]},
-        height=250,
+        height=220,
         xaxis_title="<b><i>Predicted Number of Cases per 100K Persons</b><i>",
         yaxis_title="<b><i>Frequency</i></b>",
         font=dict(size=13, color="Black",  family="Roboto"),
