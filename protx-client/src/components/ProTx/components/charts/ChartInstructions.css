@@ -18,7 +18,7 @@
   padding: 1rem 0 0;
 }
 .report-instructions-condensed {
-  margin: 2rem 1.5rem;
+  margin: 1rem 2rem;
   border-top: 1px solid var(--color-gray-dark);
   padding: 0rem 0 0;
 }
@@ -31,7 +31,7 @@
   font-weight: var(--font-weight-heavy);
 }
 .report-instructions-subtitle-condensed {
-  font-size: var(--font-size-normal);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-heavy);
 }
 .report-instructions-description {
@@ -45,9 +45,10 @@
   font-weight: var(--font-weight-light);
 }
 .report-instructions-steps-group-condensed * {
-  padding: 0.1rem 0;
-  font-size: var(--font-size-sm);
+  padding: 0 0;
+  font-size: var(--font-size-xxs);
   font-weight: var(--font-weight-light);
+
 }
 .report-instructions-steps-group {
   margin: 0 0 0 1rem;
