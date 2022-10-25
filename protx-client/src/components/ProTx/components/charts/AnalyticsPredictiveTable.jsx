@@ -61,8 +61,7 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   
   const analyticsFeatureTitle = () => {
     return (
-        <div className="feature-table-chart-title">
-        Top Three Maltreatment Factors for {countyName} County
+        <div className="feature-table-chart-title"> Top Three Maltreatment Factors for {countyName} County
           <span className="feature-table-chart-subtitle">
             ({chartSubtitle})
           </span>
@@ -88,11 +87,9 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const analyticsFeatureTableHeader = analyticsFeatureHeaderRow();
 
     return (
-      <div className="feature-table">
-        <div className="feature-table-chart-selection">
-          <div className="feature-table-chart-title"> {analyticsChartTitle}</div>
+      <div className="feature-table-chart-selection">
+        <div className="feature-table"> {analyticsChartTitle}
             <table className="feature-table">
-
               <thead>{analyticsFeatureTableHeader}</thead>
               <tbody>
                 <tr>
@@ -118,10 +115,9 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
                 </tr>
               </tbody>
             </table>
-
-        <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
-          </div>
+          <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
         </div>
+      </div>
     );
   };
 
