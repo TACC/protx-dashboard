@@ -6,7 +6,7 @@ services:
   cms:
     image: ${CMS_IMAGE}:${CMS_TAG}
     volumes:
-      - ./conf/cms/secrets.sample.py:/code/taccsite_cms/secrets.py
+      - ./conf/cms/settings_local.py:/code/taccsite_cms/settings_local.py
       - ./conf/uwsgi/uwsgi_cms.ini:/code/uwsgi.ini
       - /var/www/portal/cms/static:/code/static
       - /var/www/portal/cms/media:/code/media
