@@ -91,7 +91,7 @@ def get_distribution_prediction_plot(data, geoid=None):
             fig.add_vline(x=match.iloc[0]['pred_per_100k'],
                           line_width=3,
                           line_color="red")
-            if match.iloc[0]['pred_per_100k'] <= 0:
+            if match.iloc[0]['pred_per_100k'] < 0:
                 fig.add_vline(x=0,
                               line_width=3,
                               line_color="red")
