@@ -6,7 +6,7 @@ function Onboarding() {
   return (
     <div className={styles.root}>
       <div className={styles.message}>
-        <SectionMessage type="warn">
+        <SectionMessage type="warning">
           Your account has not be configured. Please check status by clicking
           <a
           href="/workbench/onboarding"
