@@ -151,5 +151,5 @@ def get_distribution_prediction_plot(data, geoid=None):
         font=dict(size=13, color="Black",  family="Roboto"),
         margin=dict(l=10, r=10, t=10, b=10)
     )
-    
+
     return json.loads(fig.to_json())
