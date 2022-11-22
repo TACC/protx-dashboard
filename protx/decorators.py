@@ -14,6 +14,8 @@ cache = Cache("database_cache", disk_min_file_size=0, eviction_policy="none")
 
 def get_host():
     host = request.url_root.split(',')[0] if ',' in request.url_root else request.url_root
+    if host.startswith("http://cep.test"):
+        host = "https" + host[4:]
     return host
 
 
@@ -39,20 +41,24 @@ def is_setup_complete() -> bool:
         return False
 
 
-def onboarded_user_setup_complete(function):
+def onboarded_user_setup_complete(redirect_path):
     """Decorator requires user to have setup_completed or redirects.
+
+    :param str redirect_path: redirect location when setupComplete is false
     """
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        try:
-            if not is_setup_complete():
-                return redirect(get_host() + '/workbench/onboarding')
-        except Exception as e:
-            logger.error(e)
-            raise Forbidden
-        else:
-            return function(*args, **kwargs)
-    return wrapper
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            try:
+                if not is_setup_complete():
+                    return redirect(get_host() + redirect_path)
+            except Exception as e:
+                logger.error(e)
+                raise Forbidden
+            else:
+                return f(*args, **kwargs)
+        return wrapper
+    return decorator
 
 
 def onboarded_user_required(function):

@@ -1,5 +1,6 @@
-import { useState } from 'react'
 import ProTx from './components/ProTx';
+import Onboarding from './components/ProTx/components/onboarding/Onboarding';
+
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
 
   return (
     <Router>
+      <Route path="/protx/onboarding" component={Onboarding} />
       <Route path="/protx/dash" component={ProTx} />
     </Router>
   )
