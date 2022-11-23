@@ -8,16 +8,16 @@ db_name = '/protx-data/cooks.db'
 
 # TODO.  this should be a mapping that doesn't use display names https://jira.tacc.utexas.edu/browse/COOKS-336
 maltrt_palette = {
-    'Abandonment': '#001e2e',
-    'Emotional abuse': '#003b5c',
-    'Labor trafficking': '#545859',
-    'Medical neglect': '#007a53',
-    'Neglectful supervision': '#41748d',
-    'Physical abuse': '#a9c47f',
-    'Physical neglect': '#b9d3dc',
-    'Parental Responsibility Refused': '#d4ec8e',
-    'Sexual abuse': '#CCCC99',
-    'Sex trafficking': '#eaf6c7'
+    'ABAN': '#001e2e',
+    'EMAB': '#003b5c',
+    'LBTR': '#545859',
+    'MDNG': '#007a53',
+    'NSUP': '#41748d',
+    'PHAB': '#a9c47f',
+    'PHNG': '#b9d3dc',
+    'RAPR': '#d4ec8e',
+    'SXAB': '#CCCC99',
+    'SXTR': '#eaf6c7'
 }
 
 maltrt_query = '''
@@ -48,12 +48,12 @@ def query_return(user_selection, db_conn, palette=maltrt_palette):
     years = sorted(maltrt_data['YEAR'].unique())
 
     # extract maltrt types in dataset
-    mt_ = maltrt_data[['units_display', 'units_display_plot']].drop_duplicates().sort_values(['units_display'])
-    mt = [i for i in zip(mt_['units_display'], mt_['units_display_plot'])]  # iterable to list is necessary
+    mt_ = maltrt_data[['MALTREATMENT_NAME', 'units_display']].drop_duplicates().sort_values(['units_display'])
+    mt = [i for i in zip(mt_['MALTREATMENT_NAME'], mt_['units_display'])]  # iterable to list is necessary
 
     coords = [(i, j) for i in years for j in mt]
 
-    maltrt_wide = maltrt_data.pivot_table(columns=['YEAR', 'units_display'], values='VALUE', aggfunc=sum)
+    maltrt_wide = maltrt_data.pivot_table(columns=['YEAR', 'MALTREATMENT_NAME'], values='VALUE', aggfunc=sum)
 
     return {'coords': coords, 'data': maltrt_wide, 'colors': palette, 'units': user_selection['units']}
 
