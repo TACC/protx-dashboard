@@ -58,26 +58,22 @@ def get_distribution_prediction_plot(data, geoid=None):
                       y=[0, maxh, maxh, 0],
                       fill="toself",
                       fillcolor=_medium_risk_color_tr,
-                      showlegend=False,
-                      hoverinfo="skip",
-                      line=go.scatter.Line(color='rgba(50,205,50,0.2)'))
+                      showlegend=False, line=go.scatter.Line(color='rgba(50,205,50,0.2)'))
     # box for high risk
     fig0 = go.Scatter(x=[mean+std, mean+std, 700, 700], y=[0, maxh, maxh, 0],
                       fill="toself",
                       fillcolor=_high_risk_color_tr,
                       showlegend=False,
-                      hoverinfo="skip",
                       line=go.scatter.Line(color='rgba(0,100,0,0.2)'))
 
     # box for low risk
     fig3 = go.Scatter(x=[mean-std, mean-std, mean-3*std, mean-3*std], y=[0, maxh, maxh, 0], fill="toself",
                       fillcolor=_low_risk_color_tr,
                       showlegend=False,
-                      hoverinfo="skip",
                       line=go.scatter.Line(color='rgba(144,238,144,0.2)'))
 
     # histogram
-    fig2 = go.Histogram(x=data['predictions']['pred_per_100k'], xbins=go.histogram.XBins(size=50), hoverinfo="skip",
+    fig2 = go.Histogram(x=data['predictions']['pred_per_100k'], xbins=go.histogram.XBins(size=50),
                         showlegend=False, marker_color=_histogram_color)
 
     fig.add_trace(fig2, secondary_y=True)
