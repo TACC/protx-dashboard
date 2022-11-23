@@ -53,9 +53,9 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const observedFeaturesLabel_2 = analytics.data.demographic_feature_2 ? getObservedFeaturesLabel(analytics.data.demographic_feature_2, data) : '--No Data--'
   const observedFeaturesLabel_3 = analytics.data.demographic_feature_3 ? getObservedFeaturesLabel(analytics.data.demographic_feature_3, data) : '--No Data--'
 
-  const correlation_1 = analytics.data.correlation_1 ? capitalizeString(analytics.data.correlation_1) : '--No Data--';
-  const correlation_2 = analytics.data.correlation_2 ? capitalizeString(analytics.data.correlation_2) : '--No Data--';
-  const correlation_3 = analytics.data.correlation_3 ? capitalizeString(analytics.data.correlation_3) : '--No Data--';
+  const correlation_1 = analytics.data.correlation_1 ? capitalizeString(analytics.data.correlation_1) + " correlation" : '--No Data--';
+  const correlation_2 = analytics.data.correlation_2 ? capitalizeString(analytics.data.correlation_2) + " correlation" : '--No Data--';
+  const correlation_3 = analytics.data.correlation_3 ? capitalizeString(analytics.data.correlation_3) + " correlation" : '--No Data--';
 
   const chartSubtitle = 'Table 1';    
   
