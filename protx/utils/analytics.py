@@ -92,7 +92,7 @@ def get_distribution_prediction_plot(data, geoid=None):
         match = data['predictions'].loc[data['predictions'].GEOID == int(geoid)]
         if not match.empty:
             # if we have a match in the data set we are able to draw the line
-            fig.add_vline(x=max(match.iloc[0]['pred_per_100k'],0),
+            fig.add_vline(x=max(match.iloc[0]['pred_per_100k'], 0),
                           # if less than zero, return 0
                           line_width=3,
                           line_color="red")
