@@ -58,7 +58,7 @@ def get_distribution_prediction_plot(data, geoid=None):
                       y=[0, maxh, maxh, 0],
                       fill="toself",
                       fillcolor=_medium_risk_color_tr,
-                      showlegend=False, 
+                      showlegend=False,
                       hoverinfo="skip",
                       line=go.scatter.Line(color='rgba(50,205,50,0.2)'))
     # box for high risk
