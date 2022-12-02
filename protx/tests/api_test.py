@@ -159,7 +159,7 @@ def test_get_analytics_for_specific_area(test_client, core_api_workbench_request
     resp = test_client.get('/protx/api/analytics/county/48143/')
     assert resp.status_code == 200
     data = resp.get_json()
-
+    assert "result" in data
 
 
 def test_get_analytics_for_specific_area_unauthed(test_client, core_api_workbench_request_unauthed):
