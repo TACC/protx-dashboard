@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_restx import Api
 from protx.api import api as protx_api
-from protx.decorators import onboarded_user_setup_complete
+from protx.decorators import onboarded_user_setup_complete, get_host
 import os
 
 app = Flask(__name__)
@@ -16,6 +16,22 @@ api.add_namespace(protx_api, path="/protx/api")
 
 
 @app.route("/protx/dash/<path:path>")
-@onboarded_user_setup_complete
-def index(path=None):
+@onboarded_user_setup_complete(redirect_path='/protx/onboarding')  # redirect not to CEP as we are in iframe
+def index(path):
     return render_template(template)
+
+
+@app.route("/protx/onboarding")
+def onboarding():
+    return render_template(template)
+
+
+@app.route("/protx/verify-user")
+@onboarded_user_setup_complete(redirect_path='/workbench/onboarding')
+def verify_user_and_redirect():
+    """Redirect to the main page of analytics
+
+     Decorator handles the case where setupComplete is false,
+     and redirects to /workbench/onboarding
+    """
+    return redirect(get_host() + '/analytics')
