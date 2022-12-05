@@ -142,11 +142,6 @@ def test_get_analytics(test_client, core_api_workbench_request):
     assert resp.status_code == 200
     data = resp.get_json()
     assert "result" in data
-    assert data["result"]["48143"] == {'demographic_feature_1': 'Feature 1',
-                                       'demographic_feature_2': 'Feature 2',
-                                       'demographic_feature_3': 'Feature 3',
-                                       'risk': 0.5971562810162229,
-                                       'risk_label': 'medium '}
 
 
 def test_get_analytics_unauthed(test_client, core_api_workbench_request_unauthed):
@@ -164,13 +159,7 @@ def test_get_analytics_for_specific_area(test_client, core_api_workbench_request
     resp = test_client.get('/protx/api/analytics/county/48143/')
     assert resp.status_code == 200
     data = resp.get_json()
-    assert data == {'result': {'GEOID': '48143',
-                               'GEOTYPE': 'county',
-                               'demographic_feature_1': 'Feature 1',
-                               'demographic_feature_2': 'Feature 2',
-                               'demographic_feature_3': 'Feature 3',
-                               'risk': 0.5971562810162229,
-                               'risk_label': 'medium '}}
+    assert "result" in data
 
 
 def test_get_analytics_for_specific_area_unauthed(test_client, core_api_workbench_request_unauthed):
@@ -185,11 +174,11 @@ def test_get_analytics_for_specific_area_setup_complete_false(test_client, core_
 
 @pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
 def test_get_analytics_chart(test_client, core_api_workbench_request):
-    resp = test_client.get('/protx/api/analytics-chart/county/risk')
+    resp = test_client.get('protx/api/analytics-chart/county/pred_per_100k?geoid=48053')
     assert resp.status_code == 200
     data = resp.get_json()
-    assert "result" in data
-    assert "data" in data["result"]
+    assert data["result"]["data"]
+    assert data["result"]["layout"]["template"]["data"]["histogram2dcontour"]
 
 
 def test_get_analytics_chart_unauthed(test_client, core_api_workbench_request_unauthed):
