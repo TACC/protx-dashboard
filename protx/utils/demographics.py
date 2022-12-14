@@ -8,6 +8,8 @@ from protx.utils.plotly_figures import timeseries_lineplot
 
 db_name = '/protx-data/cooks.db'
 
+six_colors_light_green_to_blue = ['#eff5d6', '#c6e8b0', '#8fcca1', '#62ad9c', '#3c7d8a', '#26547a']
+color_palette = six_colors_light_green_to_blue
 
 def currency(value1, value2):
     return '{:.0f}-{:.0f}'.format(round(value1 / 1000, 0), round(value2 / 1000, 0))
@@ -392,6 +394,11 @@ def get_age_race_pie_charts(area, geoid):
         name="Race",
         title='Racial makeup'),
         row=1, col=2)
+    fig.update_traces(marker=dict(
+        colors=color_palette, line=dict(
+            color='black',
+            width=1
+        )))
     fig.update_layout(
         font=dict(size=13, color="Black",  family="Roboto"),
         title={"text": 'Community Characteristics', "font": {"size": 14, "color": "Black", "family": "Roboto"}}
