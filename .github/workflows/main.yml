@@ -114,9 +114,9 @@ jobs:
 
       - name: npm ci
         run: |
-          cd client
+          cd protx-client
           npm ci
       - name: Client Side Linting
         run: |
-          cd client
+          cd protx-client
           npm run lint
