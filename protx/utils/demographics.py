@@ -11,6 +11,7 @@ db_name = '/protx-data/cooks.db'
 six_colors_light_green_to_blue = ['#eff5d6', '#c6e8b0', '#8fcca1', '#62ad9c', '#3c7d8a', '#26547a']
 color_palette = six_colors_light_green_to_blue
 
+
 def currency(value1, value2):
     return '{:.0f}-{:.0f}'.format(round(value1 / 1000, 0), round(value2 / 1000, 0))
 
@@ -376,23 +377,25 @@ def get_age_race_pie_charts(area, geoid):
     db_conn.close()
 
     fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "pie"}]])
-    fig.add_trace(go.Pie(
-        values=values1,
-        labels=labels1,
-        domain=dict(x=[0, 0.5]),
-        legendgroup='Race',
-        legendgrouptitle=go.pie.Legendgrouptitle(text='Race'),
-        name="Age",
-        title='Age makeup'),
+    fig.add_trace(
+        go.Pie(
+            values=values1,
+            labels=labels1,
+            domain=dict(x=[0, 0.5]),
+            legendgroup='Age',
+            legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
+            name="Age",
+            title=dict(text='Age makeup', font=dict(size=18, color="Black",  family="Roboto"))),
         row=1, col=1)
-    fig.add_trace(go.Pie(
-        values=values2,
-        labels=labels2,
-        domain=dict(x=[0.5, 1.0]),
-        legendgroup='Age',
-        legendgrouptitle=go.pie.Legendgrouptitle(text='Age'),
-        name="Race",
-        title='Racial makeup'),
+    fig.add_trace(
+        go.Pie(
+            values=values2,
+            labels=labels2,
+            domain=dict(x=[0.5, 1.0]),
+            legendgroup='Race',
+            legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
+            name="Race",
+            title=dict(text='Racial makeup', font=dict(size=18, color="Black",  family="Roboto"))),
         row=1, col=2)
     fig.update_traces(marker=dict(
         colors=color_palette, line=dict(
