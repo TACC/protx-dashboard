@@ -248,6 +248,9 @@ module.exports = {
     // 'selector-pseudo-element-blacklist': null,
     // Specify a whitelist of allowed pseudo-element selectors.
     // 'selector-pseudo-element-whitelist': null,
+    // Specify simple or complex notation for :not() pseudo-class selectors.
+    'selector-not-notation': null,
+
 
     // MEDIA FEATURE
     // Specify a blacklist of disallowed media feature names.
@@ -294,6 +297,10 @@ module.exports = {
                             //       (defaults to 2, because of extended ruleset)
     // Specify short or long notation for hex colors (Autofixable).
     'color-hex-length': 'long',
+    // Specify modern or legacy notation for color-functions.
+    'color-function-notation': null,
+    // Specify percentage or number notation for alpha-values.
+    'alpha-value-notation': null,
 
     // FONT FAMILY
     // Specify whether or not quotation marks should be used around font family names.
