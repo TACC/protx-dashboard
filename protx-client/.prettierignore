@@ -1,0 +1,7 @@
+# vendor
+node_modules
+
+# auto-generated
+coverage
+build
+dist
