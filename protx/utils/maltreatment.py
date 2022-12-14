@@ -6,7 +6,6 @@ from protx.log import logger
 
 db_name = '/protx-data/cooks.db'
 
-# TODO.  this should be a mapping that doesn't use display names https://jira.tacc.utexas.edu/browse/COOKS-336
 maltrt_palette = {
     'ABAN': '#001e2e',
     'EMAB': '#003b5c',
