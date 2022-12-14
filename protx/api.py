@@ -63,6 +63,20 @@ class DemographicsDistributionPlotData(Resource):
         return {"result": result}
 
 
+@api.route("/demographics-community-characteristics-chart/<area>/<geoid>/")
+class RaceGenderDistributionChart(Resource):
+    @api.doc("get_community_characteristics_chart")
+    def get(self, area, geoid):
+        """Get race/gender pie charts for selected areas
+
+        For example, `/protx/api/demographics-community-characteristics-chart/county/48257`
+
+        """
+        logger.info(f"Getting race and gender distribution charts for area: {area} and selected geoid:{geoid}")
+        charts = demographics.get_age_race_pie_charts(area=area, geoid=geoid)
+        return {"result": charts}
+
+
 maltreatment_plot = api.model('MaltreatmentPlot', {
     "area": fields.String(),
     "geoid": fields.String(),

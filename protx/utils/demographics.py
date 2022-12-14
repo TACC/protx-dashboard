@@ -381,7 +381,7 @@ def get_age_race_pie_charts(area, geoid):
         legendgroup='Race',
         legendgrouptitle=go.pie.Legendgrouptitle(text='Race'),
         name="Age",
-        title=f'Age makeup'),
+        title='Age makeup'),
         row=1, col=1)
     fig.add_trace(go.Pie(
         values=values2,
@@ -390,7 +390,7 @@ def get_age_race_pie_charts(area, geoid):
         legendgroup='Age',
         legendgrouptitle=go.pie.Legendgrouptitle(text='Age'),
         name="Race",
-        title=f'Racial makeup'),
+        title='Racial makeup'),
         row=1, col=2)
     fig.update_layout(
         font=dict(size=13, color="Black",  family="Roboto"),
