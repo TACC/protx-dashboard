@@ -69,7 +69,7 @@ function AnalyticsStateDistribution({geography, selectedGeographicFeature}) {
   }
 
   return (
-    <div class="maltreatment-types-plot-layout">
+    <div className="maltreatment-types-plot-layout">
       <div className="feature-table">
           <div className="feature-table-chart-selection">
             <div className="feature-table-chart-title">
