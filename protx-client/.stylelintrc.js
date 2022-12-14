@@ -111,6 +111,8 @@ module.exports = {
     } ],
     // Disallow duplicate @import rules within a stylesheet.
     // 'no-duplicate-at-import-rules': null,
+    // Specify string or URL notation for @import rules.
+    'import-notation': null,
     // Disallow duplicate selectors within a stylesheet.
     'no-duplicate-selectors': null, // TODO: Uncomment to enable this after CSS Modules is heavily used
                                     //       (duplicate selectors can help separate contexts)
