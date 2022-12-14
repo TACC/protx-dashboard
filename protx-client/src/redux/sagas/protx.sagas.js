@@ -12,26 +12,26 @@ export function* fetchProtx(action) {
       texasBoundary,
       display,
       resources,
-      analytics
+      analytics,
     } = yield all({
       maltreatment: call(fetchUtil, {
-        url: `/protx/api/maltreatment`
+        url: `/protx/api/maltreatment`,
       }),
       demographics: call(fetchUtil, {
-        url: `/protx/api/demographics`
+        url: `/protx/api/demographics`,
       }),
       texasBoundary: call(fetchUtil, {
-        url: `/data-static/Texas_State_Boundary.geojson`
+        url: `/data-static/Texas_State_Boundary.geojson`,
       }),
       display: call(fetchUtil, {
-        url: `/protx/api/display`
+        url: `/protx/api/display`,
       }),
       resources: call(fetchUtil, {
-        url: `/protx/api/resources`
+        url: `/protx/api/resources`,
       }),
       analytics: call(fetchUtil, {
-        url: `/protx/api/analytics/county/`
-      })
+        url: `/protx/api/analytics/county/`,
+      }),
     });
     yield put({
       type: 'PROTX_SUCCESS',
@@ -44,12 +44,12 @@ export function* fetchProtx(action) {
         display,
         resources: resources.resources,
         resourcesMeta: resources.display,
-        analytics: analytics.result
-      }
+        analytics: analytics.result,
+      },
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_FAILURE'
+      type: 'PROTX_FAILURE',
     });
   }
 }
@@ -58,17 +58,17 @@ export function* fetchProtxDemographicsDistribution(action) {
   yield put({ type: 'PROTX_DEMOGRAPHICS_DISTRIBUTION_INIT' });
   try {
     const data = yield call(fetchUtil, {
-      url: `/protx/api/demographics-plot-distribution/${action.payload.area}/${action.payload.selectedArea}/${action.payload.variable}/${action.payload.unit}/`
+      url: `/protx/api/demographics-plot-distribution/${action.payload.area}/${action.payload.selectedArea}/${action.payload.variable}/${action.payload.unit}/`,
     });
     yield put({
       type: 'PROTX_DEMOGRAPHICS_DISTRIBUTION_SUCCESS',
       payload: {
-        data: data.result
-      }
+        data: data.result,
+      },
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_DEMOGRAPHICS_DISTRIBUTION_FAILURE'
+      type: 'PROTX_DEMOGRAPHICS_DISTRIBUTION_FAILURE',
     });
   }
 }
@@ -79,25 +79,25 @@ export function* fetchProtxMaltreatmentDistribution(action) {
     const data = yield call(fetchUtil, {
       url: `/protx/api/maltreatment-plot-distribution/`,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       method: 'PATCH',
       body: JSON.stringify({
         area: action.payload.area,
         geoid: action.payload.geoid,
         variables: action.payload.variables,
-        unit: action.payload.unit
-      })
+        unit: action.payload.unit,
+      }),
     });
     yield put({
       type: 'PROTX_MALTREATMENT_DISTRIBUTION_SUCCESS',
       payload: {
-        data: data.result
-      }
+        data: data.result,
+      },
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_MALTREATMENT_DISTRIBUTION_FAILURE'
+      type: 'PROTX_MALTREATMENT_DISTRIBUTION_FAILURE',
     });
   }
 }
@@ -106,17 +106,17 @@ export function* fetchProtxAnalytics(action) {
   yield put({ type: 'PROTX_ANALYTICS_INIT' });
   try {
     const data = yield call(fetchUtil, {
-      url: `/protx/api/analytics/${action.payload.area}/${action.payload.selectedArea}/`
+      url: `/protx/api/analytics/${action.payload.area}/${action.payload.selectedArea}/`,
     });
     yield put({
       type: 'PROTX_ANALYTICS_SUCCESS',
       payload: {
-        data: data.result
-      }
+        data: data.result,
+      },
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_ANALYTICS_FAILURE'
+      type: 'PROTX_ANALYTICS_FAILURE',
     });
   }
 }
@@ -124,20 +124,19 @@ export function* fetchProtxAnalytics(action) {
 export function* fetchProtxAnalyticsStatewideDistribution(action) {
   yield put({ type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_INIT' });
   try {
-
     const data = yield call(fetchUtil, {
       url: `/protx/api/analytics-chart/${action.payload.area}/${action.payload.analyticsType}`,
-      params: action.payload.geoid ? {geoid: action.payload.geoid} : null
+      params: action.payload.geoid ? { geoid: action.payload.geoid } : null,
     });
     yield put({
       type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_SUCCESS',
       payload: {
-        data: data.result
-      }
+        data: data.result,
+      },
     });
   } catch (error) {
     yield put({
-      type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE'
+      type: 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE',
     });
   }
 }
@@ -161,10 +160,7 @@ export function* watchProtxMaltreatmentDistribution() {
 }
 
 export function* watchProtxAnalytics() {
-  yield takeLeading(
-    'FETCH_PROTX_ANALYTICS',
-    fetchProtxAnalytics
-  );
+  yield takeLeading('FETCH_PROTX_ANALYTICS', fetchProtxAnalytics);
 }
 
 export function* watchProtxAnalyticsStatewideDistribution() {

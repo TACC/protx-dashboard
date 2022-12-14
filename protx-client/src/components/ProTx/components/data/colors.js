@@ -17,9 +17,7 @@ const colorbrewerClassYlOrBr = {
   4: ['#ffffd4', '#fee391', '#fe9929', '#993404'],
   3: [`#ffffd4`, `#fec44f`, `#d95f0e`],
   2: [`#ffffd4`, `#993404`],
-  1: [`#ffffd4`]
+  1: [`#ffffd4`],
 };
 
-export {
-  colorbrewerClassYlOrBr,
-};
+export { colorbrewerClassYlOrBr };

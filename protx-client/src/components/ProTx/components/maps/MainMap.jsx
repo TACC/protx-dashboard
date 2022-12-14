@@ -27,7 +27,7 @@ const RESOURCE_ZOOM_LEVEL = 8; // resources will be displayed at this zoom level
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
-  shadowUrl: iconShadow
+  shadowUrl: iconShadow,
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
@@ -45,12 +45,12 @@ function MainMap({
   resourceLayers,
   setResourceLayers,
   selectedGeographicFeature,
-  setSelectedGeographicFeature
+  setSelectedGeographicFeature,
 }) {
   const dataServer = window.location.origin;
 
-  const resources = useSelector(state => state.protx.data.resources);
-  const resourcesMeta = useSelector(state => state.protx.data.resourcesMeta);
+  const resources = useSelector((state) => state.protx.data.resources);
+  const resourcesMeta = useSelector((state) => state.protx.data.resourcesMeta);
 
   // Leaflet related layers, controls, and map
   const [legendControl, setLegendControl] = useState(null);
@@ -93,7 +93,7 @@ function MainMap({
     if (zoomTransitionOccurred) {
       if (newZoomLevel >= RESOURCE_ZOOM_LEVEL) {
         currentLayerControl.expand();
-        refResourceLayers.current.forEach(resourceLayer => {
+        refResourceLayers.current.forEach((resourceLayer) => {
           if (
             resourceLayer.label === 'Child and Youth Services' ||
             resourceLayer.label === 'DFPS Locations'
@@ -103,7 +103,7 @@ function MainMap({
         });
       } else {
         currentLayerControl.collapse();
-        refResourceLayers.current.forEach(resourceLayer => {
+        refResourceLayers.current.forEach((resourceLayer) => {
           currentMap.removeLayer(resourceLayer.layer);
         });
         // unselect geographic feature
@@ -134,7 +134,7 @@ function MainMap({
       maxZoom: 16,
       maxBounds: texasBounds,
       maxBoundsViscosity: 1.0,
-      doubleClickZoom: false
+      doubleClickZoom: false,
     }).fitBounds(texasBounds);
 
     L.easyButton('icon icon-globe', (btn, currentMap) => {
@@ -149,10 +149,10 @@ function MainMap({
             return {
               stroke: true,
               color: 'black',
-              weight: 2
+              weight: 2,
             };
-          }
-        }
+          },
+        },
       })
       .addTo(newMap);
 
@@ -188,11 +188,12 @@ function MainMap({
 
       let newColorScale;
 
-      if(mapType === "analytics") {
+      if (mapType === 'analytics') {
         const categories = [
-          {key: 'low', label: 'Low'},
-          {key:'medium ', label:'Medium'}, // 'medium ' with space; check DB
-          {key: 'high', label: 'High'}];
+          { key: 'low', label: 'Low' },
+          { key: 'medium ', label: 'Medium' }, // 'medium ' with space; check DB
+          { key: 'high', label: 'High' },
+        ];
         newColorScale = new CategoryColorScale(categories);
       } else {
         const meta = getMetaData(
@@ -244,7 +245,7 @@ function MainMap({
     year,
     unit,
     map,
-    texasOutlineLayer
+    texasOutlineLayer,
   ]);
 
   useEffect(() => {
@@ -252,7 +253,7 @@ function MainMap({
     if (map && layersControl && resources) {
       // remove previous layers
       if (refResourceLayers.current) {
-        refResourceLayers.current.forEach(resourceLayer => {
+        refResourceLayers.current.forEach((resourceLayer) => {
           map.removeLayer(resourceLayer.layer);
           layersControl.removeLayer(resourceLayer.layer);
         });
@@ -260,18 +261,18 @@ function MainMap({
 
       const resourcesClusterGroups = {};
       resources
-        .filter(point => {
+        .filter((point) => {
           return point.LATITUDE && point.LONGITUDE;
         })
-        .forEach(point => {
+        .forEach((point) => {
           if (!(point.NAICS_CODE in resourcesClusterGroups)) {
             resourcesClusterGroups[point.NAICS_CODE] = L.markerClusterGroup({
-              showCoverageOnHover: false
+              showCoverageOnHover: false,
             });
           }
 
           const marker = L.marker(L.latLng(point.LATITUDE, point.LONGITUDE), {
-            title: point.NAME
+            title: point.NAME,
           });
 
           let popupContentAssemblage = `<div class="marker-popup-content">`;
@@ -315,11 +316,11 @@ function MainMap({
         resourcesClusterGroups
       ).sort((a, b) => {
         const matchingMetaA = resourcesMeta.find(
-          r => r.NAICS_CODE === parseInt(a, 10)
+          (r) => r.NAICS_CODE === parseInt(a, 10)
         );
 
         const matchingMetaB = resourcesMeta.find(
-          r => r.NAICS_CODE === parseInt(b, 10)
+          (r) => r.NAICS_CODE === parseInt(b, 10)
         );
 
         return matchingMetaA.DESCRIPTION.localeCompare(
@@ -327,10 +328,10 @@ function MainMap({
         );
       });
 
-      resourcesClusterGroupsSorted.forEach(naicsCode => {
+      resourcesClusterGroupsSorted.forEach((naicsCode) => {
         const markersClusterGroup = resourcesClusterGroups[naicsCode];
         const matchingMeta = resourcesMeta.find(
-          r => r.NAICS_CODE === parseInt(naicsCode, 10)
+          (r) => r.NAICS_CODE === parseInt(naicsCode, 10)
         );
         const layerLabel = matchingMeta
           ? matchingMeta.DESCRIPTION
@@ -343,7 +344,7 @@ function MainMap({
         newResourceLayers.push({
           naicsCode,
           label: layerLabel,
-          layer: markersClusterGroup
+          layer: markersClusterGroup,
         });
       });
       updateResourceLayers(newResourceLayers);
@@ -359,14 +360,13 @@ function MainMap({
     }
   }, [map, data, selectedGeographicFeature]);
 
-
   useEffect(() => {
     const vectorTile = `${dataServer}/data-static/vector/${geography}/2019/{z}/{x}/{y}.pbf`;
 
     if (map && layersControl) {
       const newDataLayer = L.vectorGrid.protobuf(vectorTile, {
         vectorTileLayerStyles: {
-          singleLayer: properties => {
+          singleLayer: (properties) => {
             const geoid = properties[GEOID_KEY[geography]];
             return getFeatureStyle(
               mapType,
@@ -379,21 +379,23 @@ function MainMap({
               maltreatmentTypes,
               unit
             );
-          }
+          },
         },
         interactive: true,
         getFeatureId(f) {
           return f.properties[GEOID_KEY[geography]];
         },
-        maxNativeZoom: 14 // All tiles generated up to 14 zoom level
+        maxNativeZoom: 14, // All tiles generated up to 14 zoom level
       });
 
-      if( geography === 'dfps_region') {
+      if (geography === 'dfps_region') {
         // Add tooltip to show which is which region
-        newDataLayer.bindTooltip('', {sticky: true});
-        newDataLayer.on('mouseover', function(e) {
+        newDataLayer.bindTooltip('', { sticky: true });
+        newDataLayer.on('mouseover', function (e) {
           const dfpsRegionGeoid = e.layer.properties[GEOID_KEY[geography]];
-          newDataLayer.setTooltipContent('DFPS Region ' + dfpsRegionGeoid.replace('-', ' '));
+          newDataLayer.setTooltipContent(
+            'DFPS Region ' + dfpsRegionGeoid.replace('-', ' ')
+          );
         });
       }
 
@@ -403,7 +405,7 @@ function MainMap({
       }
 
       // Add click handler
-      newDataLayer.on('click', e => {
+      newDataLayer.on('click', (e) => {
         const clickedGeographicFeature =
           e.layer.properties[GEOID_KEY[geography]];
 
@@ -427,7 +429,7 @@ function MainMap({
             ),
             color: 'black',
             weight: 2.0,
-            stroke: true
+            stroke: true,
           };
           newDataLayer.setFeatureStyle(
             clickedGeographicFeature,
@@ -466,7 +468,7 @@ function MainMap({
           ),
           color: 'black',
           weight: 2.0,
-          stroke: true
+          stroke: true,
         };
         newDataLayer.setFeatureStyle(
           selectedGeographicFeature,
@@ -489,7 +491,7 @@ function MainMap({
     year,
     unit,
     layersControl,
-    map
+    map,
   ]);
 
   return <div className={styles['map']} ref={(el) => (mapContainer = el)} />;
@@ -510,12 +512,12 @@ MainMap.propTypes = {
   map: PropTypes.object,
   setMap: PropTypes.func.isRequired,
   resourceLayers: PropTypes.arrayOf(PropTypes.object),
-  setResourceLayers: PropTypes.func.isRequired
+  setResourceLayers: PropTypes.func.isRequired,
 };
 
 MainMap.defaultProps = {
   map: null,
-  resourceLayers: null
+  resourceLayers: null,
 };
 
 export default MainMap;

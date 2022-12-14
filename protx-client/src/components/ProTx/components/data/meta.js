@@ -8,7 +8,7 @@ export const SUPPORTED_YEARS = [
   '2014',
   '2013',
   '2012',
-  '2011'
+  '2011',
 ];
 
 export const OBSERVED_FEATURES_TOP_FIELDS = [
@@ -18,7 +18,7 @@ export const OBSERVED_FEATURES_TOP_FIELDS = [
   'AGE17',
   'NOHSDP',
   'GROUPQ',
-  'CROWD'
+  'CROWD',
 ];
 
 // TOOO: we should correct vector files to all be the same thing (GEOID)
@@ -28,7 +28,7 @@ export const GEOID_KEY = {
   county: 'GEO_ID',
   dfps_region: 'Sheet1__Re',
   urban_area: 'GEOID10',
-  zcta: 'GEOID10'
+  zcta: 'GEOID10',
 };
 
 /**
@@ -45,5 +45,5 @@ export const CATEGORY_CODES = [
   'RAPR',
   'SXAB',
   'SXTR',
-  'NA'
+  'NA',
 ];
