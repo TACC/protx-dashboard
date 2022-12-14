@@ -2,6 +2,8 @@ import sqlite3
 import json
 import numpy as np
 import pandas as pd
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 from protx.utils.plotly_figures import timeseries_lineplot
 
 db_name = '/protx-data/cooks.db'
@@ -320,3 +322,79 @@ def demographics_simple_lineplot_figure(area, geoid, unit, variable):
     # Generate the plot figure data object.
     plot_figure = timeseries_lineplot(plot_result)
     return json.loads(plot_figure.to_json())
+
+
+def get_age_race_pie_charts(area, geoid):
+    """
+    Get age/race community characteristics pie charts
+
+    Parameters
+    ----------
+    area: area (i.e. 'county')
+    geoid: selected area's geoid
+
+    Returns
+    -------
+    plotly json
+
+    """
+
+    db_conn = sqlite3.connect(db_name)
+
+    query = '''
+    select d.DEMOGRAPHICS_NAME, d.VALUE, u.DISPLAY_TEXT
+    from demographics d
+    left join display_data u on
+        u.NAME = d.DEMOGRAPHICS_NAME
+    where d.GEOTYPE = "{area}" and
+        d.UNITS = "{units}" and
+        d.DEMOGRAPHICS_NAME in ({variables}) and
+        d.GEOID = "{geoid}" and
+        d.YEAR = "2020" and
+        d.GEOTYPE = "{area}";
+    '''
+    variables = ['TOTPOP', 'AGE17', 'AGE65']
+    selection = {'units': 'count', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
+
+    population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
+    population_17_to_65 = population["TOTPOP"].VALUE - population["AGE17"].VALUE - population["AGE65"].VALUE
+    labels1 = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
+    values1 = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
+
+    variables = ['HISPANIC_LATINO', 'AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
+                 'BLACK_AFRICAN_AMERICAN_ALONE', 'NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE',
+                 'WHITE_ALONE_NOT_HISPANIC_LATINO']
+
+    selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
+    labels2 = data_frame_result["DISPLAY_TEXT"].tolist()
+    values2 = data_frame_result["VALUE"].tolist()
+
+    db_conn.close()
+
+    fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "pie"}]])
+    fig.add_trace(go.Pie(
+        values=values1,
+        labels=labels1,
+        domain=dict(x=[0, 0.5]),
+        legendgroup='Race',
+        legendgrouptitle=go.pie.Legendgrouptitle(text='Race'),
+        name="Age",
+        title=f'Age makeup'),
+        row=1, col=1)
+    fig.add_trace(go.Pie(
+        values=values2,
+        labels=labels2,
+        domain=dict(x=[0.5, 1.0]),
+        legendgroup='Age',
+        legendgrouptitle=go.pie.Legendgrouptitle(text='Age'),
+        name="Race",
+        title=f'Racial makeup'),
+        row=1, col=2)
+    fig.update_layout(
+        font=dict(size=13, color="Black",  family="Roboto"),
+        title={"text": 'Community Characteristics', "font": {"size": 14, "color": "Black", "family": "Roboto"}}
+    )
+    # fig.write_html("figure.html")
+    return json.loads(fig.to_json())
