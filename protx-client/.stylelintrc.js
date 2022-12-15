@@ -1,12 +1,17 @@
 module.exports = {
-  ignoreFiles: ['build/**/*', 'dist/**/*', 'coverage/**/*', '**/icon.fonts.css'],
+  ignoreFiles: [
+    'build/**/*',
+    'dist/**/*',
+    'coverage/**/*',
+    '**/icon.fonts.css',
+  ],
 
   // `stylelint-config-recommended` turns on all the "possible errors" rules
   // SEE: Rules: https://stylelint.io/user-guide/rules/list#possible-errors
   // `stylelint-config-standard` enforces common stylistic conventions
   // SEE: CSS: https://github.com/stylelint/stylelint-config-standard#example
   // SEE: Rules: https://github.com/stylelint/stylelint-config-standard/blob/master/index.js
-  extends: 'stylelint-config-standard',
+  extends: ['stylelint-config-standard', 'stylelint-config-standard-scss'],
 
   // SEE: https://stylelint.io/user-guide/rules/list
   rules: {
@@ -22,9 +27,12 @@ module.exports = {
     // Disallow duplicate font family names.
     // 'font-family-no-duplicate-names': null,
     // Disallow missing generic families in lists of font family names.
-    'font-family-no-missing-generic-family-keyword': [ true, {
-      ignoreFontFamilies: ['Cortal-Icons']
-    }],
+    'font-family-no-missing-generic-family-keyword': [
+      true,
+      {
+        ignoreFontFamilies: ['Cortal-Icons'],
+      },
+    ],
 
     // FUNCTION
     // Disallow an invalid expression within calc functions.
@@ -44,9 +52,12 @@ module.exports = {
 
     // PROPERTY
     // Disallow unknown properties.
-    'property-no-unknown': [ true, {
-      ignoreProperties: ['composes']
-    }],
+    'property-no-unknown': [
+      true,
+      {
+        ignoreProperties: ['composes'],
+      },
+    ],
 
     // KEYFRAME DECLARATION
     // Disallow !important within keyframe declarations.
@@ -64,9 +75,11 @@ module.exports = {
 
     // SELECTOR
     // Disallow unknown pseudo-class selectors.
-    'selector-pseudo-class-no-unknown': [ true, {
-        ignorePseudoClasses: ['global']
-      }
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global'],
+      },
     ],
     // Disallow unknown pseudo-element selectors.
     // 'selector-pseudo-element-no-unknown': null,
@@ -79,7 +92,9 @@ module.exports = {
 
     // AT-RULE
     // Disallow unknown at-rules.
-    'at-rule-no-unknown': [ true, {
+    'at-rule-no-unknown': [
+      true,
+      {
         ignoreAtRules: [
           // SASS at-rules
           // SEE: https://sass-lang.com/documentation/at-rules
@@ -97,8 +112,9 @@ module.exports = {
           'each',
           'for',
           'while',
-        ]
-    } ],
+        ],
+      },
+    ],
 
     // COMMENT
     // Disallow empty comments.
@@ -106,16 +122,19 @@ module.exports = {
 
     // GENERAL / SHEET
     // Disallow selectors of lower specificity from coming after overriding selectors of higher specificity.
-    'no-descending-specificity':  [ true, {
-      ignore: ['selectors-within-list']
-    } ],
+    'no-descending-specificity': [
+      true,
+      {
+        ignore: ['selectors-within-list'],
+      },
+    ],
     // Disallow duplicate @import rules within a stylesheet.
     // 'no-duplicate-at-import-rules': null,
     // Specify string or URL notation for @import rules.
     'import-notation': null,
     // Disallow duplicate selectors within a stylesheet.
     'no-duplicate-selectors': null, // TODO: Uncomment to enable this after CSS Modules is heavily used
-                                    //       (duplicate selectors can help separate contexts)
+    //       (duplicate selectors can help separate contexts)
     // Disallow empty sources.
     // 'no-empty-source': null,
     // Disallow extra semicolons (Autofixable).
@@ -251,7 +270,6 @@ module.exports = {
     // Specify simple or complex notation for :not() pseudo-class selectors.
     'selector-not-notation': null,
 
-
     // MEDIA FEATURE
     // Specify a blacklist of disallowed media feature names.
     // 'media-feature-name-blacklist': null,
@@ -294,7 +312,7 @@ module.exports = {
 
     // Specify lowercase or uppercase for hex colors (Autofixable).
     'color-hex-case': null, // TODO: Uncomment later, to reduce scope of changes
-                            //       (defaults to 2, because of extended ruleset)
+    //       (defaults to 2, because of extended ruleset)
     // Specify short or long notation for hex colors (Autofixable).
     'color-hex-length': 'long',
     // Specify modern or legacy notation for color-functions.
@@ -486,13 +504,14 @@ module.exports = {
 
     // AT-RULE
     // Require or disallow an empty line before at-rules (Autofixable).
-    'at-rule-empty-line-before': [ 'always', {
-      except: ["blockless-after-same-name-blockless", "first-nested"],
-      ignore: ["after-comment"],
-      ignoreAtRules: [
-        'media'
-      ]
-    } ],
+    'at-rule-empty-line-before': [
+      'always',
+      {
+        except: ['blockless-after-same-name-blockless', 'first-nested'],
+        ignore: ['after-comment'],
+        ignoreAtRules: ['media'],
+      },
+    ],
     // Specify lowercase or uppercase for at-rules names (Autofixable).
     // 'at-rule-name-case': 'lower',
     // Require a newline after at-rule names.
@@ -513,7 +532,7 @@ module.exports = {
     // GENERAL / SHEET
     // Specify indentation (Autofixable).
     indentation: null, // TODO: Uncomment later, to reduce scope of changes
-                       //       (defaults to 2, because of extended ruleset)
+    //       (defaults to 2, because of extended ruleset)
     // Specify unix or windows linebreaks (Autofixable).
     // linebreaks: null,
     // Limit the number of adjacent empty lines (Autofixable).
@@ -528,5 +547,170 @@ module.exports = {
     // 'no-empty-first-line': true,
     // Require or disallow Unicode BOM.
     // 'unicode-bom': null
-  }
+
+    // SCSS
+    // SEE: Rules: https://www.npmjs.com/package/stylelint-scss
+
+    // @-each
+    // This is a rule that checks for situations where users have done a loop using map-keys or map.keys and grabbed the value for that key inside of the loop.
+    // 'scss/at-each-key-value-single-line': null,
+
+    // @-else
+    // Require or disallow a newline after the closing brace of @else statements (Autofixable).
+    // 'scss/at-else-closing-brace-newline-after: null',
+    // Require a single space or disallow whitespace after the closing brace of @else statements (Autofixable).
+    // 'scss/at-else-closing-brace-space-after: null',
+    // Require an empty line or disallow empty lines before @-else (Autofixable).
+    // 'scss/at-else-empty-line-before: null',
+    // Require or disallow a space before @else if parentheses (Autofixable).
+    // 'at-else-if-parentheses-space-before: null',
+
+    // @-extend
+    // Disallow at-extends (@extend) with missing placeholders.
+    // 'scss/at-extend-no-missing-placeholder: null',
+
+    // @-function
+    // Require named parameters in SCSS function call rule.
+    // 'scss/at-function-named-arguments: null',
+    // Require or disallow a space before @function parentheses (Autofixable).
+    // 'scss/at-function-parentheses-space-before: null',
+    // Specify a pattern for Sass/SCSS-like function names.
+    // 'scss/at-function-pattern: 'null',
+
+    // @-if
+    // Require or disallow a newline after the closing brace of @if statements (Autofixable).
+    // 'scss/at-if-closing-brace-newline-after: null',
+    // Require a single space or disallow whitespace after the closing brace of @if statements (Autofixable).
+    // 'scss/at-if-closing-brace-space-after: null',
+    // Disallow null in @if statements.
+    // 'scss/at-if-no-null: null',
+
+    // @-import
+    // Disallow leading underscore in partial names in @import.
+    // 'scss/at-import-no-partial-leading-underscore: null',
+    // Require or disallow extension in @import commands (Autofixable).
+    'scss/at-import-partial-extension': 'always',
+    // Specify blacklist of disallowed file extensions for partial names in @import commands.
+    // 'scss/at-import-partial-extension-blacklist: null',
+    // Specify whitelist of allowed file extensions for partial names in @import commands.
+    // 'scss/at-import-partial-extension-whitelist: null',
+
+    // @-mixin
+    // Require or disallow parentheses in argumentless @mixin calls (Autofixable).
+    // 'scss/at-mixin-argumentless-call-parentheses: null',
+    // Require named parameters in at-mixin call rule.
+    // 'scss/at-mixin-named-arguments: null',
+    // Require or disallow a space before @mixin parentheses (Autofixable).
+    // 'scss/at-mixin-parentheses-space-before: null',
+    // Specify a pattern for Sass/SCSS-like mixin names.
+    // 'scss/at-mixin-pattern: null',
+
+    // @-rule
+    // Disallow parentheses in conditional @ rules (if, elsif, while) (Autofixable).
+    // 'scss/at-rule-conditional-no-parentheses: null',
+    // Disallow unknown at-rules. Should be used instead of stylelint's at-rule-no-unknown.
+    // 'scss/at-rule-no-unknown: null',
+
+    // @-use
+    // Disallow @use without a namespace (i.e. @use "..." as *).
+    // 'scss/at-use-no-unnamespaced: null',
+
+    // $-variable
+    // Require a newline after the colon in $-variable declarations (Autofixable).
+    // 'scss/dollar-variable-colon-newline-after: null',
+    // Require or disallow whitespace after the colon in $-variable declarations (Autofixable).
+    // 'scss/dollar-variable-colon-space-after: null',
+    // Require a single space or disallow whitespace before the colon in $-variable declarations (Autofixable).
+    // 'scss/dollar-variable-colon-space-before: null',
+    // Require !default flag for $-variable declarations.
+    // 'scss/dollar-variable-default: null',
+    // Require a single empty line or disallow empty lines after $-variable declarations (Autofixable).
+    // 'scss/dollar-variable-empty-line-after: null',
+    // Require a single empty line or disallow empty lines before $-variable declarations (Autofixable).
+    // 'scss/dollar-variable-empty-line-before: null',
+    // Require for variables to be put first in a block (a rule or in root).
+    // 'scss/dollar-variable-first-in-block: null',
+    // Disallow Sass variables that are used without interpolation with CSS features that use custom identifiers.
+    // 'scss/dollar-variable-no-missing-interpolation: null',
+    // Disallow assignment to namespaced Sass variables.
+    // 'scss/dollar-variable-no-namespaced-assignment: null',
+    // Specify a pattern for Sass-like variables.
+    // 'scss/dollar-variable-pattern: null',
+
+    // %-placeholder
+    // Specify a pattern for %-placeholders.
+    // 'scss/percent-placeholder-pattern: null',
+
+    //-comment
+    // Require or disallow an empty line before //-comments (Autofixable).
+    // 'scss/double-slash-comment-empty-line-before: null',
+    // Require or disallow //-comments to be inline comments.
+    // 'scss/double-slash-comment-inline: null',
+    // Require or disallow whitespace after the // in //-comments
+    // 'scss/double-slash-comment-whitespace-inside: null',
+
+    // Comment
+    // Disallow empty comments.
+    // 'scss/comment-no-empty: null',
+    // Disallow /*-comments.
+    // 'scss/comment-no-loud: null',
+
+    // Declaration
+    // Require or disallow properties with - in their names to be in a form of a nested group.
+    // 'scss/declaration-nested-properties: null',
+    // Disallow nested properties of the same "namespace" be divided into multiple groups.
+    // 'scss/declaration-nested-properties-no-divided-groups: null',
+
+    // Dimension
+    // Disallow non-numeric values when interpolating a value with a unit.
+    // 'scss/dimension-no-non-numeric-values: null',
+
+    // Function
+    // Encourage the use of the scale-color function over regular color functions.
+    // 'scss/function-color-relative: null',
+    // Disallow unknown functions. Should be used instead of Stylelint's function-no-unknown.
+    // 'scss/function-no-unknown: null',
+    // Disallow quoted strings inside the quote function (Autofixable).
+    // 'scss/function-quote-no-quoted-strings-inside: null',
+    // Disallow unquoted strings inside the unquote function (Autofixable).
+    // 'scss/function-unquote-no-unquoted-strings-inside: null',
+
+    // Map
+    // Require quoted keys in Sass maps.
+    // 'scss/map-keys-quotes: null',
+
+    // Media feature
+    // Require a media feature value be a $-variable or disallow $-variables in media feature values.
+    // 'scss/media-feature-value-dollar-variable: null',
+
+    // Operator
+    // Disallow linebreaks after Sass operators.
+    // 'scss/operator-no-newline-after: null',
+    // Disallow linebreaks before Sass operators.
+    // 'scss/operator-no-newline-before: null',
+    // Disallow unspaced operators in Sass operations.
+    // 'scss/operator-no-unspaced: null',
+
+    // Partial
+    // Disallow non-CSS @imports in partial files.
+    // 'scss/partial-no-import: null',
+
+    // Selector
+    // Require or disallow nesting of combinators in selectors.
+    // 'scss/selector-nest-combinators: null',
+    // Disallow redundant nesting selectors (&).
+    // 'scss/selector-no-redundant-nesting-selector: null',
+    // Disallow union class names with the parent selector (&).
+    // 'scss/selector-no-union-class-name: null',
+
+    // General / Sheet
+    // Disallow dollar variables within a stylesheet.
+    // 'scss/no-dollar-variables: null',
+    // Disallow duplicate dollar variables within a stylesheet.
+    // 'scss/no-duplicate-dollar-variables: null',
+    // Disallow duplicate mixins within a stylesheet.
+    // 'scss/no-duplicate-mixins: null',
+    // Disallows the use of global function names, as these global functions are now located inside built-in Sass modules.
+    // 'scss/no-global-function-names: null',
+  },
 };
