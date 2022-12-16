@@ -27,7 +27,6 @@ function RateSelector({
             className={`radio-button ${styles['radio-button']}`}
             type="radio"
             value={valueRadioBtn0}
-            styleName="radio-button"
             checked={isButton0Selected}
             onChange={() => setValue(valueRadioBtn0)}
           />
@@ -41,7 +40,6 @@ function RateSelector({
             className={`radio-button ${styles['radio-button']}`}
             type="radio"
             value={valueRadioBtn1}
-            styleName="radio-button"
             checked={isButton1Selected}
             onChange={() => setValue(valueRadioBtn1)}
           />
