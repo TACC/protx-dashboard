@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import './ChartInstructions.css';
 import './PredictiveFeaturesTable.css';
 
-
 function ChartInstructions({ currentReportType }) {
   const instructions = {
     type: '',
@@ -32,9 +31,9 @@ function ChartInstructions({ currentReportType }) {
         // '-- Note: You can manually zoom in and out on the map at any time by left-clicking the zoom buttons located in the top-left corner of the map, using the scroll wheel on your mouse or using gestures on your touch device.',
         // '-- Note: The resource markers will be dynamically toggled off when the map zooms out beyond a certain level. If you wish to see the markers at these zoom levels, you can toggle them on and off manually by left-clicking the corresponding checkbox in the layer menu panel located in the top-right corner of the map.',
         // '-- Note: To display these instructions again, deselect the current geographic region on the map.'
-      ]
+      ],
     },
-    footer: 'Footer content for the current tool (if any).'
+    footer: 'Footer content for the current tool (if any).',
   };
 
   if (currentReportType === 'demographics') {
@@ -137,15 +136,33 @@ function ChartInstructions({ currentReportType }) {
   }
 
   return (
-    <div className={instructions.condensed ? "report-instructions-condensed" : "report-instructions"}>
+    <div
+      className={
+        instructions.condensed
+          ? 'report-instructions-condensed'
+          : 'report-instructions'
+      }
+    >
       <div className="report-instructions-title">{instructions.title}</div>
       <div className="report-instructions-description">
         {instructions.description}
       </div>
-      <div className={instructions.condensed ? "report-instructions-subtitle-condensed" : "report-instructions-subtitle"}>
+      <div
+        className={
+          instructions.condensed
+            ? 'report-instructions-subtitle-condensed'
+            : 'report-instructions-subtitle'
+        }
+      >
         {instructions.selections.subtitle}
       </div>
-      <div className={instructions.condensed ? "report-instructions-steps-group-condensed" : "report-instructions-steps-group"}>
+      <div
+        className={
+          instructions.condensed
+            ? 'report-instructions-steps-group-condensed'
+            : 'report-instructions-steps-group'
+        }
+      >
         <ul className="report-instructions-steps">
           {/*
           {instructions.selections.steps.map(step => (
@@ -189,7 +206,7 @@ function ChartInstructions({ currentReportType }) {
 }
 
 ChartInstructions.propTypes = {
-  currentReportType: PropTypes.string.isRequired
+  currentReportType: PropTypes.string.isRequired,
 };
 
 export default ChartInstructions;

@@ -18,7 +18,7 @@ function MainPlot({ plotState }) {
 
 MainPlot.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  plotState: PropTypes.object.isRequired
+  plotState: PropTypes.object.isRequired,
 };
 
 MainPlot.defaultProps = {};

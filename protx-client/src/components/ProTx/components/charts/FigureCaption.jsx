@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './PredictiveFeaturesTable.css';
 import './FigureCaption.css';
 
-export const FigureCaption = ({label, className, children}) => (
+export const FigureCaption = ({ label, className, children }) => (
   <div className={`annotation ${className}`}>
     <span className="annotation-label">{label}</span> {children}
   </div>
