@@ -1,13 +1,14 @@
-.plot-annotation,
-.plot-annotation * {
+.annotation,
+.annotation * {
   font-family: var(--font-type-roboto-condensed);
   font-size: var(--font-size-xs);
-  margin-bottom: 1.5rem;
   font-weight: var(--font-weight-light);
 }
-.plot-annotation {
-  margin-left: 3rem;
-  margin-right: 3rem;
+.chart-annotation {
+  margin: 0 2.5vw 2vh;
+}
+.table-annotation {
+  margin: 0.8vh 2.5vw 0.5vh;
 }
 .annotation-label {
   font-style: italic;
