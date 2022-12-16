@@ -9,15 +9,17 @@ import {
 } from '../shared/dataUtils';
 import ChartInstructions from './ChartInstructions';
 import './PredictiveFeaturesTable.css';
+import { FigureCaption } from './FigureCaption';
+
 function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({
-        type: 'FETCH_PROTX_ANALYTICS',
-        payload: {
-          area: geography,
-          selectedArea: selectedGeographicFeature,
+      type: 'FETCH_PROTX_ANALYTICS',
+      payload: {
+        area: geography,
+        selectedArea: selectedGeographicFeature,
         }
       }
     );
@@ -57,19 +59,19 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
   const correlation_2 = analytics.data.correlation_2 ? capitalizeString(analytics.data.correlation_2) + " correlation" : '--No Data--';
   const correlation_3 = analytics.data.correlation_3 ? capitalizeString(analytics.data.correlation_3) + " correlation" : '--No Data--';
 
-  const chartSubtitle = 'Table 1';    
-  
+  const chartSubtitle = 'Table 1';
+
   const analyticsFeatureTitle = () => {
     return (
         <div className="feature-table-chart-title"> Top Three Maltreatment Factors for {countyName} County
           <span className="feature-table-chart-subtitle">
             ({chartSubtitle})
           </span>
-        </div>
+      </div>
     );
   };
 
-  const analyticsChartTitle = analyticsFeatureTitle();  
+  const analyticsChartTitle = analyticsFeatureTitle();
 
   const analyticsFeatureHeaderRow  = () => {
     return (
@@ -86,40 +88,52 @@ function AnalyticsPredictiveTable({geography, selectedGeographicFeature}) {
 
   const analyticsFeatureTableHeader = analyticsFeatureHeaderRow();
 
-    return (
+  const tableAnnotationText = `Top three demographic features related to changes in the county-level child 
+        total maltreatment counts. Ranking indicates features that are most influential. 
+        Correlation indicates the nature of the relationship between the demographic 
+        feature and total maltreatment counts. A positive correlation implies that an 
+        increase in the demographic feature results in an increase in total maltreatment 
+        counts and vice versa. A negative correlation means an increase in the demographic 
+        feature results in a decrease in total maltreatment counts.`;
+
+  return (
+    <>
       <div className="feature-table-chart-selection">
-        <div className="feature-table"> {analyticsChartTitle}
-            <table className="feature-table">
-              <thead>{analyticsFeatureTableHeader}</thead>
-              <tbody>
-                <tr>
-                  <td>{"1"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_1}
-                  </td>
-                  <td>{correlation_1}</td>
-                </tr>
-                <tr>
-                  <td>{"2"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_2}
-                  </td>
-                  <td>{correlation_2}</td>
-                </tr>
-                <tr>
-                  <td>{"3"}</td>
-                  <td className="ensemble-rank-value">
-                    {observedFeaturesLabel_3}
-                  </td>
-                  <td>{correlation_3}</td>
-                </tr>
-              </tbody>
-            </table>
-          <ChartInstructions currentReportType="analyticsCountyFeatureChart"></ChartInstructions>
+          <div className="feature-table"> {analyticsChartTitle}
+              <table className="feature-table">
+            <thead>{analyticsFeatureTableHeader}</thead>
+            <tbody>
+              <tr>
+                    <td>{"1"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_1}
+                    </td>
+                <td>{correlation_1}</td>
+              </tr>
+              <tr>
+                    <td>{"2"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_2}
+                    </td>
+                <td>{correlation_2}</td>
+              </tr>
+              <tr>
+                    <td>{"3"}</td>
+                    <td className="ensemble-rank-value">
+                      {observedFeaturesLabel_3}
+                    </td>
+                <td>{correlation_3}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    );
-  };
+      <FigureCaption label={'Table 1.'} className={'table-annotation'}>
+        {tableAnnotationText}
+      </FigureCaption>
+    </>
+  );
+};
 
 
 AnalyticsPredictiveTable.propTypes = {
