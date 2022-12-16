@@ -3,22 +3,11 @@ import json
 import pandas as pd
 import plotly.graph_objects as go
 from protx.log import logger
+from protx.conf.styles import maltreatment_palette
+
 
 db_name = '/protx-data/cooks.db'
 
-# TODO.  this should be a mapping that doesn't use display names https://jira.tacc.utexas.edu/browse/COOKS-336
-maltrt_palette = {
-    'ABAN': '#001e2e',
-    'EMAB': '#003b5c',
-    'LBTR': '#545859',
-    'MDNG': '#007a53',
-    'NSUP': '#41748d',
-    'PHAB': '#a9c47f',
-    'PHNG': '#b9d3dc',
-    'RAPR': '#d4ec8e',
-    'SXAB': '#CCCC99',
-    'SXTR': '#eaf6c7'
-}
 
 maltrt_query = '''
 select d.VALUE, d.GEOID, d.GEOTYPE, d.MALTREATMENT_NAME, d.YEAR, d.UNITS as count_or_pct,
@@ -38,7 +27,7 @@ where d.GEOTYPE = "{area}" and
 '''
 
 
-def query_return(user_selection, db_conn, palette=maltrt_palette):
+def query_return(user_selection, db_conn):
     # query user input (return all units, regardless of user selection)
     # query template defined in global namespace
     maltrt_query_fmt = maltrt_query.format(**user_selection)
@@ -55,7 +44,7 @@ def query_return(user_selection, db_conn, palette=maltrt_palette):
 
     maltrt_wide = maltrt_data.pivot_table(columns=['YEAR', 'MALTREATMENT_NAME'], values='VALUE', aggfunc=sum)
 
-    return {'coords': coords, 'data': maltrt_wide, 'colors': palette, 'units': user_selection['units']}
+    return {'coords': coords, 'data': maltrt_wide, 'colors': maltreatment_palette, 'units': user_selection['units']}
 
 
 def maltrt_stacked_bar(maltrt_data_dict):
