@@ -3,73 +3,73 @@ name: CI
 # Controls when the action will run. Triggers the workflow on pushes to main or on pull request events
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ '**' ]
+    branches: ['**']
 
 jobs:
   Server_Side_Unit_Tests:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.9
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
 
-    - name: Setup Poetry
-      uses: abatilo/actions-poetry@v2.0.0
-      with:
-        poetry-version: 1.1.13
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.13
 
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pypoetry/virtualenvs
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-poetry-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-    - name: Install Python Packages
-      run:  |
-        poetry install
+      - name: Install Python Packages
+        run: |
+          poetry install
 
-    - name: Run Server-side unit tests and generate coverage report
-      run: |
-        poetry run pytest -ra protx
-      env:
-        USE_DEV_CLIENT: True
+      - name: Run Server-side unit tests and generate coverage report
+        run: |
+          poetry run pytest -ra protx
+        env:
+          USE_DEV_CLIENT: True
 
   Server_Side_Linting:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.9
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
 
-    - name: Setup Poetry
-      uses: abatilo/actions-poetry@v2.0.0
-      with:
-        poetry-version: 1.1.13
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.13
 
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pypoetry/virtualenvs
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-poetry-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-    - name: Install Python Packages
-      run:  |
-        poetry install
+      - name: Install Python Packages
+        run: |
+          poetry install
 
-    - name: Server-Side Linting
-      run: |
-        cd protx
-        poetry run flake8
+      - name: Server-Side Linting
+        run: |
+          cd protx
+          poetry run flake8
 
   Client_Side_Unit_Tests:
     runs-on: ubuntu-20.04
@@ -95,3 +95,28 @@ jobs:
         run: |
           cd protx-client
           npm run test
+
+  Client_Side_Linting:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js for use with actions
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: npm ci
+        run: |
+          cd protx-client
+          npm ci
+      - name: Client Side Linting
+        run: |
+          cd protx-client
+          npm run lint

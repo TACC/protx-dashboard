@@ -7,7 +7,7 @@ const MaltreatmentSelector = ({
   selectedTypes,
   setSelectedTypes,
   variables,
-  unit
+  unit,
 }) => {
   const [selected, setSelected] = useState([]);
 
@@ -21,7 +21,7 @@ const MaltreatmentSelector = ({
       }
       return 0;
     })
-    .filter(f => {
+    .filter((f) => {
       if (f.NAME === 'ALL') {
         return false;
       }
@@ -35,12 +35,12 @@ const MaltreatmentSelector = ({
       }
       return false;
     })
-    .map(v => {
+    .map((v) => {
       return { label: v.DISPLAY_TEXT, value: v.NAME };
     });
 
   const overideStrings = {
-    allItemsAreSelected: 'All'
+    allItemsAreSelected: 'All',
   };
 
   const customValueRenderer = (currentSelectedTypes, _options) => {
@@ -52,22 +52,22 @@ const MaltreatmentSelector = ({
         return [` All selected (${currentSelectedTypes.length})`];
       }
       return [
-        ` Multiple maltreatment selected (${currentSelectedTypes.length})`
+        ` Multiple maltreatment selected (${currentSelectedTypes.length})`,
       ];
     }
     return 'None';
   };
 
   useEffect(() => {
-    const updatedSelected = selectedTypes.map(val => {
-      const variable = variables.find(element => element.NAME === val);
+    const updatedSelected = selectedTypes.map((val) => {
+      const variable = variables.find((element) => element.NAME === val);
       return { label: variable.DISPLAY_TEXT, value: variable.NAME };
     });
     setSelected(updatedSelected);
   }, [selectedTypes]);
 
-  const handleChange = newSelection => {
-    const newSelectionTypes = newSelection.map(e => e.value);
+  const handleChange = (newSelection) => {
+    const newSelectionTypes = newSelection.map((e) => e.value);
     setSelectedTypes(newSelectionTypes);
   };
 
@@ -87,7 +87,7 @@ MaltreatmentSelector.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object).isRequired,
   unit: PropTypes.string.isRequired,
   selectedTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setSelectedTypes: PropTypes.func.isRequired
+  setSelectedTypes: PropTypes.func.isRequired,
 };
 
 export default MaltreatmentSelector;

@@ -5,7 +5,7 @@ import { PHR_MSA_COUNTIES } from '../data/PHR_MSA_County_Data';
  * @param {*} string
  * @returns
  */
-const capitalizeString = string => {
+const capitalizeString = (string) => {
   return string[0].toUpperCase() + string.slice(1);
 };
 
@@ -31,8 +31,8 @@ const compareSimplifiedValueType = (observedFeature, valueType) => {
  * @param {String} trimmedGeoid
  * @returns {countyName: string}
  */
-const getCountyName = trimmedGeoid => {
-  const county = Object.values(PHR_MSA_COUNTIES).find(cty => {
+const getCountyName = (trimmedGeoid) => {
+  const county = Object.values(PHR_MSA_COUNTIES).find((cty) => {
     const baseCode = '000';
     const countyCode = (baseCode + cty['FIPS Number']).slice(-3);
     return countyCode === trimmedGeoid;
@@ -126,7 +126,7 @@ const getMaltreatmentMetaData = (
 
   if (hasYearAndGeography) {
     const yearDataSet = data.maltreatment[geography][year];
-    maltreatmentTypes.forEach(malType => {
+    maltreatmentTypes.forEach((malType) => {
       if (malType in yearDataSet) {
         Object.entries(yearDataSet[malType]).forEach(([geoid, countInfo]) => {
           const value = countInfo[valueType];
@@ -141,7 +141,7 @@ const getMaltreatmentMetaData = (
       }
     });
 
-    const values = Object.values(aggregrateValues).map(x => +x);
+    const values = Object.values(aggregrateValues).map((x) => +x);
     if (values.length) {
       meta = { min: Math.min(...values), max: Math.max(...values) };
     } else {
@@ -241,7 +241,7 @@ const getMaltreatmentAggregatedValue = (
     geography in data.maltreatment && year in data.maltreatment[geography];
   let value = 0;
   if (hasYearAndGeography) {
-    maltreatmentTypes.forEach(malType => {
+    maltreatmentTypes.forEach((malType) => {
       if (
         malType in data.maltreatment[geography][year] &&
         geoid in data.maltreatment[geography][year][malType] &&
@@ -301,7 +301,7 @@ const getMaltreatmentLabel = (maltreatmentTypes, unit) => {
  */
 const getObservedFeaturesLabel = (selectedObservedFeatureCode, data) => {
   return data.display.variables.find(
-    f => selectedObservedFeatureCode === f.NAME
+    (f) => selectedObservedFeatureCode === f.NAME
   ).DISPLAY_TEXT;
 };
 
@@ -318,15 +318,14 @@ const getMapLegendLabel = (
 ) => {
   if (mapType === 'maltreatment') {
     return getMaltreatmentLabel(maltreatmentTypes, unit);
-  } else if ( mapType === 'observedFeatures') {
+  } else if (mapType === 'observedFeatures') {
     // For demographics (i.e. observed feature)
     const suffix = unit === `percent` ? ' (Percentages)' : ' (Totals)';
     return getObservedFeaturesLabel(observedFeature, data) + suffix;
   } else {
-    return "Risk Category";
+    return 'Risk Category';
   }
 };
-
 
 /**
  * Get analytics risk label
@@ -334,10 +333,7 @@ const getMapLegendLabel = (
  * @param {Number} geoid
  * @returns {String} risk label (null if no value exists)
  */
-const getAnalyticsRiskLabel = (
-  data,
-  geoid
-) => {
+const getAnalyticsRiskLabel = (data, geoid) => {
   const hasRiskLabel = geoid in data.analytics;
   const riskLabel = hasRiskLabel ? data.analytics[geoid].risk_label : null;
   return riskLabel;
@@ -355,5 +351,5 @@ export {
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
   getMapLegendLabel,
-  getAnalyticsRiskLabel
+  getAnalyticsRiskLabel,
 };

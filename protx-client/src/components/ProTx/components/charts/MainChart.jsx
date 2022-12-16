@@ -9,7 +9,7 @@ import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
 import './MainChart.css';
-import {getSelectedGeographyName} from "../shared/dataUtils";
+import { getSelectedGeographyName } from '../shared/dataUtils';
 
 function MainChart({
   chartType,
@@ -19,38 +19,49 @@ function MainChart({
   selectedGeographicFeature,
   data,
   unit,
-  showInstructions
+  showInstructions,
 }) {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // ANALYTICS PLOT.
   if (chartType === 'analytics') {
-    const plotDetailSectionTitle = selectedGeographicFeature ? `${getSelectedGeographyName(geography, selectedGeographicFeature)}  County`: "Texas Statewide Data";
+    const plotDetailSectionTitle = selectedGeographicFeature
+      ? `${getSelectedGeographyName(
+          geography,
+          selectedGeographicFeature
+        )}  County`
+      : 'Texas Statewide Data';
     return (
-          <div className="analytics-types-plot-layout">
-            <div className="plot-details-section">
-              <div className="plot-details-section-selected">
-                <span className="plot-details-section-selected-value">
-                {plotDetailSectionTitle}
-                </span>
-              </div>
-            </div>
+      <div className="analytics-types-plot-layout">
+        <div className="plot-details-section">
+          <div className="plot-details-section-selected">
+            <span className="plot-details-section-selected-value">
+              {plotDetailSectionTitle}
+            </span>
+          </div>
+        </div>
         <AnalyticsStateDistribution
           geography={geography}
-          selectedGeographicFeature={selectedGeographicFeature}/>
-        {selectedGeographicFeature &&
-          <AnalyticsPredictiveTable geography={geography} selectedGeographicFeature={selectedGeographicFeature}/>
-        }
+          selectedGeographicFeature={selectedGeographicFeature}
+        />
+        {selectedGeographicFeature && (
+          <AnalyticsPredictiveTable
+            geography={geography}
+            selectedGeographicFeature={selectedGeographicFeature}
+          />
+        )}
 
-        <ChartInstructions currentReportType={selectedGeographicFeature ? "hidden" : "analytics"}/>
-          </div>
+        <ChartInstructions
+          currentReportType={selectedGeographicFeature ? 'hidden' : 'analytics'}
+        />
+      </div>
     );
   }
 
   // DEMOGRAPHICS PLOT.
   if (chartType === 'demographics') {
     const protxDemographicsDistribution = useSelector(
-      state => state.protxDemographicsDistribution
+      (state) => state.protxDemographicsDistribution
     );
 
     useEffect(() => {
@@ -64,8 +75,8 @@ function MainChart({
             area: geography,
             selectedArea: selectedGeographicFeature,
             variable: observedFeature,
-            unit
-          }
+            unit,
+          },
         });
       }
     }, [geography, observedFeature, selectedGeographicFeature, unit]);
@@ -110,9 +121,9 @@ function MainChart({
   if (chartType === 'maltreatment') {
     if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
       const protxMaltreatmentDistribution = useSelector(
-        state => state.protxMaltreatmentDistribution
+        (state) => state.protxMaltreatmentDistribution
       );
-  
+
       useEffect(() => {
         if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
           dispatch({
@@ -121,17 +132,12 @@ function MainChart({
               area: geography,
               geoid: selectedGeographicFeature,
               unit,
-              variables: maltreatmentTypes
-            }
+              variables: maltreatmentTypes,
+            },
           });
         }
-      }, [
-        geography,
-        selectedGeographicFeature,
-        unit,
-        maltreatmentTypes
-      ]);
-      
+      }, [geography, selectedGeographicFeature, unit, maltreatmentTypes]);
+
       if (protxMaltreatmentDistribution.error) {
         return (
           <div className="data-error-message">
@@ -186,11 +192,11 @@ MainChart.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
   unit: PropTypes.string.isRequired,
-  showInstructions: PropTypes.bool
+  showInstructions: PropTypes.bool,
 };
 
 MainChart.defaultProps = {
-  showInstructions: false
+  showInstructions: false,
 };
 
 export default MainChart;

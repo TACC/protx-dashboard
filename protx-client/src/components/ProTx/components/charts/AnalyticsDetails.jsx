@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   getSelectedGeographyName,
   capitalizeString,
-  getObservedFeaturesLabel
+  getObservedFeaturesLabel,
 } from '../shared/dataUtils';
 import './PlotDetails.css';
 
@@ -11,11 +11,12 @@ function AnalyticsDetails({
   geography,
   observedFeature,
   selectedGeographicFeature,
-  data
+  data,
 }) {
   const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
   const selectedGeographicFeatureName = getSelectedGeographyName(
-    geography, selectedGeographicFeature
+    geography,
+    selectedGeographicFeature
   );
   const geographyType = capitalizeString(geography);
 
@@ -56,7 +57,7 @@ AnalyticsDetails.propTypes = {
   observedFeature: PropTypes.string.isRequired,
   selectedGeographicFeature: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default AnalyticsDetails;
