@@ -58,8 +58,10 @@ const getFeatureStyle = (
       fillColor = colorScale.getColor(featureValue);
     }
   } else {
-    const riskLabel = getAnalyticsRiskLabel(data, geoid);
-    fillColor = colorScale.getColor(riskLabel);
+    if (colorScale) {
+      const riskLabel = getAnalyticsRiskLabel(data, geoid);
+      fillColor = colorScale.getColor(riskLabel);
+    }
   }
   if (fillColor) {
     return {
