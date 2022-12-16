@@ -1,7 +1,7 @@
 import {
   getObservedFeatureValue,
   getMaltreatmentAggregatedValue,
-  getAnalyticsRiskLabel
+  getAnalyticsRiskLabel,
 } from './dataUtils';
 
 /**
@@ -45,7 +45,7 @@ const getFeatureStyle = (
     if (featureValue && colorScale) {
       fillColor = colorScale.getColor(featureValue);
     }
-  } else if (mapType === 'maltreatment' ) {
+  } else if (mapType === 'maltreatment') {
     const featureValue = getMaltreatmentAggregatedValue(
       data,
       geography,
@@ -68,7 +68,7 @@ const getFeatureStyle = (
       fill: true,
       fillOpacity: 1.0,
       stroke,
-      weight: 1
+      weight: 1,
     };
   }
   // if no color/data, we return a transparent style in order to allow for feature selection.
@@ -78,7 +78,7 @@ const getFeatureStyle = (
     fillColor: 'black',
     fillOpacity: 0.0,
     stroke,
-    weight: 1
+    weight: 1,
   };
 };
 

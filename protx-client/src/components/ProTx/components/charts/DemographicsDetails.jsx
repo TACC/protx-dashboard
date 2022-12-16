@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   getSelectedGeographyName,
   capitalizeString,
-  getObservedFeaturesLabel
+  getObservedFeaturesLabel,
 } from '../shared/dataUtils';
 import './PlotDetails.css';
 
@@ -11,11 +11,12 @@ function DemographicsDetails({
   geography,
   observedFeature,
   selectedGeographicFeature,
-  data
+  data,
 }) {
   const observedFeaturesLabel = getObservedFeaturesLabel(observedFeature, data);
   let selectedGeographicFeatureName = getSelectedGeographyName(
-    geography, selectedGeographicFeature
+    geography,
+    selectedGeographicFeature
   );
   let geographyType;
   let selectedGeographyTypeDisplayLabel;
@@ -23,13 +24,15 @@ function DemographicsDetails({
   switch (geography) {
     case 'county':
       selectedGeographyTypeDisplayLabel = '';
-      selectedGeographicFeature = ''
+      selectedGeographicFeature = '';
       geographyType = capitalizeString(geography);
       break;
     case 'tract':
-      selectedGeographyTypeDisplayLabel = 'Tract: ' ;
-      selectedGeographicFeature = "(" + selectedGeographicFeature.slice(-6) + ")";
-      selectedGeographicFeatureName = "TX - " + selectedGeographicFeatureName + " County";
+      selectedGeographyTypeDisplayLabel = 'Tract: ';
+      selectedGeographicFeature =
+        '(' + selectedGeographicFeature.slice(-6) + ')';
+      selectedGeographicFeatureName =
+        'TX - ' + selectedGeographicFeatureName + ' County';
       geographyType = '';
       break;
     case 'dfps_region':
@@ -42,7 +45,7 @@ function DemographicsDetails({
       selectedGeographicFeature = '';
       selectedGeographicFeatureName = '';
       geographyType = '';
-  };
+  }
 
   return (
     <>
@@ -81,7 +84,7 @@ DemographicsDetails.propTypes = {
   observedFeature: PropTypes.string.isRequired,
   selectedGeographicFeature: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default DemographicsDetails;

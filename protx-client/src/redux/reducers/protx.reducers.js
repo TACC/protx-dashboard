@@ -1,7 +1,7 @@
 export const initialState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
 export function protx(state = initialState, action) {
@@ -9,18 +9,18 @@ export function protx(state = initialState, action) {
     case 'PROTX_INIT':
       return {
         ...initialState,
-        loading: true
+        loading: true,
       };
     case 'PROTX_SUCCESS':
       return {
         ...state,
         data: { ...action.payload },
-        loading: false
+        loading: false,
       };
     case 'PROTX_FAILURE':
       return {
         ...initialState,
-        error: true
+        error: true,
       };
     default:
       return state;
@@ -30,7 +30,7 @@ export function protx(state = initialState, action) {
 export const initialDemographicsDistributionState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
 export function protxDemographicsDistribution(
@@ -41,18 +41,18 @@ export function protxDemographicsDistribution(
     case 'PROTX_DEMOGRAPHICS_DISTRIBUTION_INIT':
       return {
         ...initialDemographicsDistributionState,
-        loading: true
+        loading: true,
       };
     case 'PROTX_DEMOGRAPHICS_DISTRIBUTION_SUCCESS':
       return {
         ...state,
         data: action.payload.data,
-        loading: false
+        loading: false,
       };
     case 'PROTX_DEMOGRAPHICS_DISTRIBUTION_FAILURE':
       return {
         ...initialDemographicsDistributionState,
-        error: true
+        error: true,
       };
     default:
       return state;
@@ -62,7 +62,7 @@ export function protxDemographicsDistribution(
 export const initialMaltreatmentDistributionState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
 export function protxMaltreatmentDistribution(
@@ -73,18 +73,18 @@ export function protxMaltreatmentDistribution(
     case 'PROTX_MALTREATMENT_DISTRIBUTION_INIT':
       return {
         ...initialMaltreatmentDistributionState,
-        loading: true
+        loading: true,
       };
     case 'PROTX_MALTREATMENT_DISTRIBUTION_SUCCESS':
       return {
         ...state,
         data: action.payload.data,
-        loading: false
+        loading: false,
       };
     case 'PROTX_MALTREATMENT_DISTRIBUTION_FAILURE':
       return {
         ...initialMaltreatmentDistributionState,
-        error: true
+        error: true,
       };
     default:
       return state;
@@ -94,30 +94,27 @@ export function protxMaltreatmentDistribution(
 export const initialAnalyticsState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
-export function protxAnalytics(
-  state = initialAnalyticsState,
-  action
-) {
+export function protxAnalytics(state = initialAnalyticsState, action) {
   switch (action.type) {
     case 'PROTX_ANALYTICS_INIT':
       return {
         ...initialAnalyticsState,
-        loading: true
+        loading: true,
       };
     case 'PROTX_ANALYTICS_SUCCESS':
       return {
         ...state,
         data: action.payload.data,
-        loading: false
+        loading: false,
       };
     case 'PROTX_ANALYTICS_FAILURE':
       return {
         ...initialAnalyticsState,
         loading: false,
-        error: true
+        error: true,
       };
     default:
       return state;
@@ -127,7 +124,7 @@ export function protxAnalytics(
 export const initialAnalyticsStatewideDistributionState = {
   loading: true,
   error: false,
-  data: null
+  data: null,
 };
 
 export function protxAnalyticsStatewideDistribution(
@@ -143,12 +140,12 @@ export function protxAnalyticsStatewideDistribution(
       return {
         ...state,
         data: action.payload.data,
-        loading: false
+        loading: false,
       };
     case 'PROTX_ANALYTICS_STATEWIDE_DISTRIBUTION_FAILURE':
       return {
         ...initialAnalyticsStatewideDistributionState,
-        error: true
+        error: true,
       };
     default:
       return state;

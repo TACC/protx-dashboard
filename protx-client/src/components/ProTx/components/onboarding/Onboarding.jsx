@@ -9,9 +9,9 @@ function Onboarding() {
         <SectionMessage type="warning">
           Your account has not be configured. Please check status by clicking
           <a
-          href="/workbench/onboarding"
-          className="wb-link"
-          target="_blank"  // opening in new tab as protx dashboard in iframe
+            href="/workbench/onboarding"
+            className="wb-link"
+            target="_blank" // opening in new tab as protx dashboard in iframe
           >
             &nbsp;here.
           </a>

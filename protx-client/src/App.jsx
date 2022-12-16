@@ -11,7 +11,7 @@ function App() {
       <Route path="/protx/onboarding" component={Onboarding} />
       <Route path="/protx/dash" component={ProTx} />
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

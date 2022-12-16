@@ -16,7 +16,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 20,
       ext: 'png',
-      name: 'Stamen - Toner'
+      name: 'Stamen - Toner',
     }
   );
 
@@ -29,7 +29,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 20,
       ext: 'png',
-      name: 'Stamen - Toner Light'
+      name: 'Stamen - Toner Light',
     }
   );
 
@@ -43,7 +43,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 18,
       ext: 'png',
-      name: 'Stamen - Terrain'
+      name: 'Stamen - Terrain',
     }
   );
 
@@ -58,7 +58,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 17,
       name: 'OSM - Default',
-      type: 'png'
+      type: 'png',
     }
   );
 
@@ -71,7 +71,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 17,
       name: 'OSM - OpenTopo',
-      type: 'png'
+      type: 'png',
     }
   );
 
@@ -84,7 +84,7 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 19,
       name: 'OSM - Mapnik',
-      type: 'png'
+      type: 'png',
     }
   );
 
@@ -96,14 +96,14 @@ export default function Maptiles() {
       minZoom: 0,
       maxZoom: 18,
       name: 'OSM - Mapnik B&W',
-      type: 'png'
+      type: 'png',
     }
   );
 
   providers.push(basemapOsmBw);
   providers.push(basemapTonerLite);
 
-  Object.keys(providers).forEach(k => {
+  Object.keys(providers).forEach((k) => {
     const layer = providers[k];
     const layerName = providers[k].options.name;
     layers[layerName] = layer;
@@ -111,6 +111,6 @@ export default function Maptiles() {
 
   return {
     providers,
-    layers
+    layers,
   };
 }

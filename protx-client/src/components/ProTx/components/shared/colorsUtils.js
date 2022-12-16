@@ -84,16 +84,16 @@ class CategoryColorScale {
     this.numberIntervals = categories.length;
 
     // todo rename to just labels
-    this.intervalLabels = categories.map(c => c.label);
+    this.intervalLabels = categories.map((c) => c.label);
 
-    if( nullCategory ) {
+    if (nullCategory) {
       this.numberIntervals += 1;
       // add null
       this.intervalLabels.unshift(nullCategory);
     }
 
-    if(this.numberIntervals > 6 || this.numberIntervals < 1) {
-      throw new Error("Unsupported number of categories")
+    if (this.numberIntervals > 6 || this.numberIntervals < 1) {
+      throw new Error('Unsupported number of categories');
     }
 
     this.colors = colorbrewerClassYlOrBr[this.numberIntervals];
@@ -102,14 +102,14 @@ class CategoryColorScale {
   getColor(value) {
     if (!value) {
       if (this._nullCategory) {
-        return this.colors[0]
+        return this.colors[0];
       } else {
         return null;
       }
     } else {
       const categoryIndex = this._categories.findIndex((c) => c.key === value);
       if (categoryIndex === -1) {
-        throw new Error("Unsupported category")
+        throw new Error('Unsupported category');
       }
       const colorIndex = this._nullCategory ? categoryIndex + 1 : categoryIndex;
       return this.colors[colorIndex];
@@ -117,8 +117,4 @@ class CategoryColorScale {
   }
 }
 
-
-export {
-  IntervalColorScale,
-  CategoryColorScale
-};
+export { IntervalColorScale, CategoryColorScale };

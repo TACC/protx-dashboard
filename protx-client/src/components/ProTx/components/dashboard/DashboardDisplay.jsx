@@ -24,7 +24,7 @@ function DashboardDisplay() {
     'PHNG',
     'RAPR',
     'SXAB',
-    'SXTR'
+    'SXTR',
   ];
   const DEFAULT_YEAR = '2020';
   const [maltreatmentTypes, setMaltreatmentTypes] = useState(
@@ -32,21 +32,20 @@ function DashboardDisplay() {
   );
   const [observedFeature, setObservedFeature] = useState('AGE17');
   const [year, setYear] = useState(DEFAULT_YEAR);
-  const [selectedGeographicFeature, setSelectedGeographicFeature] = useState(
-    ''
-  );
+  const [selectedGeographicFeature, setSelectedGeographicFeature] =
+    useState('');
   const [unit, setUnit] = useState('count');
   const [map, setMap] = useState(null);
   const [resourceLayers, setResourceLayers] = useState(null);
 
   const dispatch = useDispatch();
-  const { loading, error, data } = useSelector(state => state.protx);
+  const { loading, error, data } = useSelector((state) => state.protx);
   const protxRoute = '/protx/dash';
 
   const setGeography = (geography) => {
-    setSelectedGeographicFeature('')
+    setSelectedGeographicFeature('');
     setGeographyState(geography);
-  }
+  };
 
   // Get systems and any other initial data we need from the backend.
   useEffect(() => {
@@ -69,17 +68,17 @@ function DashboardDisplay() {
   const handleDownloadResources = () => {
     if (map && resourceLayers) {
       const selectedResourcesNaicsCode = resourceLayers
-        .filter(r => {
+        .filter((r) => {
           return map.hasLayer(r.layer);
         })
-        .map(r => r.naicsCode);
+        .map((r) => r.naicsCode);
       const typeQuery = stringify({
-        naicsCode: selectedResourcesNaicsCode
+        naicsCode: selectedResourcesNaicsCode,
       });
 
       let downloadResourceHref = `/protx/api/download/${geography}/${selectedGeographicFeature}/`;
       if (typeQuery) {
-          downloadResourceHref += `?${typeQuery}`;
+        downloadResourceHref += `?${typeQuery}`;
       }
       window.open(downloadResourceHref);
     }

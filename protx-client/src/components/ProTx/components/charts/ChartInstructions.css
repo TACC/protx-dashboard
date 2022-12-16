@@ -1,14 +1,22 @@
 .report-instructions-hidden {
-  margin: 1.5rem 1.5rem;
+  margin: 1.5rem;
   border-top: 1px solid var(--color-gray);
   padding: 1rem 0 0;
   font-size: var(--font-size-sm);
   font-style: italic;
   text-align: center;
 }
-
-.report-instructions-hidden
-.report-instructions * {
+.report-instructions-steps-group * {
+  padding: 0.1rem 0;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-light);
+}
+.report-instructions-steps-group-condensed * {
+  padding: 0.1rem 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-light);
+}
+.report-instructions-hidden .report-instructions * {
   font-family: var(--font-type-roboto);
   margin: 0.5rem;
 }
@@ -20,7 +28,7 @@
 .report-instructions-condensed {
   margin: 2rem 1.5rem;
   border-top: 1px solid var(--color-gray-dark);
-  padding: 0rem 0 0;
+  padding: 0;
 }
 .report-instructions-title {
   font-size: var(--font-size-xl);
@@ -37,16 +45,6 @@
 .report-instructions-description {
   margin-bottom: 1.5rem;
   font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-light);
-}
-.report-instructions-steps-group * {
-  padding: 0.1rem 0;
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-light);
-}
-.report-instructions-steps-group-condensed * {
-  padding: 0.1rem 0;
-  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-light);
 }
 .report-instructions-steps-group {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   getSelectedGeographyName,
   capitalizeString,
-  getMaltreatmentTypeNames
+  getMaltreatmentTypeNames,
 } from '../shared/dataUtils';
 import './PlotDetails.css';
 
@@ -11,9 +11,12 @@ function MaltreatmentDetails({
   geography,
   selectedGeographicFeature,
   maltreatmentTypes,
-  data
+  data,
 }) {
-  const fipsIdValue = getSelectedGeographyName(geography, selectedGeographicFeature);
+  const fipsIdValue = getSelectedGeographyName(
+    geography,
+    selectedGeographicFeature
+  );
   const geographyLabel = capitalizeString(geography);
   const maltreatmentTypesList = getMaltreatmentTypeNames(
     maltreatmentTypes,
@@ -36,7 +39,7 @@ function MaltreatmentDetails({
               Current Aggregation:{'  '}
             </span>
             <span className="plot-details-section-selected-value-list">
-              {maltreatmentTypesList.map(type => (
+              {maltreatmentTypesList.map((type) => (
                 <span className="details-list-item" key={type}>
                   {type}
                 </span>
@@ -58,7 +61,7 @@ MaltreatmentDetails.propTypes = {
   selectedGeographicFeature: PropTypes.string.isRequired,
   maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default MaltreatmentDetails;
