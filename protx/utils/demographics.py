@@ -5,11 +5,9 @@ import pandas as pd
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from protx.utils.plotly_figures import timeseries_lineplot
+from protx.conf.styles import light_green_to_blue_color_palette
 
 db_name = '/protx-data/cooks.db'
-
-six_colors_light_green_to_blue = ['#eff5d6', '#c6e8b0', '#8fcca1', '#62ad9c', '#3c7d8a', '#26547a']
-color_palette = six_colors_light_green_to_blue
 
 
 def currency(value1, value2):
@@ -398,7 +396,7 @@ def get_age_race_pie_charts(area, geoid):
             title=dict(text='Racial makeup', font=dict(size=18, color="Black",  family="Roboto"))),
         row=1, col=2)
     fig.update_traces(marker=dict(
-        colors=color_palette, line=dict(
+        colors=light_green_to_blue_color_palette, line=dict(
             color='black',
             width=1
         )))
