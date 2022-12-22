@@ -189,3 +189,12 @@ def test_get_analytics_chart_unauthed(test_client, core_api_workbench_request_un
 def test_get_analytics_chart_complete_false(test_client, core_api_workbench_request_setup_complete_false):
     resp = test_client.get('/protx/api/analytics-chart/county/risk')
     assert resp.status_code == 403
+
+
+@pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
+def test_get_community_characteristics_chart(test_client, core_api_workbench_request):
+    resp = test_client.get('protx/api/demographics-community-characteristics-chart/county/48257/')
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["result"]["data"]
+    assert data["result"]["layout"]
