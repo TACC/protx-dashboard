@@ -11,24 +11,71 @@ import MainPlot from './MainPlot';
 import './MainChart.css';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 
-function MainChart({
-  chartType,
-  geography,
-  maltreatmentTypes,
-  observedFeature,
-  selectedGeographicFeature,
-  data,
-  unit,
-  showInstructions,
-}) {
+function MainChart({ data, showInstructions }) {
+  const selection = useSelector((state) => state.protxSelection);
   const dispatch = useDispatch();
 
+  // TODO refactor into components; current workaround is placing different hooks with conditions at
+  //  the top of this component
+  const protxMaltreatmentDistribution = useSelector(
+    (state) => state.protxMaltreatmentDistribution
+  );
+  useEffect(() => {
+    if (
+      selection.type === 'maltreatment' &&
+      selection.selectedGeographicFeature &&
+      selection.maltreatmentTypes.length !== 0
+    ) {
+      dispatch({
+        type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
+        payload: {
+          area: selection.geography,
+          geoid: selection.selectedGeographicFeature,
+          unit: selection.unit,
+          variables: selection.maltreatmentTypes,
+        },
+      });
+    }
+  }, [
+    selection.type,
+    selection.geography,
+    selection.selectedGeographicFeature,
+    selection.unit,
+    selection.maltreatmentTypes,
+  ]);
+  const protxDemographicsDistribution = useSelector(
+    (state) => state.protxDemographicsDistribution
+  );
+
+  useEffect(() => {
+    if (
+      selection.type === 'demographics' &&
+      selection.selectedGeographicFeature
+    ) {
+      dispatch({
+        type: 'FETCH_PROTX_DEMOGRAPHICS_DISTRIBUTION',
+        payload: {
+          area: selection.geography,
+          selectedArea: selection.selectedGeographicFeature,
+          variable: selection.observedFeature,
+          unit: selection.unit,
+        },
+      });
+    }
+  }, [
+    selection.type,
+    selection.geography,
+    selection.observedFeature,
+    selection.selectedGeographicFeature,
+    selection.unit,
+  ]);
+
   // ANALYTICS PLOT.
-  if (chartType === 'analytics') {
-    const plotDetailSectionTitle = selectedGeographicFeature
+  if (selection.type === 'analytics') {
+    const plotDetailSectionTitle = selection.selectedGeographicFeature
       ? `${getSelectedGeographyName(
-          geography,
-          selectedGeographicFeature
+          selection.geography,
+          selection.selectedGeographicFeature
         )}  County`
       : 'Texas Statewide Data';
     return (
@@ -41,47 +88,28 @@ function MainChart({
           </div>
         </div>
         <AnalyticsStateDistribution
-          geography={geography}
-          selectedGeographicFeature={selectedGeographicFeature}
+          geography={selection.geography}
+          selectedGeographicFeature={selection.selectedGeographicFeature}
         />
-        {selectedGeographicFeature && (
+        {selection.selectedGeographicFeature && (
           <AnalyticsPredictiveTable
-            geography={geography}
-            selectedGeographicFeature={selectedGeographicFeature}
+            geography={selection.geography}
+            selectedGeographicFeature={selection.selectedGeographicFeature}
           />
         )}
 
         <ChartInstructions
-          currentReportType={selectedGeographicFeature ? 'hidden' : 'analytics'}
+          currentReportType={
+            selection.selectedGeographicFeature ? 'hidden' : 'analytics'
+          }
         />
       </div>
     );
   }
 
   // DEMOGRAPHICS PLOT.
-  if (chartType === 'demographics') {
-    const protxDemographicsDistribution = useSelector(
-      (state) => state.protxDemographicsDistribution
-    );
-
-    useEffect(() => {
-      if (observedFeature === 'maltreatment') {
-        return;
-      }
-      if (selectedGeographicFeature) {
-        dispatch({
-          type: 'FETCH_PROTX_DEMOGRAPHICS_DISTRIBUTION',
-          payload: {
-            area: geography,
-            selectedArea: selectedGeographicFeature,
-            variable: observedFeature,
-            unit,
-          },
-        });
-      }
-    }, [geography, observedFeature, selectedGeographicFeature, unit]);
-
-    if (selectedGeographicFeature && observedFeature) {
+  if (selection.type === 'demographics') {
+    if (selection.selectedGeographicFeature && selection.observedFeature) {
       if (protxDemographicsDistribution.error) {
         return (
           <div className="data-error-message">
@@ -103,9 +131,9 @@ function MainChart({
       return (
         <div className="observed-features-plot-layout">
           <DemographicsDetails
-            geography={geography}
-            observedFeature={observedFeature}
-            selectedGeographicFeature={selectedGeographicFeature}
+            geography={selection.geography}
+            observedFeature={selection.observedFeature}
+            selectedGeographicFeature={selection.selectedGeographicFeature}
             data={data}
           />
           <MainPlot plotState={plotState} />
@@ -118,26 +146,11 @@ function MainChart({
   }
 
   // MALTEATMENT PLOT.
-  if (chartType === 'maltreatment') {
-    if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
-      const protxMaltreatmentDistribution = useSelector(
-        (state) => state.protxMaltreatmentDistribution
-      );
-
-      useEffect(() => {
-        if (selectedGeographicFeature && maltreatmentTypes.length !== 0) {
-          dispatch({
-            type: 'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
-            payload: {
-              area: geography,
-              geoid: selectedGeographicFeature,
-              unit,
-              variables: maltreatmentTypes,
-            },
-          });
-        }
-      }, [geography, selectedGeographicFeature, unit, maltreatmentTypes]);
-
+  if (selection.type === 'maltreatment') {
+    if (
+      selection.selectedGeographicFeature &&
+      selection.maltreatmentTypes.length !== 0
+    ) {
       if (protxMaltreatmentDistribution.error) {
         return (
           <div className="data-error-message">
@@ -161,9 +174,9 @@ function MainChart({
           <div className="maltreatment-types-plot">
             <div className="maltreatment-types-plot-layout">
               <MaltreatmentDetails
-                geography={geography}
-                selectedGeographicFeature={selectedGeographicFeature}
-                maltreatmentTypes={maltreatmentTypes}
+                geography={selection.geography}
+                selectedGeographicFeature={selection.selectedGeographicFeature}
+                maltreatmentTypes={selection.maltreatmentTypes}
                 data={data}
               />
               <MainPlot plotState={plotState} />
@@ -178,20 +191,16 @@ function MainChart({
   // PLOT INSTRUCTIONS.
   return (
     <div className="main-chart">
-      {showInstructions && <ChartInstructions currentReportType={chartType} />}
+      {showInstructions && (
+        <ChartInstructions currentReportType={selection.type} />
+      )}
     </div>
   );
 }
 
 MainChart.propTypes = {
-  chartType: PropTypes.string.isRequired,
-  geography: PropTypes.string.isRequired,
-  maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  observedFeature: PropTypes.string.isRequired,
-  selectedGeographicFeature: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
-  unit: PropTypes.string.isRequired,
   showInstructions: PropTypes.bool,
 };
 
