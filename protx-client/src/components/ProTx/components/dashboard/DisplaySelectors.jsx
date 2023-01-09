@@ -219,7 +219,7 @@ function DisplaySelectors({
           onClick={downloadResources}
           color="primary"
           size="sm"
-          styleName="download-btn"
+          className="download-btn"
           download
         >
           Download

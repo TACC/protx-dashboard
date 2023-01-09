@@ -135,25 +135,6 @@ function ChartInstructions({ currentReportType }) {
     );
   }
 
-  if (currentReportType === 'analyticsCountyFeatureChart') {
-    return (
-      <div className="feature-table-annotation">
-        {' '}
-        <span className="feature-table-annotation-prefix"> Table 1. </span>
-        <span className="feature-table-annotation-text">
-          Top three demographic features related to changes in the county-level
-          child total maltreatment counts. Ranking indicates features that are
-          most influential. Correlation indicates the nature of the relationship
-          between the demographic feature and total maltreatment counts. A
-          positive correlation implies that an increase in the demographic
-          feature results in an increase in total maltreatment counts and vice
-          versa. A negative correlation means an increase in the demographic
-          feature results in a decrease in total maltreatment counts.
-        </span>
-      </div>
-    );
-  }
-
   return (
     <div
       className={
