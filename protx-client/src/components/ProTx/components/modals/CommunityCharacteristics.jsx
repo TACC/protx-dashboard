@@ -35,11 +35,9 @@ const CommunityCharacteristicsChart = ({
   }
 
   if (isError) {
-    debugger;
-    return <SectionMessage type="error">something went wrong</SectionMessage>;
+    return <SectionMessage type="error">Something went wrong</SectionMessage>;
   }
 
-  debugger;
   return <MainPlot plotState={data.result} />;
 };
 CommunityCharacteristicsChart.propTypes = {
@@ -60,10 +58,12 @@ const CommunityCharacteristics = ({
         Community Characteristics for {geographyLabel}
       </ModalHeader>
       <ModalBody>
-        <CommunityCharacteristicsChart
-          geography={geography}
-          selectedGeographicFeature={selectedGeographicFeature}
-        />
+        <div className={styles['modal-body-container']}>
+          <CommunityCharacteristicsChart
+            geography={geography}
+            selectedGeographicFeature={selectedGeographicFeature}
+          />
+        </div>
       </ModalBody>
     </Modal>
   );

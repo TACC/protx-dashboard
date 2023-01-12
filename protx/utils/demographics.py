@@ -402,7 +402,7 @@ def get_age_race_pie_charts(area, geoid):
         )))
     fig.update_layout(
         font=dict(size=13, color="Black",  family="Roboto"),
-        title={"text": 'Community Characteristics', "font": {"size": 14, "color": "Black", "family": "Roboto"}}
+        margin=dict(l=10, r=10, t=10, b=10)
     )
     # fig.write_html("figure.html")
     return json.loads(fig.to_json())
