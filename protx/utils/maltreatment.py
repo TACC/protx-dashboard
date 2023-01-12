@@ -94,7 +94,8 @@ def maltrt_stacked_bar(maltrt_data_dict):
             font=dict(size=16),
             traceorder='normal'
         ),
-        xaxis=dict(tickfont=dict(size=16))
+        xaxis=dict(tickfont=dict(size=16)),
+        margin=dict(l=10, r=10, t=10, b=10)
     )
 
     return fig
