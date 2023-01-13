@@ -123,13 +123,13 @@ function DisplaySelectors({ downloadResources }) {
   return (
     <div className={styles['display-selectors']}>
       <div className={styles['control']}>
-        <span className={styles['label']}>Type</span>
+        <span className={styles['label']}>Report</span>
         <DropdownSelector
           value={selection.type}
           onChange={(event) => setType(event.target.value)}
         >
-          <optgroup label="Select Type">
-            <option value="maltreatment">Maltreatment</option>
+          <optgroup label="Select Report">
+            <option value="maltreatment">Child Maltreatment</option>
             <option value="observedFeatures">Demographics</option>
             <option value="analytics">Analytics</option>
           </optgroup>
