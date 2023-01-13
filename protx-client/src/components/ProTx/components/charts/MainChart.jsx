@@ -49,7 +49,7 @@ function MainChart({ data, showInstructions }) {
 
   useEffect(() => {
     if (
-      selection.type === 'demographics' &&
+      selection.type === 'observedFeatures' &&
       selection.selectedGeographicFeature
     ) {
       dispatch({
@@ -108,7 +108,7 @@ function MainChart({ data, showInstructions }) {
   }
 
   // DEMOGRAPHICS PLOT.
-  if (selection.type === 'demographics') {
+  if (selection.type === 'observedFeatures') {
     if (selection.selectedGeographicFeature && selection.observedFeature) {
       if (protxDemographicsDistribution.error) {
         return (
