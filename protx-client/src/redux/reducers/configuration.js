@@ -13,13 +13,14 @@ const PRESELECTED_MALTREATMENT_CATEGORIES = [
 
 const DEFAULT_YEAR = '2020';
 
+/* initial state on load is demographics/observedFeatures */
 export const initialState = {
-  type: 'maltreatment',
+  type: 'observedFeatures',
   geography: 'county',
   maltreatmentTypes: PRESELECTED_MALTREATMENT_CATEGORIES,
   observedFeature: 'AGE17',
   year: DEFAULT_YEAR,
-  unit: 'rate_per_100k_under17',
+  unit: 'percent',
   selectedGeographicFeature: '',
 };
 
