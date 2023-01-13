@@ -17,7 +17,7 @@ api.add_namespace(protx_api, path="/protx/api")
 
 @app.route("/protx/dash/")
 @onboarded_user_setup_complete(redirect_path='/protx/onboarding')  # redirect not to CEP as we are in iframe
-def index(path):
+def index():
     return render_template(template)
 
 
