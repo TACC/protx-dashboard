@@ -365,14 +365,16 @@ def get_age_race_pie_charts(area, geoid):
     age_labels = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
     age_values = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
 
+    # list of variables is in desired order (alphabetic order and then last two at end)
     variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
                  'BLACK_AFRICAN_AMERICAN_ALONE', 'NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE',
-                 'OTHER_RACE_ALONE', 'TWO_OR_MORE_RACES', 'WHITE_ALONE']
+                 'WHITE_ALONE', 'TWO_OR_MORE_RACES', 'OTHER_RACE_ALONE', ]
 
     selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
-    race_labels = data_frame_result["DISPLAY_TEXT"].tolist()
-    race_values = data_frame_result["VALUE"].tolist()
+    race_data = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
+    race_labels = [race_data[v].DISPLAY_TEXT for v in variables]
+    race_values = [race_data[v].VALUE for v in variables]
 
     race_sum = sum(race_values)
     if not math.isclose(race_sum, 100, abs_tol=.1):
@@ -392,6 +394,7 @@ def get_age_race_pie_charts(area, geoid):
         go.Pie(
             values=age_values,
             labels=age_labels,
+            sort=False,
             legendgroup='Age',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
             name="Age",
@@ -401,6 +404,7 @@ def get_age_race_pie_charts(area, geoid):
         go.Pie(
             values=ethnicity_values,
             labels=ethnicity_labels,
+            sort=False,
             legendgroup='Ethnicity',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
             name="Ethnicity",
@@ -410,6 +414,7 @@ def get_age_race_pie_charts(area, geoid):
         go.Pie(
             values=race_values,
             labels=race_labels,
+            sort=False,
             legendgroup='Race',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
             name="Race",
