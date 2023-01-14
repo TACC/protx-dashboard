@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import styles from './CommunityCharacteristics.module.scss';
-import { LoadingSpinner } from '_common/index';
+import { LoadingSpinner, SectionMessage } from '_common/index';
 import Cookies from 'js-cookie';
 import MainPlot from '../charts/MainPlot';
 
