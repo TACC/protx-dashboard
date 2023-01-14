@@ -386,12 +386,12 @@ def get_age_race_pie_charts(area, geoid):
     ethnicity_labels = [population["HISPANIC_LATINO"].DISPLAY_TEXT, "Not Hispanic/or Latino population"]
     ethnicity_values = [population["HISPANIC_LATINO"].VALUE, 100-population["HISPANIC_LATINO"].VALUE]
 
-    fig = make_subplots(rows=1, cols=3, specs=[[{"type": "pie"}, {"type": "pie"}, {"type": "pie"}]])
+    fig = make_subplots(rows=2, cols=2,
+                        specs=[[{"type": "pie", "colspan": 2}, None], [{"type": "pie"}, {"type": "pie"}]])
     fig.add_trace(
         go.Pie(
             values=age_values,
             labels=age_labels,
-            domain=dict(x=[0, 0.5]),
             legendgroup='Age',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
             name="Age",
@@ -405,17 +405,16 @@ def get_age_race_pie_charts(area, geoid):
             legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
             name="Ethnicity",
             title=dict(text='Ethnicity', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=1, col=2)
+        row=2, col=1)
     fig.add_trace(
         go.Pie(
             values=race_values,
             labels=race_labels,
-            domain=dict(x=[0.5, 1.0]),
             legendgroup='Race',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
             name="Race",
             title=dict(text='Racial makeup', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=1, col=3)
+        row=2, col=2)
 
 
     fig.update_traces(marker=dict(
