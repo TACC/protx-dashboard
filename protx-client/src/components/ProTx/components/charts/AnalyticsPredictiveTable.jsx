@@ -8,6 +8,7 @@ import {
   getObservedFeaturesLabel,
 } from '../shared/dataUtils';
 import './PredictiveFeaturesTable.css';
+import styles from './AnalyticsPredictiveTable.module.scss';
 import { FigureCaption } from './FigureCaption';
 import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 import { Button } from 'reactstrap';
@@ -144,6 +145,7 @@ function AnalyticsPredictiveTable({ geography, selectedGeographicFeature }) {
         {tableAnnotationText}
       </FigureCaption>
       <Button
+        className={styles.link}
         color="link"
         onClick={() => setShowCommunityCharacteristics(true)}
       >
