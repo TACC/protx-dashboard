@@ -398,7 +398,7 @@ def get_age_race_pie_charts(area, geoid):
             legendgroup='Age',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
             name="Age",
-            title=dict(text='Age', font=dict(size=18, color="Black",  family="Roboto"))),
+            title=dict(text='Age', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
         row=1, col=1)
     fig.add_trace(
         go.Pie(
@@ -408,7 +408,7 @@ def get_age_race_pie_charts(area, geoid):
             legendgroup='Ethnicity',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
             name="Ethnicity",
-            title=dict(text='Ethnicity', font=dict(size=18, color="Black",  family="Roboto"))),
+            title=dict(text='Ethnicity', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
         row=2, col=1)
     fig.add_trace(
         go.Pie(
@@ -418,7 +418,7 @@ def get_age_race_pie_charts(area, geoid):
             legendgroup='Race',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
             name="Race",
-            title=dict(text='Race', font=dict(size=18, color="Black",  family="Roboto"))),
+            title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
         row=2, col=2)
 
 
