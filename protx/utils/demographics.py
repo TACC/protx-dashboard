@@ -421,7 +421,6 @@ def get_age_race_pie_charts(area, geoid):
             title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
         row=2, col=2)
 
-
     fig.update_traces(marker=dict(
         colors=light_green_to_blue_color_palette, line=dict(
             color='black',
