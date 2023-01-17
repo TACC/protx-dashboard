@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y curl
 RUN mkdir /app
 WORKDIR /app/protx
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 RUN poetry config virtualenvs.create false
 
