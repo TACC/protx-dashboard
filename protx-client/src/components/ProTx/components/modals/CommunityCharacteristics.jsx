@@ -27,11 +27,7 @@ const CommunityCharacteristicsChart = ({
   );
 
   if (isFetching) {
-    return (
-      <div className={styles.loading}>
-        <LoadingSpinner />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (isError) {
@@ -40,6 +36,7 @@ const CommunityCharacteristicsChart = ({
 
   return <MainPlot plotState={data.result} />;
 };
+
 CommunityCharacteristicsChart.propTypes = {
   selectedGeographicFeature: PropTypes.string.isRequired,
   geographyLabel: PropTypes.string.isRequired,
