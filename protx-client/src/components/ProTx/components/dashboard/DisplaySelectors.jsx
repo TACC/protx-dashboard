@@ -157,45 +157,43 @@ function DisplaySelectors({
         </div>
       )}
       {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
-        <>
-          <div className={styles['control']}>
-            <span className={styles['label']}>Demographic</span>
-            <DropdownSelector
-              value={observedFeature}
-              onChange={(event) => setObservedFeature(event.target.value)}
-            >
-              <optgroup label="Select demographic feature">
-                {display.variables
-                  .sort((a, b) => {
-                    if (a.DISPLAY_TEXT < b.DISPLAY_TEXT) {
-                      return -1;
-                    }
-                    if (a.DISPLAY_TEXT > b.DISPLAY_TEXT) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .filter((f) => {
-                    if (limitToTopObservedFeatureFields) {
-                      return OBSERVED_FEATURES_TOP_FIELDS.includes(f.NAME);
-                    }
-                    if (unit === 'percent' && f.DISPLAY_DEMOGRAPHIC_RATE) {
-                      return true;
-                    }
-                    if (unit === 'count' && f.DISPLAY_DEMOGRAPHIC_COUNT) {
-                      return true;
-                    }
-                    return false;
-                  })
-                  .map((f) => (
-                    <option key={f.NAME} value={f.NAME}>
-                      {f.DISPLAY_TEXT}
-                    </option>
-                  ))}
-              </optgroup>
-            </DropdownSelector>
-          </div>
-        </>
+        <div className={styles['control']}>
+          <span className={styles['label']}>Demographic</span>
+          <DropdownSelector
+            value={observedFeature}
+            onChange={(event) => setObservedFeature(event.target.value)}
+          >
+            <optgroup label="Select demographic feature">
+              {display.variables
+                .sort((a, b) => {
+                  if (a.DISPLAY_TEXT < b.DISPLAY_TEXT) {
+                    return -1;
+                  }
+                  if (a.DISPLAY_TEXT > b.DISPLAY_TEXT) {
+                    return 1;
+                  }
+                  return 0;
+                })
+                .filter((f) => {
+                  if (limitToTopObservedFeatureFields) {
+                    return OBSERVED_FEATURES_TOP_FIELDS.includes(f.NAME);
+                  }
+                  if (unit === 'percent' && f.DISPLAY_DEMOGRAPHIC_RATE) {
+                    return true;
+                  }
+                  if (unit === 'count' && f.DISPLAY_DEMOGRAPHIC_COUNT) {
+                    return true;
+                  }
+                  return false;
+                })
+                .map((f) => (
+                  <option key={f.NAME} value={f.NAME}>
+                    {f.DISPLAY_TEXT}
+                  </option>
+                ))}
+            </optgroup>
+          </DropdownSelector>
+        </div>
       )}
       {mapType !== 'analytics' && (
         <div className={styles['control']}>
