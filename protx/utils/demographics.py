@@ -6,6 +6,8 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from protx.utils.plotly_figures import timeseries_lineplot
 from protx.conf.styles import light_green_to_blue_color_palette
+from protx.log import logger
+import math
 
 db_name = '/protx-data/cooks.db'
 
@@ -360,49 +362,79 @@ def get_age_race_pie_charts(area, geoid):
 
     population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
     population_17_to_65 = population["TOTPOP"].VALUE - population["AGE17"].VALUE - population["AGE65"].VALUE
-    labels1 = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
-    values1 = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
+    age_labels = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
+    age_values = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
 
-    variables = ['HISPANIC_LATINO', 'AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
+    # list of variables is in desired order (alphabetic order and then last two at end)
+    variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
                  'BLACK_AFRICAN_AMERICAN_ALONE', 'NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE',
-                 'WHITE_ALONE_NOT_HISPANIC_LATINO']
+                 'WHITE_ALONE', 'TWO_OR_MORE_RACES', 'OTHER_RACE_ALONE', ]
 
     selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
-    labels2 = data_frame_result["DISPLAY_TEXT"].tolist()
-    values2 = data_frame_result["VALUE"].tolist()
+    race_data = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
+    race_labels = [race_data[v].DISPLAY_TEXT for v in variables]
+    race_values = [race_data[v].VALUE for v in variables]
 
-    db_conn.close()
+    race_sum = sum(race_values)
+    if not math.isclose(race_sum, 100, abs_tol=.1):
+        logger.warn(f"Race characteristics percentages do not sum to 100. (sum = {race_sum} ")
 
-    fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "pie"}]])
+    # Hispanic/Latino Percent from DB and calculate Not Hispanic/Latino
+    variables = ['HISPANIC_LATINO']
+    selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
+    population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
+    ethnicity_labels = [population["HISPANIC_LATINO"].DISPLAY_TEXT, "Not Hispanic/or Latino population"]
+    ethnicity_values = [population["HISPANIC_LATINO"].VALUE, 100-population["HISPANIC_LATINO"].VALUE]
+
+    fig = make_subplots(rows=2, cols=2,
+                        specs=[[{"type": "pie", "colspan": 2}, None], [{"type": "pie"}, {"type": "pie"}]])
     fig.add_trace(
         go.Pie(
-            values=values1,
-            labels=labels1,
-            domain=dict(x=[0, 0.5]),
+            values=age_values,
+            labels=age_labels,
+            sort=False,
             legendgroup='Age',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
             name="Age",
-            title=dict(text='Age makeup', font=dict(size=18, color="Black",  family="Roboto"))),
+            title=dict(text='Age', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
         row=1, col=1)
     fig.add_trace(
         go.Pie(
-            values=values2,
-            labels=labels2,
-            domain=dict(x=[0.5, 1.0]),
+            values=ethnicity_values,
+            labels=ethnicity_labels,
+            sort=False,
+            legendgroup='Ethnicity',
+            legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
+            name="Ethnicity",
+            title=dict(text='Ethnicity', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
+        row=2, col=1)
+    fig.add_trace(
+        go.Pie(
+            values=race_values,
+            labels=race_labels,
+            sort=False,
             legendgroup='Race',
             legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
             name="Race",
-            title=dict(text='Racial makeup', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=1, col=2)
+            title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
+        row=2, col=2)
+
     fig.update_traces(marker=dict(
         colors=light_green_to_blue_color_palette, line=dict(
             color='black',
             width=1
         )))
+
     fig.update_layout(
         font=dict(size=13, color="Black",  family="Roboto"),
-        title={"text": 'Community Characteristics', "font": {"size": 14, "color": "Black", "family": "Roboto"}}
+        margin=dict(l=10, r=10, t=10, b=10),
+        height=620,
     )
-    # fig.write_html("figure.html")
+
+    fig.show()
+
+    db_conn.close()
+
     return json.loads(fig.to_json())
