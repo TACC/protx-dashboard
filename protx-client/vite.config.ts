@@ -18,6 +18,7 @@ export default defineConfig({
   },
   server: {
     host: 'cep.test',
+    port: 3000,
     https: {
       key: readFileSync('../conf/certificates/cep.test.key'),
       cert: readFileSync('../conf/certificates/cep.test.crt')
