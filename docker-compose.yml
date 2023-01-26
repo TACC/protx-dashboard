@@ -46,7 +46,7 @@ services:
       - core_portal_es_data:/usr/share/elasticsearch/data
     container_name: core_portal_elasticsearch
     ports:
-      - 9200:9200
+      - 127.0.0.1:9200:9200
 
   postgres:
     image: postgres:11.5
@@ -89,8 +89,8 @@ services:
       - ./protx-client:/var/www/portal/protx-client
       - protx_app_distribution:/protx-app-distribution
     ports:
-      - 80:80
-      - 443:443
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
     container_name: core_portal_nginx
     depends_on:
       - cms
