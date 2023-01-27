@@ -149,8 +149,6 @@ services:
     volumes:
       - ~/protx-data:/protx-data
       - ./protx:/app/protx # Comment out this line if using an image (3/4).
-    ports:
-      - 8000:8000
     dns:
       - 8.8.8.8
       - 8.8.4.4
