@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoadingSpinner } from '_common';
@@ -7,9 +7,11 @@ import {
   capitalizeString,
   getObservedFeaturesLabel,
 } from '../shared/dataUtils';
-import ChartInstructions from './ChartInstructions';
 import './PredictiveFeaturesTable.css';
+import styles from './AnalyticsPredictiveTable.module.scss';
 import { FigureCaption } from './FigureCaption';
+import CommunityCharacteristics from '../modals/CommunityCharacteristics';
+import { Button } from 'reactstrap';
 
 function AnalyticsPredictiveTable({ geography, selectedGeographicFeature }) {
   const dispatch = useDispatch();
@@ -27,6 +29,9 @@ function AnalyticsPredictiveTable({ geography, selectedGeographicFeature }) {
   const analytics = useSelector((state) => state.protxAnalytics);
 
   const data = useSelector((state) => state.protx.data);
+
+  const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
+    useState(false);
 
   if (analytics.error) {
     return <div>something went wrong</div>;
@@ -139,6 +144,20 @@ function AnalyticsPredictiveTable({ geography, selectedGeographicFeature }) {
       <FigureCaption label={'Table 1.'} className={'table-annotation'}>
         {tableAnnotationText}
       </FigureCaption>
+      <Button
+        className={styles.link}
+        color="link"
+        onClick={() => setShowCommunityCharacteristics(true)}
+      >
+        View community characteristics
+      </Button>
+      <CommunityCharacteristics
+        isOpen={showCommunityCharacteristics}
+        toggle={() => setShowCommunityCharacteristics(false)}
+        geography={geography}
+        selectedGeographicFeature={selectedGeographicFeature}
+        geographyLabel={`${countyName} County`}
+      />
     </>
   );
 }

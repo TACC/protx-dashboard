@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from '_common';
 import { Button } from 'reactstrap';
 import MaltreatmentSelector from './MaltreatmentSelector';
-import { OBSERVED_FEATURES_TOP_FIELDS, SUPPORTED_YEARS } from '../data/meta';
+import { SUPPORTED_YEARS } from '../data/meta';
 import styles from './DisplaySelectors.module.scss';
 
 /* Radio buttons for types of values to display in dropdown (see COOKS-110 for next steps). */
@@ -62,66 +62,83 @@ RateSelector.propTypes = {
 /**
  * Selectors (i.e. dropdowns) to allow users to select what to display on maps/charts
  *
- * Customizations:
- * - if `setGeography` or `setYear` are not set then the associated dropdown is disabled
- * - if 'limitToTopObservedFeatureFields' then a limited set of demographic data is selectable
- *    (and user can't switch between value types like between percent/total)
  * Note:
  * Maltreatment data is available at the county level.
  * Demographic Features only has 2019 data.
  *
  */
-function DisplaySelectors({
-  mapType,
-  geography,
-  maltreatmentTypes,
-  observedFeature,
-  year,
-  unit,
-  selectedGeographicFeature,
-  setGeography,
-  setMaltreatmentTypes,
-  setObservedFeature,
-  setYear,
-  setUnit,
-  limitToTopObservedFeatureFields,
-  downloadResources,
-}) {
-  const disableGeography = mapType === 'maltreatment' || setGeography === null;
-  const disabledYear = mapType === 'observedFeatures' || setYear == null;
-  const valueLabelRadioBtn0 = 'Percentages';
-  const valueLabelRadioBtn1 =
-    mapType === 'maltreatment' ? 'Rate per 100K children' : 'Totals';
-  const valueRadioBtn0 = 'percent';
-  const valueRadioBtn1 =
-    mapType === 'maltreatment' ? 'rate_per_100k_under17' : 'count';
+function DisplaySelectors({ downloadResources }) {
+  const dispatch = useDispatch();
+  const selection = useSelector((state) => state.protxSelection);
   const display = useSelector((state) => state.protx.data.display);
 
-  const changeUnit = (newUnit) => {
-    if (mapType === 'observedFeatures') {
-      // check to see if we also need to switch the variable if it doesn't a count or percentage
-      // that would be needed.
-      const current = display.variables.find((f) => f.NAME === observedFeature);
-      if (newUnit && current.DISPLAY_DEMOGRAPHIC_RATE === 0) {
-        setObservedFeature(
-          display.variables.find((f) => f.DISPLAY_DEMOGRAPHIC_RATE === 1).NAME
-        );
-      }
-      if (!newUnit && current.DISPLAY_DEMOGRAPHIC_COUNT === 0) {
-        setObservedFeature(
-          display.variables.find((f) => f.DISPLAY_DEMOGRAPHIC_COUNT === 1).NAME
-        );
-      }
-    }
-    setUnit(newUnit);
+  const setType = (selectedType) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_TYPE',
+      payload: { type: selectedType, displayData: display },
+    });
   };
+  const setYear = (year) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_YEAR',
+      payload: year,
+    });
+  };
+  const setMaltreatmentTypes = (maltreatmentTypes) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_SELECTED_MALTREATMENT_TYPES',
+      payload: maltreatmentTypes,
+    });
+  };
+  const setObservedFeature = (observedFeature) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_OBSERVED_FEATURE',
+      payload: observedFeature,
+    });
+  };
+  const setUnit = (newUnit) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_UNIT',
+      payload: { unit: newUnit, displayData: display },
+    });
+  };
+  const setGeography = (newGeography) => {
+    dispatch({
+      type: 'PROTX_CONFIG/SET_GEOGRAPHY',
+      payload: newGeography,
+    });
+  };
+
+  const demographicsOrMaltreatment =
+    selection.type === 'maltreatment' || selection.type === 'observedFeatures';
+  const disableGeography = selection.type !== 'observedFeatures';
+  const disabledYear = selection.type === 'observedFeatures';
+  const valueLabelRadioBtn0 = 'Percentages';
+  const valueLabelRadioBtn1 =
+    selection.type === 'maltreatment' ? 'Rate per 100K children' : 'Totals';
+  const valueRadioBtn0 = 'percent';
+  const valueRadioBtn1 =
+    selection.type === 'maltreatment' ? 'rate_per_100k_under17' : 'count';
 
   return (
     <div className={styles['display-selectors']}>
       <div className={styles['control']}>
+        <span className={styles['label']}>Report</span>
+        <DropdownSelector
+          value={selection.type}
+          onChange={(event) => setType(event.target.value)}
+        >
+          <optgroup label="Select Report">
+            <option value="maltreatment">Child Maltreatment</option>
+            <option value="observedFeatures">Demographics</option>
+            <option value="analytics">Analytics</option>
+          </optgroup>
+        </DropdownSelector>
+      </div>
+      <div className={styles['control']}>
         <span className={styles['label']}>Area</span>
         <DropdownSelector
-          value={geography}
+          value={selection.geography}
           onChange={(event) => setGeography(event.target.value)}
           disabled={disableGeography}
         >
@@ -132,74 +149,79 @@ function DisplaySelectors({
           </optgroup>
         </DropdownSelector>
       </div>
-      {setUnit && (
+      {demographicsOrMaltreatment && (
         <div className={styles['control']}>
           <span className={styles['label']}>Value</span>
           <RateSelector
-            value={unit}
+            value={selection.unit}
             valueLabelRadioBtn0={valueLabelRadioBtn0}
             valueLabelRadioBtn1={valueLabelRadioBtn1}
             valueRadioBtn0={valueRadioBtn0}
             valueRadioBtn1={valueRadioBtn1}
-            setValue={changeUnit}
+            setValue={setUnit}
           />
         </div>
       )}
-      {mapType === 'maltreatment' && (
+      {selection.type === 'maltreatment' && (
         <div className={styles['control']}>
           <span className={styles['label']}>Type</span>
           <MaltreatmentSelector
-            unit={unit}
+            unit={selection.unit}
             variables={display.variables}
-            selectedTypes={maltreatmentTypes}
+            selectedTypes={selection.maltreatmentTypes}
             setSelectedTypes={setMaltreatmentTypes}
           />
         </div>
       )}
-      {(mapType === 'observedFeatures' || mapType === 'predictiveFeatures') && (
-        <div className={styles['control']}>
-          <span className={styles['label']}>Demographic</span>
-          <DropdownSelector
-            value={observedFeature}
-            onChange={(event) => setObservedFeature(event.target.value)}
-          >
-            <optgroup label="Select demographic feature">
-              {display.variables
-                .sort((a, b) => {
-                  if (a.DISPLAY_TEXT < b.DISPLAY_TEXT) {
-                    return -1;
-                  }
-                  if (a.DISPLAY_TEXT > b.DISPLAY_TEXT) {
-                    return 1;
-                  }
-                  return 0;
-                })
-                .filter((f) => {
-                  if (limitToTopObservedFeatureFields) {
-                    return OBSERVED_FEATURES_TOP_FIELDS.includes(f.NAME);
-                  }
-                  if (unit === 'percent' && f.DISPLAY_DEMOGRAPHIC_RATE) {
-                    return true;
-                  }
-                  if (unit === 'count' && f.DISPLAY_DEMOGRAPHIC_COUNT) {
-                    return true;
-                  }
-                  return false;
-                })
-                .map((f) => (
-                  <option key={f.NAME} value={f.NAME}>
-                    {f.DISPLAY_TEXT}
-                  </option>
-                ))}
-            </optgroup>
-          </DropdownSelector>
-        </div>
+      {selection.type === 'observedFeatures' && (
+        <>
+          <div className={styles['control']}>
+            <span className={styles['label']}>Demographic</span>
+            <DropdownSelector
+              value={selection.observedFeature}
+              onChange={(event) => setObservedFeature(event.target.value)}
+            >
+              <optgroup label="Select demographic feature">
+                {display.variables
+                  .sort((a, b) => {
+                    if (a.DISPLAY_TEXT < b.DISPLAY_TEXT) {
+                      return -1;
+                    }
+                    if (a.DISPLAY_TEXT > b.DISPLAY_TEXT) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .filter((f) => {
+                    if (
+                      selection.unit === 'percent' &&
+                      f.DISPLAY_DEMOGRAPHIC_RATE
+                    ) {
+                      return true;
+                    }
+                    if (
+                      selection.unit === 'count' &&
+                      f.DISPLAY_DEMOGRAPHIC_COUNT
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  })
+                  .map((f) => (
+                    <option key={f.NAME} value={f.NAME}>
+                      {f.DISPLAY_TEXT}
+                    </option>
+                  ))}
+              </optgroup>
+            </DropdownSelector>
+          </div>
+        </>
       )}
-      {mapType !== 'analytics' && (
+      {selection.type !== 'analytics' && (
         <div className={styles['control']}>
           <span className={styles['label']}>Years</span>
           <DropdownSelector
-            value={year}
+            value={selection.year}
             onChange={(event) => setYear(event.target.value)}
             disabled={disabledYear}
           >
@@ -212,7 +234,7 @@ function DisplaySelectors({
           </DropdownSelector>
         </div>
       )}
-      {selectedGeographicFeature && (
+      {selection.selectedGeographicFeature && (
         <Button
           onClick={downloadResources}
           color="primary"
@@ -228,27 +250,7 @@ function DisplaySelectors({
 }
 
 DisplaySelectors.propTypes = {
-  mapType: PropTypes.string.isRequired,
-  geography: PropTypes.string.isRequired,
-  maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  observedFeature: PropTypes.string.isRequired,
-  year: PropTypes.string.isRequired,
-  unit: PropTypes.string.isRequired,
-  selectedGeographicFeature: PropTypes.string.isRequired,
-  setGeography: PropTypes.func,
-  setMaltreatmentTypes: PropTypes.func.isRequired,
-  setObservedFeature: PropTypes.func.isRequired,
-  setYear: PropTypes.func,
-  setUnit: PropTypes.func,
-  limitToTopObservedFeatureFields: PropTypes.bool,
   downloadResources: PropTypes.func.isRequired,
-};
-
-DisplaySelectors.defaultProps = {
-  setGeography: null,
-  setYear: null,
-  setUnit: null,
-  limitToTopObservedFeatureFields: false,
 };
 
 export default DisplaySelectors;

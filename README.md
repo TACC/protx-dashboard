@@ -48,42 +48,26 @@ Get access to Django CMS, run `docker exec -it core_portal_cms /bin/bash` and th
 python3 manage.py createsuperuser
 ```
 
-In Django CMS admin (i.e. https://cep.test/admin/`), you need to create three pages (using three snippets).
+In Django CMS admin (i.e. https://cep.test/admin/`), you need to create single page page (using a snippet).
 
 
-The iframe snippets that have the following markup:
-
-```
-<body style="margin:0px;padding:0px;overflow:hidden">
-    <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.test/protx/dash/demographics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
-    </div>
-</body>
-```
+The iframe snippet has the following markup:
 
 ```
 <body style="margin:0px;padding:0px;overflow:hidden">
     <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.test/protx/dash/maltreatment" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
-    </div>
-</body>
-```
-
-```
-<body style="margin:0px;padding:0px;overflow:hidden">
-    <div style="position:relative;width:100vw;height:100vh;">
-        <iframe src="https://cep.test/protx/dash/analytics" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
+        <iframe src="https://cep.test/protx/dash/" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" width="100%" height="100%"></iframe>
     </div>
 </body>
 ```
 
 To create these pages/snippets:
 * Login to CMS Admin > Snippets
-* Add Snippet > [Paste in that code and name it (ex. demographics)] > Save Snippet
+* Add Snippet > [Paste in that code and name it "Data and Analysis"] > Save Snippet
 * Navigate to CMS Admin > Pages
-* Add Page (ex. demographics)
+* Add Page (ex. "Data and Analysis")
 * In the new Page, add a Text element (in the structure view)
-* Edit the new Text Element, select “Snippet” from the CMS dropdown options, and choose the “demographics” snippet you created.
+* Edit the new Text Element, select “Snippet” from the CMS dropdown options, and choose the “Data and Analysis” snippet you created.
 * Save and publish the Page.
 * Note: Go into the Continue Editing (Advanced Settings) and change the template from nearest ancestor to Full Width
 * The page will now link to the container route.
@@ -96,7 +80,7 @@ npm ci
 npm run dev
 ```
 
-Then go to either `https://cep.test/`, `https://cep.test/workbench`, `https://cep.test/protx/dash/maltreatment`, `https://cep.test/protx/dash/demographics` or `https://cep.test/protx/dash/analytics`
+Then go to either `https://cep.test/`, `https://cep.test/workbench`, `https://cep.test/protx/dash/`
 
 ## Testing
 

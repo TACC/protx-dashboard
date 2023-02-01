@@ -33,22 +33,15 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 function MainMap({
-  mapType,
-  geography,
-  maltreatmentTypes,
-  observedFeature,
-  year,
-  unit,
   data,
   map,
   setMap,
   resourceLayers,
   setResourceLayers,
-  selectedGeographicFeature,
   setSelectedGeographicFeature,
 }) {
   const dataServer = window.location.origin;
-
+  const selection = useSelector((state) => state.protxSelection);
   const resources = useSelector((state) => state.protx.data.resources);
   const resourcesMeta = useSelector((state) => state.protx.data.resourcesMeta);
 
@@ -56,7 +49,6 @@ function MainMap({
   const [legendControl, setLegendControl] = useState(null);
   const [layersControl, setLayersControl] = useState(null);
   const [texasOutlineLayer, setTexasOutlineLayer] = useState(null);
-  const [colorScale, setColorScale] = useState(null);
   const [selectedGeoid, setSelectedGeoid] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(6);
 
@@ -170,6 +162,7 @@ function MainMap({
         .prepend('<div class="resources-layers--title">Resources</div>');
     }, 0);
   }, [data, mapContainer]);
+
   useEffect(() => {
     if (map && layersControl && refDataLayer.current) {
       map.on('zoomend', () => {
@@ -180,7 +173,7 @@ function MainMap({
   }, [map, layersControl, refDataLayer.current]);
 
   useEffect(() => {
-    if (map) {
+    if (map && layersControl) {
       // remove old legend
       if (legendControl) {
         legendControl.remove();
@@ -188,7 +181,7 @@ function MainMap({
 
       let newColorScale;
 
-      if (mapType === 'analytics') {
+      if (selection.type === 'analytics') {
         const categories = [
           { key: 'low', label: 'Low' },
           { key: 'medium ', label: 'Medium' }, // 'medium ' with space; check DB
@@ -198,24 +191,22 @@ function MainMap({
       } else {
         const meta = getMetaData(
           data,
-          mapType,
-          geography,
-          year,
-          observedFeature,
-          maltreatmentTypes,
-          unit
+          selection.type,
+          selection.geography,
+          selection.year,
+          selection.observedFeature,
+          selection.maltreatmentTypes,
+          selection.unit
         );
         newColorScale = meta ? new IntervalColorScale(meta) : null;
       }
 
-      setColorScale(newColorScale);
-
       if (newColorScale) {
         const label = getMapLegendLabel(
-          mapType,
-          maltreatmentTypes,
-          observedFeature,
-          unit,
+          selection.type,
+          selection.maltreatmentTypes,
+          selection.observedFeature,
+          selection.unit,
           data
         );
 
@@ -235,16 +226,136 @@ function MainMap({
         newLegend.addTo(map);
         setLegendControl(newLegend);
       }
+
+      const vectorTile = `${dataServer}/data-static/vector/${selection.geography}/2019/{z}/{x}/{y}.pbf`;
+      const newDataLayer = L.vectorGrid.protobuf(vectorTile, {
+        vectorTileLayerStyles: {
+          singleLayer: (properties) => {
+            const geoid = properties[GEOID_KEY[selection.geography]];
+            return getFeatureStyle(
+              selection.type,
+              data,
+              newColorScale,
+              selection.geography,
+              selection.year,
+              geoid,
+              selection.observedFeature,
+              selection.maltreatmentTypes,
+              selection.unit
+            );
+          },
+        },
+        interactive: true,
+        getFeatureId(f) {
+          return f.properties[GEOID_KEY[selection.geography]];
+        },
+        maxNativeZoom: 14, // All tiles generated up to 14 zoom level
+      });
+
+      if (selection.geography === 'dfps_region') {
+        // Add tooltip to show which is which region
+        newDataLayer.bindTooltip('', { sticky: true });
+        newDataLayer.on('mouseover', function (e) {
+          const dfpsRegionGeoid =
+            e.layer.properties[GEOID_KEY[selection.geography]];
+          newDataLayer.setTooltipContent(
+            'DFPS Region ' + dfpsRegionGeoid.replace('-', ' ')
+          );
+        });
+      }
+
+      if (refDataLayer.current && layersControl) {
+        // we will remove data layer from map
+        refDataLayer.current.remove();
+      }
+
+      // Add click handler
+      newDataLayer.on('click', (e) => {
+        const clickedGeographicFeature =
+          e.layer.properties[GEOID_KEY[selection.geography]];
+
+        if (refSelectedGeoid.current) {
+          refDataLayer.current.resetFeatureStyle(refSelectedGeoid.current);
+        }
+
+        if (clickedGeographicFeature !== refSelectedGeoid.current) {
+          updateSelectedGeographicFeature(clickedGeographicFeature);
+          const highlightedStyle = {
+            ...getFeatureStyle(
+              selection.type,
+              data,
+              newColorScale,
+              selection.geography,
+              selection.year,
+              clickedGeographicFeature,
+              selection.observedFeature,
+              selection.maltreatmentTypes,
+              selection.unit
+            ),
+            color: 'black',
+            weight: 2.0,
+            stroke: true,
+          };
+          newDataLayer.setFeatureStyle(
+            clickedGeographicFeature,
+            highlightedStyle
+          );
+          // Simple zoom to point clicked based on what type of region is being clicked
+          // (see https://jira.tacc.utexas.edu/browse/COOKS-290 and https://jira.tacc.utexas.edu/browse/COOKS-54)
+          if (selection.geography === 'county') {
+            map.setView(e.latlng, 9);
+          } else if (selection.geography === 'dfps_region') {
+            map.setView(e.latlng, 8);
+          } else {
+            map.setView(e.latlng, 11);
+          }
+        } else {
+          updateSelectedGeographicFeature('');
+        }
+      });
+
+      // add new data layer to map
+      newDataLayer.addTo(map);
+
+      // updated/new layer
+      if (selection.selectedGeographicFeature) {
+        const highlightedStyle = {
+          ...getFeatureStyle(
+            selection.type,
+            data,
+            newColorScale,
+            selection.geography,
+            selection.year,
+            selection.selectedGeographicFeature,
+            selection.observedFeature,
+            selection.maltreatmentTypes,
+            selection.unit
+          ),
+          color: 'black',
+          weight: 2.0,
+          stroke: true,
+        };
+        newDataLayer.setFeatureStyle(
+          selection.selectedGeographicFeature,
+          highlightedStyle
+        );
+      }
+
+      refDataLayer.current = newDataLayer;
+
+      // ensure that texas outline is on top
+      texasOutlineLayer.bringToFront();
     }
   }, [
     data,
-    mapType,
-    observedFeature,
-    geography,
-    maltreatmentTypes,
-    year,
-    unit,
+    selection.type,
+    selection.observedFeature,
+    selection.geography,
+    selection.maltreatmentTypes,
+    selection.year,
+    selection.unit,
     map,
+    layersControl,
     texasOutlineLayer,
   ]);
 
@@ -352,159 +463,18 @@ function MainMap({
   }, [layersControl, map, resources]);
 
   useEffect(() => {
-    if (map && selectedGeographicFeature === '') {
+    if (map && selection.selectedGeographicFeature === '') {
       // if selected geographic feature gets unset, we should zoom out
       const texasOutlineGeojson = L.geoJSON(data.texasBoundary);
       const texasBounds = texasOutlineGeojson.getBounds(texasOutlineGeojson);
       map.fitBounds(texasBounds);
     }
-  }, [map, data, selectedGeographicFeature]);
-
-  useEffect(() => {
-    const vectorTile = `${dataServer}/data-static/vector/${geography}/2019/{z}/{x}/{y}.pbf`;
-
-    if (map && layersControl) {
-      const newDataLayer = L.vectorGrid.protobuf(vectorTile, {
-        vectorTileLayerStyles: {
-          singleLayer: (properties) => {
-            const geoid = properties[GEOID_KEY[geography]];
-            return getFeatureStyle(
-              mapType,
-              data,
-              colorScale,
-              geography,
-              year,
-              geoid,
-              observedFeature,
-              maltreatmentTypes,
-              unit
-            );
-          },
-        },
-        interactive: true,
-        getFeatureId(f) {
-          return f.properties[GEOID_KEY[geography]];
-        },
-        maxNativeZoom: 14, // All tiles generated up to 14 zoom level
-      });
-
-      if (geography === 'dfps_region') {
-        // Add tooltip to show which is which region
-        newDataLayer.bindTooltip('', { sticky: true });
-        newDataLayer.on('mouseover', function (e) {
-          const dfpsRegionGeoid = e.layer.properties[GEOID_KEY[geography]];
-          newDataLayer.setTooltipContent(
-            'DFPS Region ' + dfpsRegionGeoid.replace('-', ' ')
-          );
-        });
-      }
-
-      if (refDataLayer.current && layersControl) {
-        // we will remove data layer from map
-        refDataLayer.current.remove();
-      }
-
-      // Add click handler
-      newDataLayer.on('click', (e) => {
-        const clickedGeographicFeature =
-          e.layer.properties[GEOID_KEY[geography]];
-
-        if (refSelectedGeoid.current) {
-          refDataLayer.current.resetFeatureStyle(refSelectedGeoid.current);
-        }
-
-        if (clickedGeographicFeature !== refSelectedGeoid.current) {
-          updateSelectedGeographicFeature(clickedGeographicFeature);
-          const highlightedStyle = {
-            ...getFeatureStyle(
-              mapType,
-              data,
-              colorScale,
-              geography,
-              year,
-              clickedGeographicFeature,
-              observedFeature,
-              maltreatmentTypes,
-              unit
-            ),
-            color: 'black',
-            weight: 2.0,
-            stroke: true,
-          };
-          newDataLayer.setFeatureStyle(
-            clickedGeographicFeature,
-            highlightedStyle
-          );
-          // Simple zoom to point clicked based on what type of region is being clicked
-          // (see https://jira.tacc.utexas.edu/browse/COOKS-290 and https://jira.tacc.utexas.edu/browse/COOKS-54)
-          if (geography === 'county') {
-            map.setView(e.latlng, 9);
-          } else if (geography === 'dfps_region') {
-            map.setView(e.latlng, 8);
-          } else {
-            map.setView(e.latlng, 11);
-          }
-        } else {
-          updateSelectedGeographicFeature('');
-        }
-      });
-
-      // add new data layer to map
-      newDataLayer.addTo(map);
-
-      // updated/new layer
-      if (selectedGeographicFeature) {
-        const highlightedStyle = {
-          ...getFeatureStyle(
-            mapType,
-            data,
-            colorScale,
-            geography,
-            year,
-            selectedGeographicFeature,
-            observedFeature,
-            maltreatmentTypes,
-            unit
-          ),
-          color: 'black',
-          weight: 2.0,
-          stroke: true,
-        };
-        newDataLayer.setFeatureStyle(
-          selectedGeographicFeature,
-          highlightedStyle
-        );
-      }
-
-      refDataLayer.current = newDataLayer;
-
-      // ensure that texas outline is on top
-      texasOutlineLayer.bringToFront();
-    }
-  }, [
-    data,
-    colorScale,
-    mapType,
-    geography,
-    observedFeature,
-    maltreatmentTypes,
-    year,
-    unit,
-    layersControl,
-    map,
-  ]);
+  }, [map, data, selection.selectedGeographicFeature]);
 
   return <div className={styles['map']} ref={(el) => (mapContainer = el)} />;
 }
 
 MainMap.propTypes = {
-  mapType: PropTypes.string.isRequired,
-  geography: PropTypes.string.isRequired,
-  maltreatmentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  observedFeature: PropTypes.string.isRequired,
-  year: PropTypes.string.isRequired,
-  unit: PropTypes.string.isRequired,
-  selectedGeographicFeature: PropTypes.string.isRequired,
   setSelectedGeographicFeature: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
