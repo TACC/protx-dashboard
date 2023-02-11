@@ -65,7 +65,7 @@ To create these pages/snippets:
 * Login to CMS Admin > Snippets
 * Add Snippet > [Paste in that code and name it "Data and Analysis"] > Save Snippet
 * Navigate to CMS Admin > Pages
-* Add Page (ex. "Data and Analysis")
+* Add Page (ex. "Data and Analysis" with slug of "data-analysis")
 * In the new Page, add a Text element (in the structure view)
 * Edit the new Text Element, select “Snippet” from the CMS dropdown options, and choose the “Data and Analysis” snippet you created.
 * Save and publish the Page.
