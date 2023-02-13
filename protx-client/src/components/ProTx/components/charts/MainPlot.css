@@ -11,3 +11,11 @@
     text-align: center;
     font-weight: 700;
 }
+.main-plot * {
+    font-family: var(--font-type-roboto-condensed);
+}
+.main-plot {
+    margin: 0 1vw;
+    width: 96%;
+    height: 100%;
+}
