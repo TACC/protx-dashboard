@@ -8,8 +8,9 @@ import AnalyticsStateDistribution from './AnalyticsStateDistribution';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
-import './MainChart.css';
+import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
+
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
@@ -136,7 +137,7 @@ function MainChart({ data, showInstructions }) {
             selectedGeographicFeature={selection.selectedGeographicFeature}
             data={data}
           />
-          <MainPlot plotState={plotState} />
+          <MainPlot plotState={plotState} className={styles['demographics-plot']} />
           {!protxDemographicsDistribution.loading && (
             <ChartInstructions currentReportType="hidden" />
           )}
