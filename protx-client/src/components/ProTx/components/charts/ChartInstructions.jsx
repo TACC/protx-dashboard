@@ -35,8 +35,7 @@ function ChartInstructions({ currentReportType }) {
     },
     footer: 'Footer content for the current tool (if any).',
   };
-
-  if (currentReportType === 'demographics') {
+  if (currentReportType === 'demographics' || currentReportType === 'observedFeatures') {
     instructions.type = 'demographics';
     instructions.title = 'Demographics Data Reporting Tool Instructions';
     instructions.description =
