@@ -4,7 +4,6 @@ import Plot from 'react-plotly.js';
 import './MainPlot.css';
 import styles from './MainPlot.module.scss';
 
-
 function MainPlot({ plotState, className }) {
   return (
     <Plot

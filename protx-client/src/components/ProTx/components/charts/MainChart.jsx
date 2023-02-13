@@ -11,7 +11,6 @@ import MainPlot from './MainPlot';
 import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 
-
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
   const dispatch = useDispatch();
@@ -137,7 +136,10 @@ function MainChart({ data, showInstructions }) {
             selectedGeographicFeature={selection.selectedGeographicFeature}
             data={data}
           />
-          <MainPlot plotState={plotState} className={styles['demographics-plot']} />
+          <MainPlot
+            plotState={plotState}
+            className={styles['demographics-plot']}
+          />
           {!protxDemographicsDistribution.loading && (
             <ChartInstructions currentReportType="hidden" />
           )}
