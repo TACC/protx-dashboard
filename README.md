@@ -86,10 +86,10 @@ In Django CMS admin (i.e. https://cep.test/admin/`), you need to create a page  
 * Navigate to the newly created data-and-analysis page as CMS Admin.
 * In the Structure View (CMS toolbar, top right), under the `CONTENT` section, click the plus to add a new plugin and select a `Text` element.
 * Edit the newly added Text Element under the content section.
-* Select “Snippet” from the `CMS plugins` dropdown menu options in the text .editor window, then select the `Data and Analysis` snippet.
+* Select “Snippet” from the `CMS plugins` dropdown menu options in the text editor window, then select the `Data and Analysis` snippet.
 * Save the editor window and close it.
 * Publish the Page to display the changes.
-* The page will now link to the container route.
+* The page link in the navigation menu will now route to the protx container.
 
 ### Start frontend
 
