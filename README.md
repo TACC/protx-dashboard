@@ -59,7 +59,7 @@ In Django CMS admin (i.e. https://cep.test/admin/`), you need to create a page  
 ```
 <div style="margin:0; padding:0;">
     <div style="display:flex; flex-direction:column; min-height:100vh;">
-        <iframe style="border:none; flex-grow:1;" src="https://cep.test/protx/dash/analytics"></iframe>
+        <iframe style="border:none; flex-grow:1;" src="https://cep.test/protx/dash/"></iframe>
     </div>
 </div>
 ```
