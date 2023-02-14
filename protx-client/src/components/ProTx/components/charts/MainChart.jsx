@@ -119,9 +119,7 @@ function MainChart({ data, showInstructions }) {
       }
 
       if (protxDemographicsDistribution.loading) {
-        return (
-          <LoadingSpinner />
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxDemographicsDistribution.data;
@@ -161,9 +159,7 @@ function MainChart({ data, showInstructions }) {
       }
 
       if (protxMaltreatmentDistribution.loading) {
-        return (
-          <LoadingSpinner />
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxMaltreatmentDistribution.data;
