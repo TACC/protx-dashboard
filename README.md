@@ -89,7 +89,7 @@ In Django CMS admin (i.e. https://cep.test/admin/`), you need to create a page  
 * Select “Snippet” from the `CMS plugins` dropdown menu options in the text editor window, then select the `Data and Analysis` snippet.
 * Save the editor window and close it.
 * Publish the Page to display the changes.
-* The page link in the navigation menu will now route to the protx container.
+* The link in the navigation menu will now route the user to the page with the embedded protx container iframe.
 
 ### Start frontend
 
