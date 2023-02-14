@@ -1,3 +1,15 @@
+.data-error-message {
+  margin: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-blood-orange);
+}
 .demographics-plot {
   max-height: 55vh;
+}
+.loading-spinner {
+  margin: 5%;
+  margin-top: 40%;
+  text-align: center;
+  font-weight: 700;
 }

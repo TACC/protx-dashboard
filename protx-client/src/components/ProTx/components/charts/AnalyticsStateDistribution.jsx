@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
+import styles from './MainChart.module.scss';
 import { FigureCaption } from './FigureCaption';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import './PlotDetails.css';
