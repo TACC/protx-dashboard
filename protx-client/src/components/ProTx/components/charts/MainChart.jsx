@@ -120,9 +120,7 @@ function MainChart({ data, showInstructions }) {
 
       if (protxDemographicsDistribution.loading) {
         return (
-          <div className={styles['loading-spinner']}>
-            <LoadingSpinner />
-          </div>
+          <LoadingSpinner />
         );
       }
 
@@ -164,9 +162,7 @@ function MainChart({ data, showInstructions }) {
 
       if (protxMaltreatmentDistribution.loading) {
         return (
-          <div className={styles['loading-spinner']}>
-            <LoadingSpinner />
-          </div>
+          <LoadingSpinner />
         );
       }
 
