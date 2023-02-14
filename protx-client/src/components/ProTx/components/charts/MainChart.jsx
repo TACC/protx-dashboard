@@ -112,7 +112,7 @@ function MainChart({ data, showInstructions }) {
     if (selection.selectedGeographicFeature && selection.observedFeature) {
       if (protxDemographicsDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
