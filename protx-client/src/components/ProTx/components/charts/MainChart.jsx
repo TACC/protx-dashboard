@@ -120,7 +120,7 @@ function MainChart({ data, showInstructions }) {
 
       if (protxDemographicsDistribution.loading) {
         return (
-          <div className="loading-spinner">
+          <div className={styles['loading-spinner']}>
             <LoadingSpinner />
           </div>
         );
@@ -156,7 +156,7 @@ function MainChart({ data, showInstructions }) {
     ) {
       if (protxMaltreatmentDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
@@ -164,7 +164,7 @@ function MainChart({ data, showInstructions }) {
 
       if (protxMaltreatmentDistribution.loading) {
         return (
-          <div className="loading-spinner">
+          <div className={styles['loading-spinner']}>
             <LoadingSpinner />
           </div>
         );
