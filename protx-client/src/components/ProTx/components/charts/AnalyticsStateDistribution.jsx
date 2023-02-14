@@ -5,7 +5,7 @@ import { LoadingSpinner } from '_common';
 import MainPlot from './MainPlot';
 import { FigureCaption } from './FigureCaption';
 import { getSelectedGeographyName } from '../shared/dataUtils';
-import './PlotDetails.css';
+import styles from './AnalyticsStateDistribution.module.scss';
 
 function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
 
   if (chartData.error || analytics.error) {
     return (
-      <div className="data-error-message">
+      <div className={styles['data-error-message']}>
         There was a problem loading the data.
       </div>
     );
@@ -42,7 +42,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
 
   if (chartData.loading || (selectedGeographicFeature && analytics.loading)) {
     return (
-      <div className="loading-spinner">
+      <div className={styles['loading-spinner']}>
         <LoadingSpinner />
       </div>
     );

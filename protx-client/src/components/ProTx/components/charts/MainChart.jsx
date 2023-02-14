@@ -112,18 +112,14 @@ function MainChart({ data, showInstructions }) {
     if (selection.selectedGeographicFeature && selection.observedFeature) {
       if (protxDemographicsDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
       }
 
       if (protxDemographicsDistribution.loading) {
-        return (
-          <div className="loading-spinner">
-            <LoadingSpinner />
-          </div>
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxDemographicsDistribution.data;
@@ -156,18 +152,14 @@ function MainChart({ data, showInstructions }) {
     ) {
       if (protxMaltreatmentDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
       }
 
       if (protxMaltreatmentDistribution.loading) {
-        return (
-          <div className="loading-spinner">
-            <LoadingSpinner />
-          </div>
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxMaltreatmentDistribution.data;
