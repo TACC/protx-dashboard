@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
-// import './MainPlot.css';
 import styles from './MainPlot.module.scss';
 
 function MainPlot({ plotState, className }) {
