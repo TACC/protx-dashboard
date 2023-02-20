@@ -16,3 +16,10 @@
     width: 100%;
 
 }
+.main-chart-title-text-annotation {  
+  margin: 0 0 0 0.5vw;
+  font-style: oblique;
+  color: var(--color-gray);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-heavy);
+}

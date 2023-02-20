@@ -84,9 +84,10 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
       <div className="plot-details">
         <div className="plot-details-section">
         <div className="plot-details-section-selected">
+          <div className='feature-table-chart-title'>
             <span className="plot-details-section-selected-label">
           Definition of Risk Levels</span>
-          <span className="plot-details-section-selected-annotation"> (Figure 1)</span>
+          <span className="main-chart-title-text-annotation">(Figure 1)</span></div>
         </div>
         </div>
     <MainPlot plotState={chartData.data} />

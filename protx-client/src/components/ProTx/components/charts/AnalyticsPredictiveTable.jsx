@@ -77,7 +77,7 @@ function AnalyticsPredictiveTable({ geography, selectedGeographicFeature }) {
     return (
       <div className="feature-table-chart-title">
         {' '}
-        Top Three Maltreatment Factors for {countyName} County
+        Top Factors for {countyName} County
         <span className="feature-table-chart-subtitle">({chartSubtitle})</span>
       </div>
     );
