@@ -80,22 +80,20 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   return (
-    <>
-      <div className="plot-details">
-        <div className="plot-details-section">
-        <div className="plot-details-section-selected">
-          <div className='feature-table-chart-title'>
-            <span className="plot-details-section-selected-label">
-          Definition of Risk Levels</span>
-          <span className="main-chart-title-text-annotation">(Figure 1)</span></div>
+    <div className="maltreatment-types-plot-layout">
+      <div className="feature-table">
+        <div className="feature-table-chart-selection">
+          <div className="feature-table-chart-title">
+            Definition of Risk Levels
+            <span className="feature-table-chart-subtitle">(Figure 1)</span>
+          </div>
         </div>
-        </div>
-    <MainPlot plotState={chartData.data} />
-    <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
-      {plotCaptionJSX}
-    </FigureCaption>
-  </div>
-</>
+      </div>
+      <MainPlot plotState={chartData.data} />
+      <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
+        {plotCaptionJSX}
+      </FigureCaption>
+    </div>
 
   );
 }
