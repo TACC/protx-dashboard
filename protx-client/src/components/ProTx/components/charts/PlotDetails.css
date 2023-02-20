@@ -21,6 +21,10 @@
   font-size: calc(var(--font-size-normal) * 1.3);
   font-weight: var(--font-weight-heavy);
 }
+.plot-details-section-selected-annotation {
+  font-weight: var(--font-weight-light);
+  font-style: italic;
+}
 .plot-details-section-selected-value-list {
   margin-left: 1rem;
   font-size: var(--font-size-normal);

@@ -79,14 +79,11 @@ function MainChart({ data, showInstructions }) {
         )}  County`
       : 'Texas Statewide Data';
     return (
-      <div className="analytics-types-plot-layout">
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {plotDetailSectionTitle}
-            </span>
-          </div>
-        </div>
+
+      <div className="main-chart">
+        <span className='main-chart-title'>
+          <span className='main-chart-title-text'>
+              {plotDetailSectionTitle}</span></span>
         <AnalyticsStateDistribution
           geography={selection.geography}
           selectedGeographicFeature={selection.selectedGeographicFeature}
@@ -96,7 +93,7 @@ function MainChart({ data, showInstructions }) {
             geography={selection.geography}
             selectedGeographicFeature={selection.selectedGeographicFeature}
           />
-        )}
+        )}      
 
         <ChartInstructions
           currentReportType={
