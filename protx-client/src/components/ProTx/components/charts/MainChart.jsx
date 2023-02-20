@@ -93,7 +93,7 @@ function MainChart({ data, showInstructions }) {
             geography={selection.geography}
             selectedGeographicFeature={selection.selectedGeographicFeature}
           />
-        )}      
+        )}
 
         <ChartInstructions
           currentReportType={
