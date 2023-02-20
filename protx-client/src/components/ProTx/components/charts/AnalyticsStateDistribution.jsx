@@ -94,7 +94,6 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
         {plotCaptionJSX}
       </FigureCaption>
     </div>
-
   );
 }
 
