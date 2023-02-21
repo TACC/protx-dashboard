@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
@@ -6,6 +6,8 @@ import MainPlot from './MainPlot';
 import { FigureCaption } from './FigureCaption';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import styles from './AnalyticsStateDistribution.module.scss';
+import CommunityCharacteristics from '../modals/CommunityCharacteristics';
+import { Button } from 'reactstrap';
 
 function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   const dispatch = useDispatch();
@@ -15,6 +17,9 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   const analytics = useSelector((state) => state.protxAnalytics);
+
+  const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
+  useState(false);
 
   let countyName;
   if (selectedGeographicFeature) {
@@ -49,8 +54,28 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   }
 
   let conditionalCaptionJSX;
+  let communityCharacteristics;
 
   if (selectedGeographicFeature) {
+    communityCharacteristics = (
+    <>
+      <div className={styles['main-chart-title']}>
+        <Button
+          className={styles.link}
+          color="link"
+          onClick={() => setShowCommunityCharacteristics(true)}
+          > View County Characteristics
+        </Button>
+        <CommunityCharacteristics
+          isOpen={showCommunityCharacteristics}
+          toggle={() => setShowCommunityCharacteristics(false)}
+          geography={geography}
+          selectedGeographicFeature={selectedGeographicFeature}
+          geographyLabel={`${countyName} County`}
+        />
+      </div>
+    </>
+  );
     if (analytics.data.pred_per_100k) {
       conditionalCaptionJSX = (
         <>
@@ -69,6 +94,9 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
       );
     }
   }
+  else {
+    communityCharacteristics = '';
+  }
 
   const plotCaptionJSX = (
     <>
@@ -80,7 +108,8 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   return (
-    <div className="maltreatment-types-plot-layout">
+    <div>
+      {communityCharacteristics}
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
