@@ -8,7 +8,7 @@ import AnalyticsStateDistribution from './AnalyticsStateDistribution';
 import DemographicsDetails from './DemographicsDetails';
 import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
-import './MainChart.css';
+import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 
 function MainChart({ data, showInstructions }) {
@@ -109,18 +109,14 @@ function MainChart({ data, showInstructions }) {
     if (selection.selectedGeographicFeature && selection.observedFeature) {
       if (protxDemographicsDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
       }
 
       if (protxDemographicsDistribution.loading) {
-        return (
-          <div className="loading-spinner">
-            <LoadingSpinner />
-          </div>
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxDemographicsDistribution.data;
@@ -133,7 +129,10 @@ function MainChart({ data, showInstructions }) {
             selectedGeographicFeature={selection.selectedGeographicFeature}
             data={data}
           />
-          <MainPlot plotState={plotState} />
+          <MainPlot
+            plotState={plotState}
+            className={styles['demographics-plot']}
+          />
           {!protxDemographicsDistribution.loading && (
             <ChartInstructions currentReportType="hidden" />
           )}
@@ -150,18 +149,14 @@ function MainChart({ data, showInstructions }) {
     ) {
       if (protxMaltreatmentDistribution.error) {
         return (
-          <div className="data-error-message">
+          <div className={styles['data-error-message']}>
             There was a problem loading the data.
           </div>
         );
       }
 
       if (protxMaltreatmentDistribution.loading) {
-        return (
-          <div className="loading-spinner">
-            <LoadingSpinner />
-          </div>
-        );
+        return <LoadingSpinner />;
       }
 
       const plotState = protxMaltreatmentDistribution.data;
