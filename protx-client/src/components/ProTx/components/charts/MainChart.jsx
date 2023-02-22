@@ -80,9 +80,9 @@ function MainChart({ data, showInstructions }) {
       : 'Texas Statewide Data';
     return (
 
-      <div className="main-chart">
-        <span className='main-chart-title'>
-          <span className='main-chart-title-text'>
+      <div className={styles["main-chart"]}>
+        <span className={styles['main-chart-title']}>
+          <span className={styles['main-chart-title-text']}>
               {plotDetailSectionTitle}</span></span>
         <AnalyticsStateDistribution
           geography={selection.geography}
