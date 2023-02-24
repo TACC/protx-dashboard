@@ -119,20 +119,21 @@ def test_get_resources_setup_complete_false(test_client, core_api_workbench_requ
 
 @pytest.mark.skipif(missing_database_directory(), reason="requires database directory or to-be-done database fixtures")
 def test_get_resources_download(test_client, core_api_workbench_request):
-    resp = test_client.get('/protx/api/download/county/48143/?naicsCode=9999')
+
+    resp = test_client.get('/protx/api/download/county/48055/?selectedCategory=Child%20%26%20Youth%20Services&selectedCategory=DFPS%20Locations')
     assert resp.status_code == 200
-    assert resp.headers['Content-Disposition'].startswith("attachment; filename=\"Erath_county_resources")
+    assert resp.headers['Content-Disposition'].startswith("attachment; filename=\"Caldwell_county_resources")
     assert resp.headers['Content-Disposition'].endswith('.csv\"')
-    assert resp.get_data(as_text=True).startswith("NAME,STREET,CITY,STATE,POSTAL_CODE,PHONE,WEBSITE,NAICS_CODE,NAICS_DESCRIPTION")
+    assert resp.get_data(as_text=True).startswith("NAME,STREET,CITY,STATE,POSTAL_CODE,PHONE,WEBSITE,NAICS_CODE,FULL_NAICS_CODE,DETAILED_DESCRIPTION,Main_Description")
 
 
 def test_get_resources_download_unauthed(test_client, core_api_workbench_request_unauthed):
-    resp = test_client.get('/protx/api/download/county/48143/?naicsCode=9999')
+    resp = test_client.get('/protx/api/download/county/48143/?selectedCategory=DFPS%20Locations')
     assert resp.status_code == 403
 
 
 def test_get_resources_download_setup_complete_false(test_client, core_api_workbench_request_setup_complete_false):
-    resp = test_client.get('/protx/api/download/county/48143/?naicsCode=9999')
+    resp = test_client.get('/protx/api/download/county/48143/?selectedCategory=DFPS%20Locations')
     assert resp.status_code == 403
 
 

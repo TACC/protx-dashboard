@@ -9,28 +9,34 @@ from flask import abort, Response
 from protx.utils.db import SQLALCHEMY_RESOURCES_DATABASE_URL
 
 
-def get_resources_and_display(naics_codes=None):
+def get_resources(selected_categories=None):
     """
-    Get resources and related metadata
+    Get resources from database, filtering out null latitude and longitude values.
 
-    if naics_codes, then limit the resources returned to those
-    that have a NAICS_CODE in naics_codes
+    A result set containing the following fields:
+    - All fields from the 'business_locations' table.
+    - 'DETAILED_DESCRIPTION' field from the 'detailed_menu' table (i.e our main category)
+    - 'Main_Description' field from the 'detailed_menu' table (i.e. our secondary category)
+    -
+
+    Args:
+        selected_categories: if provided, then limit to resources with Main_Description matching selected_categories
     """
+
     engine = create_engine(SQLALCHEMY_RESOURCES_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
-        resource_query = "SELECT * FROM business_locations"
-        if naics_codes:
-            resource_query += " r WHERE r.NAICS_CODE IN ({})".format(
-                ','.join(['"{}"'.format(code) for code in naics_codes]))
+        resource_query = "SELECT bl.*, dm.DETAILED_DESCRIPTION, dm.Main_Description" \
+                         " FROM business_locations bl" \
+                         " JOIN detailed_menu dm ON bl.FULL_NAICS_CODE = dm.FULL_NAICS_CODE " \
+                         "WHERE bl.LATITUDE IS NOT NULL AND bl.LONGITUDE IS NOT NULL "
+        if selected_categories:
+            resource_query += "AND dm.Main_Description IN ({})".format(
+                ','.join(['"{}"'.format(code) for code in selected_categories]))
         resources = connection.execute(resource_query)
         resources_result = []
         for r in resources:
             resources_result.append(dict(r))
-        meta = connection.execute("SELECT * FROM business_menu")
-        display_result = []
-        for m in meta:
-            display_result.append(dict(m))
-    return resources_result, display_result
+    return resources_result
 
 
 class Echo:
@@ -41,9 +47,10 @@ class Echo:
         return value
 
 
-def download_resources(naics_codes, area, geoid):
+def download_resources(selected_categories, area, geoid):
     """Get resources csv"""
-    download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "NAICS_CODE"]
+    download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "NAICS_CODE",
+                       "FULL_NAICS_CODE", "DETAILED_DESCRIPTION", "Main_Description"]
     supported_areas = {"county": {"table": "texas_counties", "geo_identifier": "geo_id", "name": "name"},
                        "tract": {"table": "census_tracts_2019", "geo_identifier": "geoid", "name": "name"},
                        "dfps_region": {"table": "dfps_regions", "geo_identifier": "sheet1__re", "name": "sheet1__re"}}
@@ -65,11 +72,9 @@ def download_resources(naics_codes, area, geoid):
 
     def generate_csv_rows():
         # header row
-        yield download_fields + ["NAICS_DESCRIPTION"]
+        yield download_fields
 
-        resources_result, display_result = get_resources_and_display(naics_codes=naics_codes)
-
-        naics_to_description = {d["NAICS_CODE"]: d["DESCRIPTION"] for d in display_result}
+        resources_result = get_resources(selected_categories=selected_categories)
 
         for r in resources_result:
             long = r["LONGITUDE"]
@@ -77,7 +82,7 @@ def download_resources(naics_codes, area, geoid):
             if lat and long:  # some resources are missing position
                 point = shapely.geometry.Point(long, lat)
                 if area_dataframe.contains(point).any():
-                    row = [r[key] for key in download_fields] + [naics_to_description[r["NAICS_CODE"]]]
+                    row = [r[key] for key in download_fields]
                     yield row
 
     pseudo_buffer = Echo()

@@ -30,13 +30,13 @@ function DashboardDisplay() {
 
   const handleDownloadResources = () => {
     if (map && resourceLayers) {
-      const selectedResourcesNaicsCode = resourceLayers
+      const selectedCategories = resourceLayers
         .filter((r) => {
           return map.hasLayer(r.layer);
         })
-        .map((r) => r.naicsCode);
+        .map((r) => r.label);
       const typeQuery = stringify({
-        naicsCode: selectedResourcesNaicsCode,
+        selectedCategory: selectedCategories,
       });
 
       let downloadResourceHref = `/protx/api/download/${selection.geography}/${selection.selectedGeographicFeature}/`;

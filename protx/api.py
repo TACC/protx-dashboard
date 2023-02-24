@@ -44,8 +44,8 @@ class Demographics(Resource):
 class DownloadResources(Resource):
     @api.doc("get_resources")
     def get(self, area, geoid):
-        naics_codes = request.args.getlist("naicsCode")
-        return resources.download_resources(naics_codes=naics_codes, area=area, geoid=geoid)
+        selected_categories = request.args.getlist("selectedCategory")
+        return resources.download_resources(selected_categories=selected_categories, area=area, geoid=geoid)
 
 
 @onboarded_user_required
@@ -242,5 +242,5 @@ def get_demographics_cached_and_compressed():
 def get_resources_cached_and_compressed():
     """Get resources data as compressed json string
     """
-    resources_result, display_result = resources.get_resources_and_display()
-    return {"resources": resources_result, "display": display_result}
+    resources_result = resources.get_resources()
+    return {"resources": resources_result}
