@@ -16,21 +16,21 @@ def get_resources(selected_categories=None):
     A result set containing the following fields:
     - All fields from the 'business_locations' table.
     - 'DETAILED_DESCRIPTION' field from the 'detailed_menu' table (i.e our main category)
-    - 'Main_Description' field from the 'detailed_menu' table (i.e. our secondary category)
+    - 'MAIN_DESCRIPTION' field from the 'detailed_menu' table (i.e. our secondary category)
     -
 
     Args:
-        selected_categories: if provided, then limit to resources with Main_Description matching selected_categories
+        selected_categories: if provided, then limit to resources with MAIN_DESCRIPTION matching selected_categories
     """
 
     engine = create_engine(SQLALCHEMY_RESOURCES_DATABASE_URL, connect_args={'check_same_thread': False})
     with engine.connect() as connection:
-        resource_query = "SELECT bl.*, dm.DETAILED_DESCRIPTION, dm.Main_Description" \
+        resource_query = "SELECT bl.*, dm.DETAILED_DESCRIPTION, dm.MAIN_DESCRIPTION" \
                          " FROM business_locations bl" \
                          " JOIN detailed_menu dm ON bl.FULL_NAICS_CODE = dm.FULL_NAICS_CODE " \
                          "WHERE bl.LATITUDE IS NOT NULL AND bl.LONGITUDE IS NOT NULL "
         if selected_categories:
-            resource_query += "AND dm.Main_Description IN ({})".format(
+            resource_query += "AND dm.MAIN_DESCRIPTION IN ({})".format(
                 ','.join(['"{}"'.format(code) for code in selected_categories]))
         resources = connection.execute(resource_query)
         resources_result = []
@@ -50,7 +50,7 @@ class Echo:
 def download_resources(selected_categories, area, geoid):
     """Get resources csv"""
     download_fields = ["NAME", "STREET", "CITY", "STATE", "POSTAL_CODE", "PHONE", "WEBSITE", "NAICS_CODE",
-                       "FULL_NAICS_CODE", "DETAILED_DESCRIPTION", "Main_Description"]
+                       "FULL_NAICS_CODE", "DETAILED_DESCRIPTION", "MAIN_DESCRIPTION"]
     supported_areas = {"county": {"table": "texas_counties", "geo_identifier": "geo_id", "name": "name"},
                        "tract": {"table": "census_tracts_2019", "geo_identifier": "geoid", "name": "name"},
                        "dfps_region": {"table": "dfps_regions", "geo_identifier": "sheet1__re", "name": "sheet1__re"}}

@@ -371,8 +371,8 @@ function MainMap({
 
       const resourcesClusterGroups = {};
       resources.forEach((point) => {
-        if (!(point.Main_Description in resourcesClusterGroups)) {
-          resourcesClusterGroups[point.Main_Description] = L.markerClusterGroup(
+        if (!(point.MAIN_DESCRIPTION in resourcesClusterGroups)) {
+          resourcesClusterGroups[point.MAIN_DESCRIPTION] = L.markerClusterGroup(
             {
               showCoverageOnHover: false,
             }
@@ -414,7 +414,7 @@ function MainMap({
 
         const popupContent = popupContentAssemblage;
         marker.bindPopup(popupContent);
-        resourcesClusterGroups[point.Main_Description].addLayers(marker);
+        resourcesClusterGroups[point.MAIN_DESCRIPTION].addLayers(marker);
       });
 
       const newResourceLayers = [];
