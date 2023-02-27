@@ -43,7 +43,6 @@ function MainMap({
   const dataServer = window.location.origin;
   const selection = useSelector((state) => state.protxSelection);
   const resources = useSelector((state) => state.protx.data.resources);
-  const resourcesMeta = useSelector((state) => state.protx.data.resourcesMeta);
 
   // Leaflet related layers, controls, and map
   const [legendControl, setLegendControl] = useState(null);
