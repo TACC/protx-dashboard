@@ -124,7 +124,8 @@ def test_get_resources_download(test_client, core_api_workbench_request):
     assert resp.status_code == 200
     assert resp.headers['Content-Disposition'].startswith("attachment; filename=\"Caldwell_county_resources")
     assert resp.headers['Content-Disposition'].endswith('.csv\"')
-    assert resp.get_data(as_text=True).startswith("NAME,STREET,CITY,STATE,POSTAL_CODE,PHONE,WEBSITE,NAICS_CODE,FULL_NAICS_CODE,DETAILED_DESCRIPTION,Main_Description")
+    assert resp.get_data(as_text=True).startswith(
+        "NAME,STREET,CITY,STATE,POSTAL_CODE,PHONE,WEBSITE,NAICS_CODE,FULL_NAICS_CODE,DETAILED_DESCRIPTION,Main_Description")
 
 
 def test_get_resources_download_unauthed(test_client, core_api_workbench_request_unauthed):
