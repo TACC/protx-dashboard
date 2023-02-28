@@ -387,7 +387,13 @@ function MainMap({
         if (point.NAME !== null) {
           popupContentAssemblage += `<div class="marker-popup-name">${point.NAME}</div>`;
         }
-        if (point.HOVER_DESCRIPTION !== null) {
+        if (point.MAIN_DESCRIPTION) {
+          popupContentAssemblage += `<div class="marker-popup-description">${point.MAIN_DESCRIPTION}</div>`;
+        }
+        if (point.DETAILED_DESCRIPTION && point.DETAILED_DESCRIPTION !== point.MAIN_DESCRIPTION) {
+          popupContentAssemblage += `<div class="marker-popup-description">${point.DETAILED_DESCRIPTION}</div>`;
+        }
+        if (point.HOVER_DESCRIPTION && point.HOVER_DESCRIPTION !== point.DETAILED_DESCRIPTION) {
           popupContentAssemblage += `<div class="marker-popup-description">${point.HOVER_DESCRIPTION}</div>`;
         }
         if (point.STREET !== null) {
