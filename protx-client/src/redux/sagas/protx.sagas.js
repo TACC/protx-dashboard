@@ -43,7 +43,6 @@ export function* fetchProtx(action) {
         texasBoundary,
         display,
         resources: resources.resources,
-        resourcesMeta: resources.display,
         analytics: analytics.result,
       },
     });

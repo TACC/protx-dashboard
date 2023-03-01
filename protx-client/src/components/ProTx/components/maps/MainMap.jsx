@@ -43,7 +43,6 @@ function MainMap({
   const dataServer = window.location.origin;
   const selection = useSelector((state) => state.protxSelection);
   const resources = useSelector((state) => state.protx.data.resources);
-  const resourcesMeta = useSelector((state) => state.protx.data.resourcesMeta);
 
   // Leaflet related layers, controls, and map
   const [legendControl, setLegendControl] = useState(null);
@@ -87,7 +86,7 @@ function MainMap({
         currentLayerControl.expand();
         refResourceLayers.current.forEach((resourceLayer) => {
           if (
-            resourceLayer.label === 'Child and Youth Services' ||
+            resourceLayer.label === 'Child & Youth Services' ||
             resourceLayer.label === 'DFPS Locations'
           ) {
             currentMap.addLayer(resourceLayer.layer);
@@ -371,93 +370,83 @@ function MainMap({
       }
 
       const resourcesClusterGroups = {};
-      resources
-        .filter((point) => {
-          return point.LATITUDE && point.LONGITUDE;
-        })
-        .forEach((point) => {
-          if (!(point.NAICS_CODE in resourcesClusterGroups)) {
-            resourcesClusterGroups[point.NAICS_CODE] = L.markerClusterGroup({
+      resources.forEach((point) => {
+        if (!(point.MAIN_DESCRIPTION in resourcesClusterGroups)) {
+          resourcesClusterGroups[point.MAIN_DESCRIPTION] = L.markerClusterGroup(
+            {
               showCoverageOnHover: false,
-            });
-          }
+            }
+          );
+        }
 
-          const marker = L.marker(L.latLng(point.LATITUDE, point.LONGITUDE), {
-            title: point.NAME,
-          });
-
-          let popupContentAssemblage = `<div class="marker-popup-content">`;
-          if (point.NAME !== null) {
-            popupContentAssemblage += `<div class="marker-popup-name">${point.NAME}</div>`;
-          }
-          if (point.HOVER_DESCRIPTION !== null) {
-            popupContentAssemblage += `<div class="marker-popup-description">${point.HOVER_DESCRIPTION}</div>`;
-          }
-          if (point.STREET !== null) {
-            popupContentAssemblage += `<div class="marker-popup-street">${point.STREET}</div>`;
-          }
-          popupContentAssemblage += `<div class="marker-popup-location">`;
-          if (point.CITY !== null) {
-            popupContentAssemblage += `${point.CITY}, `;
-          }
-          if (point.STATE !== null) {
-            popupContentAssemblage += `${point.STATE}, `;
-          }
-          if (point.POSTAL_CODE !== null) {
-            popupContentAssemblage += `${point.POSTAL_CODE}`;
-          }
-          popupContentAssemblage += `</div>`;
-          if (point.PHONE !== null) {
-            popupContentAssemblage += `<div class="marker-popup-phone">${point.PHONE}</div>`;
-          }
-          if (point.WEBSITE !== null) {
-            popupContentAssemblage += `<div class="marker-popup-website"><a href="${point.WEBSITE}" target="_blank">website</a></div>`;
-          }
-          popupContentAssemblage += `</div>`;
-
-          const popupContent = popupContentAssemblage;
-          marker.bindPopup(popupContent);
-          resourcesClusterGroups[point.NAICS_CODE].addLayers(marker);
+        const marker = L.marker(L.latLng(point.LATITUDE, point.LONGITUDE), {
+          title: point.NAME,
         });
+
+        let popupContentAssemblage = `<div class="marker-popup-content">`;
+        if (point.NAME !== null) {
+          popupContentAssemblage += `<div class="marker-popup-name">${point.NAME}</div>`;
+        }
+        if (point.MAIN_DESCRIPTION) {
+          popupContentAssemblage += `<div class="marker-popup-description">${point.MAIN_DESCRIPTION}</div>`;
+        }
+        if (
+          point.DETAILED_DESCRIPTION &&
+          point.DETAILED_DESCRIPTION !== point.MAIN_DESCRIPTION
+        ) {
+          popupContentAssemblage += `<div class="marker-popup-description">${point.DETAILED_DESCRIPTION}</div>`;
+        }
+        if (
+          point.HOVER_DESCRIPTION &&
+          point.HOVER_DESCRIPTION !== point.DETAILED_DESCRIPTION
+        ) {
+          popupContentAssemblage += `<div class="marker-popup-description">${point.HOVER_DESCRIPTION}</div>`;
+        }
+        if (point.STREET !== null) {
+          popupContentAssemblage += `<div class="marker-popup-street">${point.STREET}</div>`;
+        }
+        popupContentAssemblage += `<div class="marker-popup-location">`;
+        if (point.CITY !== null) {
+          popupContentAssemblage += `${point.CITY}, `;
+        }
+        if (point.STATE !== null) {
+          popupContentAssemblage += `${point.STATE}, `;
+        }
+        if (point.POSTAL_CODE !== null) {
+          popupContentAssemblage += `${point.POSTAL_CODE}`;
+        }
+        popupContentAssemblage += `</div>`;
+        if (point.PHONE !== null) {
+          popupContentAssemblage += `<div class="marker-popup-phone">${point.PHONE}</div>`;
+        }
+        if (point.WEBSITE !== null) {
+          popupContentAssemblage += `<div class="marker-popup-website"><a href="${point.WEBSITE}" target="_blank">website</a></div>`;
+        }
+        popupContentAssemblage += `</div>`;
+
+        const popupContent = popupContentAssemblage;
+        marker.bindPopup(popupContent);
+        resourcesClusterGroups[point.MAIN_DESCRIPTION].addLayers(marker);
+      });
 
       const newResourceLayers = [];
       const currentZoom = map.getZoom();
 
-      const resourcesClusterGroupsSorted = Object.keys(
-        resourcesClusterGroups
-      ).sort((a, b) => {
-        const matchingMetaA = resourcesMeta.find(
-          (r) => r.NAICS_CODE === parseInt(a, 10)
-        );
-
-        const matchingMetaB = resourcesMeta.find(
-          (r) => r.NAICS_CODE === parseInt(b, 10)
-        );
-
-        return matchingMetaA.DESCRIPTION.localeCompare(
-          matchingMetaB.DESCRIPTION
-        );
-      });
-
-      resourcesClusterGroupsSorted.forEach((naicsCode) => {
-        const markersClusterGroup = resourcesClusterGroups[naicsCode];
-        const matchingMeta = resourcesMeta.find(
-          (r) => r.NAICS_CODE === parseInt(naicsCode, 10)
-        );
-        const layerLabel = matchingMeta
-          ? matchingMeta.DESCRIPTION
-          : `Unknown Resource (${naicsCode})`;
-        layersControl.addOverlay(markersClusterGroup, layerLabel);
-        if (currentZoom >= RESOURCE_ZOOM_LEVEL) {
-          // we would only want to add to map (i.e. selection is ON) if zoomed in
-          map.addLayer(markersClusterGroup);
-        }
-        newResourceLayers.push({
-          naicsCode,
-          label: layerLabel,
-          layer: markersClusterGroup,
+      Object.keys(resourcesClusterGroups)
+        .sort()
+        .forEach((mainDescription) => {
+          const markersClusterGroup = resourcesClusterGroups[mainDescription];
+          layersControl.addOverlay(markersClusterGroup, mainDescription);
+          if (currentZoom >= RESOURCE_ZOOM_LEVEL) {
+            // we would only want to add to map (i.e. selection is ON) if zoomed in
+            map.addLayer(markersClusterGroup);
+          }
+          newResourceLayers.push({
+            mainDescription,
+            label: mainDescription,
+            layer: markersClusterGroup,
+          });
         });
-      });
       updateResourceLayers(newResourceLayers);
     }
   }, [layersControl, map, resources]);
