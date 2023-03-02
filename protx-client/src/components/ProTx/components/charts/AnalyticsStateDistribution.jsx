@@ -17,10 +17,6 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   const analytics = useSelector((state) => state.protxAnalytics);
-
-  const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
-    useState(false);
-
   let countyName;
   if (selectedGeographicFeature) {
     countyName = getSelectedGeographyName(geography, selectedGeographicFeature);
@@ -54,30 +50,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   }
 
   let conditionalCaptionJSX;
-  let communityCharacteristics;
-
   if (selectedGeographicFeature) {
-    communityCharacteristics = (
-      <>
-        <div className={styles['main-chart-title']}>
-          <Button
-            className={styles.link}
-            color="link"
-            onClick={() => setShowCommunityCharacteristics(true)}
-          >
-            {' '}
-            View County Characteristics
-          </Button>
-          <CommunityCharacteristics
-            isOpen={showCommunityCharacteristics}
-            toggle={() => setShowCommunityCharacteristics(false)}
-            geography={geography}
-            selectedGeographicFeature={selectedGeographicFeature}
-            geographyLabel={`${countyName} County`}
-          />
-        </div>
-      </>
-    );
     if (analytics.data.pred_per_100k) {
       conditionalCaptionJSX = (
         <>
@@ -95,8 +68,6 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
         </span>
       );
     }
-  } else {
-    communityCharacteristics = '';
   }
 
   const plotCaptionJSX = (
@@ -108,9 +79,42 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
     </>
   );
 
+    function CommunityCharacteristicsButton({
+      countyName,
+      geography,
+      selectedGeographicFeature,
+    }) {
+      const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
+      useState(false);
+      return (
+        <>
+          <div className={styles['main-chart-title']}>
+            <Button
+              className={styles.link}
+              color="link"
+              onClick={() => setShowCommunityCharacteristics(true)}
+            >
+              {' '}
+              View County Characteristics
+            </Button>
+            <CommunityCharacteristics
+              isOpen={showCommunityCharacteristics}
+              toggle={() => setShowCommunityCharacteristics(false)}
+              geography={geography}
+              selectedGeographicFeature={selectedGeographicFeature}
+              geographyLabel={`${countyName} County`}
+            />
+          </div>
+        </>
+    )};
+
   return (
     <div>
-      {communityCharacteristics}
+      {selectedGeographicFeature && 
+        (<CommunityCharacteristicsButton 
+          geographyLabel = {countyName} 
+          geography={geography} 
+          selectedGeographicFeature={selectedGeographicFeature} />)} : {""}
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
