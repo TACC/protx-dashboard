@@ -79,42 +79,46 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
     </>
   );
 
-    function CommunityCharacteristicsButton({
-      countyName,
-      geography,
-      selectedGeographicFeature,
-    }) {
-      const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
+  function CommunityCharacteristicsButton({
+    countyName,
+    geography,
+    selectedGeographicFeature,
+  }) {
+    const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
       useState(false);
-      return (
-        <>
-          <div className={styles['main-chart-title']}>
-            <Button
-              className={styles.link}
-              color="link"
-              onClick={() => setShowCommunityCharacteristics(true)}
-            >
-              {' '}
-              View County Characteristics
-            </Button>
-            <CommunityCharacteristics
-              isOpen={showCommunityCharacteristics}
-              toggle={() => setShowCommunityCharacteristics(false)}
-              geography={geography}
-              selectedGeographicFeature={selectedGeographicFeature}
-              geographyLabel={`${countyName} County`}
-            />
-          </div>
-        </>
-    )};
+    return (
+      <>
+        <div className={styles['main-chart-title']}>
+          <Button
+            className={styles.link}
+            color="link"
+            onClick={() => setShowCommunityCharacteristics(true)}
+          >
+            {' '}
+            View County Characteristics
+          </Button>
+          <CommunityCharacteristics
+            isOpen={showCommunityCharacteristics}
+            toggle={() => setShowCommunityCharacteristics(false)}
+            geography={geography}
+            selectedGeographicFeature={selectedGeographicFeature}
+            geographyLabel={`${countyName} County`}
+          />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div>
-      {selectedGeographicFeature && 
-        (<CommunityCharacteristicsButton 
-          geographyLabel = {countyName} 
-          geography={geography} 
-          selectedGeographicFeature={selectedGeographicFeature} />)} : {""}
+      {selectedGeographicFeature && (
+        <CommunityCharacteristicsButton
+          geographyLabel={countyName}
+          geography={geography}
+          selectedGeographicFeature={selectedGeographicFeature}
+        />
+      )}{' '}
+      : {''}
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
