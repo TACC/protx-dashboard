@@ -79,14 +79,12 @@ function MainChart({ data, showInstructions }) {
         )}  County`
       : 'Texas Statewide Data';
     return (
-      <div className="analytics-types-plot-layout">
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {plotDetailSectionTitle}
-            </span>
-          </div>
-        </div>
+      <div className={styles['main-chart']}>
+        <span className={styles['main-chart-title']}>
+          <span className={styles['main-chart-title-text']}>
+            {plotDetailSectionTitle}
+          </span>
+        </span>
         <AnalyticsStateDistribution
           geography={selection.geography}
           selectedGeographicFeature={selection.selectedGeographicFeature}
