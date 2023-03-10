@@ -7,6 +7,7 @@ import styles from './CommunityCharacteristics.module.scss';
 import { LoadingSpinner, SectionMessage } from '_common/index';
 import Cookies from 'js-cookie';
 import MainPlot from '../charts/MainPlot';
+import { FigureCaption } from '../charts/FigureCaption';
 
 const getData = async (geography, geoid) => {
   const url = `/protx/api/demographics-community-characteristics-chart/${geography}/${geoid}/`;
@@ -56,10 +57,32 @@ const CommunityCharacteristics = ({
       </ModalHeader>
       <ModalBody>
         <div className={styles['modal-body-container']}>
-          <CommunityCharacteristicsChart
-            geography={geography}
-            selectedGeographicFeature={selectedGeographicFeature}
-          />
+          <div className={styles.chart}>
+            <CommunityCharacteristicsChart
+              geography={geography}
+              selectedGeographicFeature={selectedGeographicFeature}
+            />
+          </div>
+          <FigureCaption
+            label={'Figure 1.'}
+            className={styles['figure-caption']}
+          >
+            Community Characteristics for {geographyLabel}. The U.S. Census
+            follow{' '}
+            <a href="${point.WEBSITE}" className={styles.link} target="_blank">
+              standards on race and ethnicity
+            </a>{' '}
+            set by the U.S. Office of Management and Budget (OMB) in 1997. Data
+            is accumulated for Hispanic Origin and Race in two separate
+            questions. Race categories in census data are White, Black or
+            African American, American Indian or Alaska Native, Asian, and
+            Native Hawaiian or Other Pacific Islander. An additional category is
+            Some Other Race for those who do not identify as any of the previous
+            5 categories. All participants who identify with two or more of the
+            race categories are only included in the Two Or More Race category.
+            Participants can indicate that they are of a Hispanic Origin and
+            identify with any of the race categories.
+          </FigureCaption>
         </div>
       </ModalBody>
     </Modal>
