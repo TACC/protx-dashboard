@@ -609,18 +609,16 @@ test = ["fixtures", "mock", "purl", "pytest", "sphinx", "testrepository (>=0.0.1
 
 [[package]]
 name = "shapely"
-version = "2.0.1"
-description = "Manipulation and analysis of geometric objects"
+version = "1.8.5"
+description = "Geometric objects, predicates, and operations"
 category = "main"
 optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-numpy = ">=1.14"
+python-versions = ">=3.6"
 
 [package.extras]
-docs = ["numpydoc (>=1.1.0,<1.2.0)", "matplotlib", "sphinx", "sphinx-book-theme", "sphinx-remove-toctrees"]
+all = ["pytest", "pytest-cov", "numpy"]
 test = ["pytest", "pytest-cov"]
+vectorized = ["numpy"]
 
 [[package]]
 name = "six"
@@ -756,7 +754,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "f641cb3d4602bf83b16bf001b2b5bf7697b37379050ff82b86d636dca1223039"
+content-hash = "0dd8cdbd5a0db8a74c7ff2ce0c82d050c85e22a5fb9bf54962e4f544e74e0738"
 
 [metadata.files]
 aniso8601 = [
