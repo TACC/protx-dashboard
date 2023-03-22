@@ -4,12 +4,11 @@ import numpy as np
 import pandas as pd
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+from protx.utils import db
 from protx.utils.plotly_figures import timeseries_lineplot
 from protx.conf.styles import light_green_to_blue_color_palette
 from protx.log import logger
 import math
-
-db_name = '/protx-data/cooks.db'
 
 
 def currency(value1, value2):
@@ -290,7 +289,7 @@ def update_focal_area(display_dict, focal_data):
 
 
 def demographic_data_query(area, unit, variable):
-    db_conn = sqlite3.connect(db_name)
+    db_conn = sqlite3.connect(db.cooks_db)
     selection = {'area': area, 'unit': unit, 'variable': variable, 'report_type': 'demographics'}
     query = yearly_data_query.format(**selection)
     query_result = pd.read_sql_query(query, db_conn)
@@ -299,7 +298,7 @@ def demographic_data_query(area, unit, variable):
 
 
 def demographic_focal_area_data_query(area, geoid, unit, variable):
-    db_conn = sqlite3.connect(db_name)
+    db_conn = sqlite3.connect(db.cooks_db)
     selection = {'area': area, 'geoid': geoid, 'unit': unit, 'variable': variable, 'report_type': 'demographics'}
     query = focal_query.format(**selection)
     query_result = pd.read_sql_query(query, db_conn)
@@ -342,7 +341,7 @@ def get_age_race_pie_charts(area, geoid):
 
     """
 
-    db_conn = sqlite3.connect(db_name)
+    db_conn = sqlite3.connect(db.cooks_db)
 
     query = '''
     select d.DEMOGRAPHICS_NAME, d.VALUE, u.DISPLAY_TEXT

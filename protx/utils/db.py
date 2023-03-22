@@ -1,10 +1,14 @@
-from protx.utils import demographics
 from protx.log import logger
 from werkzeug.exceptions import HTTPException
+import os
+
+
+cooks_db = f'/protx-data/{os.getenv("PROTX_COOKS_DATABASE")}'
+analytics_db = f'/protx-data/{os.getenv("PROTX_ANALYTICS_DATABASE")}'
+resources_db = f'/protx-data/{os.getenv("PROTX_RESOURCES_DATABASE")}'
 
 
 # TODO: single engine for django instance.
-
 
 MALTREATMENT_QUERY = "SELECT * FROM maltreatment"
 
@@ -52,10 +56,7 @@ GROUP BY
     d.DEMOGRAPHICS_NAME;
 '''
 
-resources_db = '/protx-data/resources.db'
-analytics_db = '/protx-data/analytics.db'
-
-SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(demographics.db_name)
+SQLALCHEMY_DATABASE_URL = 'sqlite:///{}'.format(cooks_db)
 SQLALCHEMY_RESOURCES_DATABASE_URL = 'sqlite:///{}'.format(resources_db)
 SQLALCHEMY_RESOURCES_ANALYTICS_URL = 'sqlite:///{}'.format(analytics_db)
 
