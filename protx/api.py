@@ -8,10 +8,9 @@ from werkzeug.exceptions import BadRequest
 
 from protx.log import logger
 from protx.decorators import onboarded_user_required, memoize_db_results, create_compressed_json
-from protx.utils.db import (resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_ANALYTICS_URL,
+from protx.utils.db import (cooks_db, analytics_db, resources_db, create_dict, SQLALCHEMY_DATABASE_URL, SQLALCHEMY_RESOURCES_ANALYTICS_URL,
                             DEMOGRAPHICS_JSON_STRUCTURE_KEYS, DEMOGRAPHICS_QUERY, DEMOGRAPHICS_MIN_MAX_QUERY,
-                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY,
-                            analytics_db)
+                            MALTREATMENT_JSON_STRUCTURE_KEYS, MALTREATMENT_QUERY, MALTREATMENT_MIN_MAX_QUERY)
 from protx.utils import demographics, maltreatment, resources, analytics
 
 
@@ -200,7 +199,7 @@ class Resources(Resource):
         return response
 
 
-@memoize_db_results(db_file=maltreatment.db_name)
+@memoize_db_results(db_file=cooks_db)
 def get_maltreatment_cached():
     """Get maltreatment data
 
@@ -227,7 +226,7 @@ def get_demographics():
         return data, meta
 
 
-@memoize_db_results(db_file=demographics.db_name)
+@memoize_db_results(db_file=cooks_db)
 @create_compressed_json()
 def get_demographics_cached_and_compressed():
     """Get demographics data as compressed json string
