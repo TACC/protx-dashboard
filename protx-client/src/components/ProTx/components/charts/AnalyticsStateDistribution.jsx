@@ -84,29 +84,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
     geography,
     selectedGeographicFeature,
   }) {
-    const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
-      useState(false);
-    return (
-      <>
-        <div className={styles['main-chart-title']}>
-          <Button
-            className={styles.link}
-            color="link"
-            onClick={() => setShowCommunityCharacteristics(true)}
-          >
-            {' '}
-            View County Characteristics
-          </Button>
-          <CommunityCharacteristics
-            isOpen={showCommunityCharacteristics}
-            toggle={() => setShowCommunityCharacteristics(false)}
-            geography={geography}
-            selectedGeographicFeature={selectedGeographicFeature}
-            geographyLabel={`${countyName} County`}
-          />
-        </div>
-      </>
-    );
+    return <CommunityCharacteristics />;
   }
 
   return (
@@ -118,7 +96,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
           selectedGeographicFeature={selectedGeographicFeature}
         />
       )}{' '}
-      : {''}
+      {''}
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
