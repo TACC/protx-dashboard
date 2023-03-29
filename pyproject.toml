@@ -20,6 +20,7 @@ geopandas = "^0.10.2"
 psycopg2-binary = "^2.9.3"
 Werkzeug = "==2.2.3"
 setuptools = "^66.1.1"
+shapely = "1.8.5"
 
 [tool.poetry.dev-dependencies]
 pytest-mock = "^3.1.1"
