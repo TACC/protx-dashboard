@@ -6,6 +6,7 @@ import MainPlot from './MainPlot';
 import { FigureCaption } from './FigureCaption';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import styles from './AnalyticsStateDistribution.module.scss';
+import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 
 function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   const dispatch = useDispatch();
@@ -15,7 +16,6 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   const analytics = useSelector((state) => state.protxAnalytics);
-
   let countyName;
   if (selectedGeographicFeature) {
     countyName = getSelectedGeographyName(geography, selectedGeographicFeature);
@@ -49,7 +49,6 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   }
 
   let conditionalCaptionJSX;
-
   if (selectedGeographicFeature) {
     if (analytics.data.pred_per_100k) {
       conditionalCaptionJSX = (
@@ -80,7 +79,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   return (
-    <div className="maltreatment-types-plot-layout">
+    <>
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
@@ -89,11 +88,13 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
           </div>
         </div>
       </div>
-      <MainPlot plotState={chartData.data} />
-      <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
-        {plotCaptionJSX}
-      </FigureCaption>
-    </div>
+      <div>
+        <MainPlot plotState={chartData.data} />
+        <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
+          {plotCaptionJSX}
+        </FigureCaption>
+      </div>
+    </>
   );
 }
 

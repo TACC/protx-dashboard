@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LoadingSpinner } from '_common';
@@ -10,10 +10,14 @@ import MaltreatmentDetails from './MaltreatmentDetails';
 import MainPlot from './MainPlot';
 import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
+import { Button } from 'reactstrap';
+import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
   const dispatch = useDispatch();
+  const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
+    useState(false);
 
   // TODO refactor into components; current workaround is placing different hooks with conditions at
   //  the top of this component
@@ -72,12 +76,36 @@ function MainChart({ data, showInstructions }) {
 
   // ANALYTICS PLOT.
   if (selection.type === 'analytics') {
-    const plotDetailSectionTitle = selection.selectedGeographicFeature
-      ? `${getSelectedGeographyName(
+    const countyName = getSelectedGeographyName(
+      selection.geography,
+      selection.selectedGeographicFeature
+    );
+    const plotDetailSectionTitle = selection.selectedGeographicFeature ? (
+      <>
+        {getSelectedGeographyName(
           selection.geography,
           selection.selectedGeographicFeature
-        )}  County`
-      : 'Texas Statewide Data';
+        )}{' '}
+        County
+        <Button
+          className={styles.link}
+          color="link"
+          onClick={() => setShowCommunityCharacteristics(true)}
+        >
+          <CommunityCharacteristics
+            isOpen={showCommunityCharacteristics}
+            toggle={() => setShowCommunityCharacteristics(false)}
+            geographyLabel={countyName + ' County'}
+            geography={selection.geography}
+            selectedGeographicFeature={selection.selectedGeographicFeature}
+          />
+          View County Characteristics
+        </Button>
+      </>
+    ) : (
+      'Texas Statewide Data'
+    );
+
     return (
       <div className={styles['main-chart']}>
         <span className={styles['main-chart-title']}>
@@ -85,6 +113,7 @@ function MainChart({ data, showInstructions }) {
             {plotDetailSectionTitle}
           </span>
         </span>
+
         <AnalyticsStateDistribution
           geography={selection.geography}
           selectedGeographicFeature={selection.selectedGeographicFeature}
