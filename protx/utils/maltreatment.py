@@ -4,9 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from protx.log import logger
 from protx.conf.styles import maltreatment_palette
-
-
-db_name = '/protx-data/cooks.db'
+from protx.utils import db
 
 
 maltrt_query = '''
@@ -109,7 +107,7 @@ def maltreatment_plot_figure(area, geoid, variables, unit):
         'units': unit,
         'variables': ','.join(['"{}"'.format(v) for v in variables])
     }
-    db_conn = sqlite3.connect(db_name)
+    db_conn = sqlite3.connect(db.cooks_db)
     maltrt_data = query_return(user_select_data, db_conn)
     db_conn.close()
     plot_figure = maltrt_stacked_bar(maltrt_data)
