@@ -79,15 +79,7 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   );
 
   return (
-    <div>
-      {selectedGeographicFeature && (
-        <CommunityCharacteristics
-          geographyLabel={countyName}
-          geography={geography}
-          selectedGeographicFeature={selectedGeographicFeature}
-        />
-      )}{' '}
-      {''}
+    <>
       <div className="feature-table">
         <div className="feature-table-chart-selection">
           <div className="feature-table-chart-title">
@@ -96,11 +88,13 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
           </div>
         </div>
       </div>
-      <MainPlot plotState={chartData.data} />
-      <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
-        {plotCaptionJSX}
-      </FigureCaption>
-    </div>
+      <div>
+        <MainPlot plotState={chartData.data} />
+        <FigureCaption label={'Figure 1.'} className={'chart-annotation'}>
+          {plotCaptionJSX}
+        </FigureCaption>
+      </div>
+    </>
   );
 }
 
