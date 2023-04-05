@@ -11,7 +11,7 @@ import MainPlot from './MainPlot';
 import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import { Button } from 'reactstrap';
-import CommunityCharacteristicsButton from '../modals/CommunityCharacteristics';
+import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
@@ -92,7 +92,7 @@ function MainChart({ data, showInstructions }) {
           color="link"
           onClick={() => setShowCommunityCharacteristics(true)}
         >
-          <CommunityCharacteristicsButton
+          <CommunityCharacteristics
             isOpen={showCommunityCharacteristics}
             toggle={() => setShowCommunityCharacteristics(false)}
             geographyLabel={countyName + ' County'}

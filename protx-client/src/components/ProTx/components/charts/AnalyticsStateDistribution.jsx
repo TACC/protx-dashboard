@@ -7,7 +7,6 @@ import { FigureCaption } from './FigureCaption';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import styles from './AnalyticsStateDistribution.module.scss';
 import CommunityCharacteristics from '../modals/CommunityCharacteristics';
-import { Button } from 'reactstrap';
 
 function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
   const dispatch = useDispatch();
@@ -79,18 +78,10 @@ function AnalyticsStateDistribution({ geography, selectedGeographicFeature }) {
     </>
   );
 
-  function CommunityCharacteristicsButton({
-    countyName,
-    geography,
-    selectedGeographicFeature,
-  }) {
-    return <CommunityCharacteristics />;
-  }
-
   return (
     <div>
       {selectedGeographicFeature && (
-        <CommunityCharacteristicsButton
+        <CommunityCharacteristics
           geographyLabel={countyName}
           geography={geography}
           selectedGeographicFeature={selectedGeographicFeature}
