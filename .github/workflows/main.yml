@@ -9,7 +9,7 @@ on:
 
 jobs:
   Server_Side_Unit_Tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -41,7 +41,7 @@ jobs:
           USE_DEV_CLIENT: True
 
   Server_Side_Linting:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -72,7 +72,7 @@ jobs:
           poetry run flake8
 
   Client_Side_Unit_Tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js for use with actions
@@ -97,7 +97,7 @@ jobs:
           npm run test
 
   Client_Side_Linting:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js for use with actions
