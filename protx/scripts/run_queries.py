@@ -1,6 +1,5 @@
 from protx.api import get_maltreatment_cached, get_demographics_cached_and_compressed, get_resources_cached_and_compressed
 from protx.decorators import cache
-from protx.utils.db import resources_db, cooks_db
 import time
 import argparse
 functions_to_cache = [get_maltreatment_cached, get_demographics_cached_and_compressed, get_resources_cached_and_compressed]
@@ -21,10 +20,9 @@ parser.add_argument("-c", "--clear-cache", action="store_true", help="empty cach
 args = parser.parse_args()
 config = vars(args)
 if config['clear_cache']:
-    dbs = [cooks_db, resources_db]
-    print(f"Clearing existing cache related to databases: {dbs}")
-    for db in dbs:
-        cache.evict(db)
+    print("Clearing cache...")
+    count = cache.clear()
+    print(f"Removed {count} items")
 
 print(f" Running {len(functions_to_cache)} methods in order to cache their results")
 
