@@ -20,7 +20,7 @@ parser.add_argument("-c", "--clear-cache", action="store_true", help="empty cach
 args = parser.parse_args()
 config = vars(args)
 if config['clear_cache']:
-    print(f"Clearing cache...")
+    print("Clearing cache...")
     count = cache.clear()
     print(f"Removed {count} items")
 
