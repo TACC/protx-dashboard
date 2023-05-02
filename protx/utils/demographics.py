@@ -367,7 +367,7 @@ def get_age_race_pie_charts(area, geoid):
     # list of variables is in desired order (alphabetic order and then last two at end)
     variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
                  'BLACK_AFRICAN_AMERICAN_ALONE', 'NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE',
-                 'WHITE_ALONE', 'TWO_OR_MORE_RACES after 2019', 'OTHER_RACE_ALONE', ]
+                 'WHITE_ALONE', 'TWO_OR_MORE_RACES', 'OTHER_RACE_ALONE', ]
 
     selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
