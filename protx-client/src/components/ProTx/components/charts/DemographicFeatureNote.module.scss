@@ -1,0 +1,11 @@
+.root {
+  margin: 0.8vh 1vw 0.5vh;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  line-height: 2vh;
+  font-style: italic;
+}
+
+.root a {
+  color: var(--global-color-accent--normal);
+}
