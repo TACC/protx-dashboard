@@ -2,7 +2,7 @@ FROM python:3.9-slim
 
 LABEL maintainer="TACC-ACI-WMA <wma_prtl@tacc.utexas.edu>"
 
-ENV POETRY_VERSION=1.1.13
+ENV POETRY_VERSION=1.4.2
 ENV POETRY_HOME=/opt/poetry
 ENV PATH="$POETRY_HOME/bin:$PATH"
 ENV PYTHONPATH "${PYTHONPATH}:/app"
