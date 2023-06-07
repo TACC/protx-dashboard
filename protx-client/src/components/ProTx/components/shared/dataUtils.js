@@ -305,6 +305,19 @@ const getObservedFeaturesLabel = (selectedObservedFeatureCode, data) => {
   ).DISPLAY_TEXT;
 };
 
+/** Get display note for selected observed feature
+ *
+ * This note has additional optional info for this feature.
+ *
+ * @param selectedObservedFeatureCode:str code of feature
+ * @returns label
+ */
+const getObservedFeaturesNote = (selectedObservedFeatureCode, data) => {
+  return data.display.variables.find(
+    (f) => selectedObservedFeatureCode === f.NAME
+  ).DISPLAY_FIGURE_NOTE;
+};
+
 /** Get display label for map
  *
  * @returns string
@@ -350,6 +363,7 @@ export {
   getMaltreatmentTypeNames,
   getMaltreatmentLabel,
   getObservedFeaturesLabel,
+  getObservedFeaturesNote,
   getMapLegendLabel,
   getAnalyticsRiskLabel,
 };

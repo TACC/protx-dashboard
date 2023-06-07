@@ -12,6 +12,7 @@ import styles from './MainChart.module.scss';
 import { getSelectedGeographyName } from '../shared/dataUtils';
 import { Button } from 'reactstrap';
 import CommunityCharacteristics from '../modals/CommunityCharacteristics';
+import DemographicFeatureNote from './DemographicFeatureNote';
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
@@ -162,6 +163,10 @@ function MainChart({ data, showInstructions }) {
           <MainPlot
             plotState={plotState}
             className={styles['demographics-plot']}
+          />
+          <DemographicFeatureNote
+            observedFeature={selection.observedFeature}
+            data={data}
           />
           {!protxDemographicsDistribution.loading && (
             <ChartInstructions currentReportType="hidden" />
