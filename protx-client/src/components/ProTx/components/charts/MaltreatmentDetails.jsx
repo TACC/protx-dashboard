@@ -25,27 +25,18 @@ function MaltreatmentDetails({
 
   return (
     <>
-      <div className="plot-details">
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {fipsIdValue} {geographyLabel}
-            </span>
-          </div>
-        </div>
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-label">
-              Current Aggregation:{'  '}
-            </span>
-            <span className="plot-details-section-selected-value-list">
-              {maltreatmentTypesList.map((type) => (
-                <span className="details-list-item" key={type}>
-                  {type}
-                </span>
-              ))}
-            </span>
-          </div>
+      <div className="plot-details-section">
+        <div className="plot-details-section-selected">
+          <span className="plot-details-section-selected-label">
+            Current Aggregation:{'  '}
+          </span>
+          <span className="plot-details-section-selected-value-list">
+            {maltreatmentTypesList.map((type) => (
+              <span className="details-list-item" key={type}>
+                {type}
+              </span>
+            ))}
+          </span>
         </div>
       </div>
       <div className="plot-details-summary">

@@ -63,10 +63,7 @@ const CommunityCharacteristics = ({
               selectedGeographicFeature={selectedGeographicFeature}
             />
           </div>
-          <FigureCaption
-            label={'Figure 1.'}
-            className={styles['figure-caption']}
-          >
+          <FigureCaption label={'Figure 1.'}>
             Community Characteristics for {geographyLabel}. The U.S. Census
             follow{' '}
             <a href="${point.WEBSITE}" className={styles.link} target="_blank">

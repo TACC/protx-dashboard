@@ -190,11 +190,43 @@ function MainChart({ data, showInstructions }) {
       }
 
       const plotState = protxMaltreatmentDistribution.data;
+      const countyName = getSelectedGeographyName(
+        selection.geography,
+        selection.selectedGeographicFeature
+      );
+      const plotDetailSectionTitle = selection.selectedGeographicFeature ? (
+        <>
+          {getSelectedGeographyName(
+            selection.geography,
+            selection.selectedGeographicFeature
+          )}{' '}
+          County
+          <Button
+            className={styles.link}
+            color="link"
+            onClick={() => setShowCommunityCharacteristics(true)}
+          >
+            <CommunityCharacteristics
+              isOpen={showCommunityCharacteristics}
+              toggle={() => setShowCommunityCharacteristics(false)}
+              geographyLabel={countyName + ' County'}
+              geography={selection.geography}
+              selectedGeographicFeature={selection.selectedGeographicFeature}
+            />
+            View County Characteristics
+          </Button>
+        </>
+      ) : (
+        ''
+      );
 
       return (
-        <div className="maltreatment-chart">
-          <div className="maltreatment-types-plot">
-            <div className="maltreatment-types-plot-layout">
+        <div className={styles['main-chart']}>
+        <span className={styles['main-chart-title']}>
+          <span className={styles['main-chart-title-text']}>
+            {plotDetailSectionTitle}
+          </span>
+        </span>
               <MaltreatmentDetails
                 geography={selection.geography}
                 selectedGeographicFeature={selection.selectedGeographicFeature}
@@ -204,8 +236,6 @@ function MainChart({ data, showInstructions }) {
               <MainPlot plotState={plotState} />
               <ChartInstructions currentReportType="hidden" />
             </div>
-          </div>
-        </div>
       );
     }
   }
