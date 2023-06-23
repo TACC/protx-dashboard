@@ -222,20 +222,20 @@ function MainChart({ data, showInstructions }) {
 
       return (
         <div className={styles['main-chart']}>
-        <span className={styles['main-chart-title']}>
-          <span className={styles['main-chart-title-text']}>
-            {plotDetailSectionTitle}
+          <span className={styles['main-chart-title']}>
+            <span className={styles['main-chart-title-text']}>
+              {plotDetailSectionTitle}
+            </span>
           </span>
-        </span>
-              <MaltreatmentDetails
-                geography={selection.geography}
-                selectedGeographicFeature={selection.selectedGeographicFeature}
-                maltreatmentTypes={selection.maltreatmentTypes}
-                data={data}
-              />
-              <MainPlot plotState={plotState} />
-              <ChartInstructions currentReportType="hidden" />
-            </div>
+          <MaltreatmentDetails
+            geography={selection.geography}
+            selectedGeographicFeature={selection.selectedGeographicFeature}
+            maltreatmentTypes={selection.maltreatmentTypes}
+            data={data}
+          />
+          <MainPlot plotState={plotState} />
+          <ChartInstructions currentReportType="hidden" />
+        </div>
       );
     }
   }
