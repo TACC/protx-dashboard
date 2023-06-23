@@ -344,25 +344,31 @@ def get_age_race_pie_charts(area, geoid):
     db_conn = sqlite3.connect(db.cooks_db)
 
     query = '''
-    select d.DEMOGRAPHICS_NAME, d.VALUE, u.DISPLAY_TEXT
+    select d.DEMOGRAPHICS_NAME, d.VALUE, u.DISPLAY_TEXT, m.VALUE_UNDER_FIVE, m.VALUE_FIVE_TO_NINE, m.VALUE_TEN_TO_FOURTEEN, m.VALUE_OVER_FOURTEEN
     from demographics d
     left join display_data u on
         u.NAME = d.DEMOGRAPHICS_NAME
+    left join maltreatment m on 
+        m.GEOID = d.GEOID
     where d.GEOTYPE = "{area}" and
         d.UNITS = "{units}" and
-        d.DEMOGRAPHICS_NAME in ({variables}) and
         d.GEOID = "{geoid}" and
         d.YEAR = "2020" and
         d.GEOTYPE = "{area}";
     '''
-    variables = ['TOTPOP', 'AGE17', 'AGE65']
-    selection = {'units': 'count', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    selection = {'units': 'count', 'area': area, 'geoid': geoid}
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
 
     population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
-    population_17_to_65 = population["TOTPOP"].VALUE - population["AGE17"].VALUE - population["AGE65"].VALUE
-    age_labels = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
-    age_values = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
+    age_labels = ["Under 5 Years Old", "5 - 9 Years Old", "10 - 14 Years Old", "Over 14 Years Old"]
+
+    # Create a list to store the summed values of maltreatment for each age group
+    age_values = []
+
+    # Iterate over the columns and calculate the maltreatment sum for each age group
+    for column in ['VALUE_UNDER_FIVE', 'VALUE_FIVE_TO_NINE', 'VALUE_TEN_TO_FOURTEEN', 'VALUE_OVER_FOURTEEN']:
+        column_sum = print(row.column for row in population.values() if getattr(row, column) is not None)
+        age_values.append(column_sum)
 
     # list of variables is in desired order (alphabetic order and then last two at end)
     variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
@@ -389,10 +395,10 @@ def get_age_race_pie_charts(area, geoid):
 
     fig = make_subplots(rows=2, cols=2,
                         specs=[[{"type": "bar", "colspan": 2, "b": .1}, None], [{"type": "pie"}, {"type": "pie"}]],
-                        row_heights=[0.4, 0.6] )
+                        row_heights=[0.5, 0.5] )
     fig.add_trace(
         go.Bar(
-            name='Population', 
+            name='Population',
             x=age_labels, 
             y=age_values,
             yaxis='y',
@@ -432,14 +438,22 @@ def get_age_race_pie_charts(area, geoid):
         font=dict(size=13, color="Black",  family="Roboto"),
         margin=dict(l=10, r=10, t=15, b=15),
         height=620,
-        xaxis=dict(tickangle=20,         
+        xaxis=dict(tickangle=0,         
                    tickfont=dict(
-                        size=8,
+                        size=12,
                         color='black'
-                    ),
-                ),
+                    )
+        ),
+        yaxis=dict(title=dict(text="Population (persons)", 
+                              font=dict(size=12))),
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=1.1
+        ),
+                
     )
-
     fig.show()
 
     db_conn.close()
