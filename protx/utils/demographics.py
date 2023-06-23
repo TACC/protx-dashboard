@@ -348,7 +348,7 @@ def get_age_race_pie_charts(area, geoid):
     from demographics d
     left join display_data u on
         u.NAME = d.DEMOGRAPHICS_NAME
-    left join maltreatment m on 
+    left join maltreatment m on
         m.GEOID = d.GEOID
     where d.GEOTYPE = "{area}" and
         d.UNITS = "{units}" and
@@ -395,16 +395,16 @@ def get_age_race_pie_charts(area, geoid):
 
     fig = make_subplots(rows=2, cols=2,
                         specs=[[{"type": "bar", "colspan": 2, "b": .1}, None], [{"type": "pie"}, {"type": "pie"}]],
-                        row_heights=[0.5, 0.5] )
+                        row_heights=[0.5, 0.5])
     fig.add_trace(
         go.Bar(
             name='Population',
-            x=age_labels, 
+            x=age_labels,
             y=age_values,
             yaxis='y',
-            xaxis = 'x',
+            xaxis='x',
             marker=dict(
-                color=light_green_to_blue_color_palette[1], 
+                color=light_green_to_blue_color_palette[1],
                 line=dict(
                     color='black',
                     width=1)),
@@ -432,19 +432,13 @@ def get_age_race_pie_charts(area, geoid):
             title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto")),
             marker_colors=light_green_to_blue_color_palette),
         row=2, col=2)
-
-
     fig.update_layout(
         font=dict(size=13, color="Black",  family="Roboto"),
         margin=dict(l=10, r=10, t=15, b=15),
         height=620,
-        xaxis=dict(tickangle=0,         
-                   tickfont=dict(
-                        size=12,
-                        color='black'
-                    )
-        ),
-        yaxis=dict(title=dict(text="Population (persons)", 
+        xaxis=dict(tickangle=0,
+                   tickfont=dict(size=12, color='black')),
+        yaxis=dict(title=dict(text="Population (persons)",
                               font=dict(size=12))),
         legend=dict(
             yanchor="top",
@@ -452,7 +446,6 @@ def get_age_race_pie_charts(area, geoid):
             xanchor="left",
             x=1.1
         ),
-                
     )
     fig.show()
 
