@@ -363,7 +363,6 @@ def get_age_race_pie_charts(area, geoid):
     age_labels = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
     age_values = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
     density_values = [(population["AGE17"].VALUE / population["LAND_AREA"].VALUE), (population_17_to_65 / population["LAND_AREA"].VALUE),  (population["AGE65"].VALUE / population["LAND_AREA"].VALUE)]
-    logger.debug(print([population]))
 
     # list of variables is in desired order (alphabetic order and then last two at end)
     variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
