@@ -206,20 +206,6 @@ function MainChart({ data, showInstructions }) {
             selection.selectedGeographicFeature
           )}{' '}
           County
-          <Button
-            className={styles.link}
-            color="link"
-            onClick={() => setShowCommunityCharacteristics(true)}
-          >
-            <CommunityCharacteristics
-              isOpen={showCommunityCharacteristics}
-              toggle={() => setShowCommunityCharacteristics(false)}
-              geographyLabel={countyName + ' County'}
-              geography={selection.geography}
-              selectedGeographicFeature={selection.selectedGeographicFeature}
-            />
-            View County Characteristics
-          </Button>
         </>
       ) : (
         ''
