@@ -40,7 +40,7 @@ const CommunityCharacteristicsChart = ({
 
 CommunityCharacteristicsChart.propTypes = {
   selectedGeographicFeature: PropTypes.string.isRequired,
-  geographyLabel: PropTypes.string.isRequired,
+  geography: PropTypes.string.isRequired,
 };
 
 const CommunityCharacteristics = ({

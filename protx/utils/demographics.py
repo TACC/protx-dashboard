@@ -389,8 +389,7 @@ def get_age_race_pie_charts(area, geoid):
 
     fig = make_subplots(rows=2, cols=2,
                         # "r": .07 on all subplots to make them center to each other and give margin to bar graph's y axis label
-                        specs=[[{"type": "xy", "colspan": 2, "b": .05, "r": .07, "secondary_y": True, }, None], [{"type": "pie","r": .07}, {"type": "pie", "r": .07}]],
-                        )
+                        specs=[[{"type": "xy", "colspan": 2, "secondary_y": True, }, None], [{"type": "pie"}, {"type": "pie"}]])
     fig.add_trace(
         go.Bar(
             name='Population', 
@@ -426,7 +425,7 @@ def get_age_race_pie_charts(area, geoid):
                 labels=ethnicity_labels,
                 sort=False,
                 legendgroup='Ethnicity',
-                legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
+                legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=15, color="Black",  family="Roboto")),
                 name="Ethnicity",
                 title=dict(text='Ethnicity', position='bottom center', font=dict(size=18, color="Black",  family="Roboto")),
                 marker_colors=light_green_to_blue_color_palette),
@@ -437,7 +436,7 @@ def get_age_race_pie_charts(area, geoid):
             labels=race_labels,
             sort=False,
             legendgroup='Race',
-            legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
+            legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=15, color="Black",  family="Roboto")),
             name="Race",
             title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto")),
             marker_colors=light_green_to_blue_color_palette),
@@ -445,13 +444,12 @@ def get_age_race_pie_charts(area, geoid):
 
 
     fig.update_layout(
-        yaxis=dict(title='Population (persons)', automargin=True),
-        yaxis2=dict(title='Population Density<br>(persons per square mile)', overlaying='y', side='right', automargin=True ),
-        font=dict(color="Black",  family="Roboto",),
-        margin=dict(l=10, r=0, t=15, b=15),
-        height=620,
+        yaxis=dict(title='Population (persons)'),
+        yaxis2=dict(title='Population Density<br>(persons per square mile)', overlaying='y'),        font=dict(color="Black",  family="Roboto",),
+        legend=dict(y=-.05),
+        margin=dict(l=10, r=10, t=20, b=20),
         xaxis=dict(tickfont=dict(
-                        size=11,
+                        size=12,
                         color='black'
                     ),
                 ),
