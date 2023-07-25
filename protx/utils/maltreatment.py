@@ -112,3 +112,61 @@ def maltreatment_plot_figure(area, geoid, variables, unit):
     db_conn.close()
     plot_figure = maltrt_stacked_bar(maltrt_data)
     return json.loads(plot_figure.to_json())
+
+def get_child_mal_by_age_charts(area, geoid):
+    db_conn = sqlite3.connect(db.cooks_db)
+    light_green_to_blue_color_palette = ['#eff5d6', '#c6e8b0', '#8fcca1', '#62ad9c', '#3c7d8a', '#26547a', '#eff5d6', '#c6e8b0', '#8fcca1', '#62ad9c']
+
+    query = '''
+    SELECT YEAR, {age_variables} as AGE
+        from maltreatment m
+    where m.GEOID = "{geoid}" and
+        m.MALTREATMENT_NAME= "{maltreatment_name}" and
+        m.GEOTYPE = "{area}" and
+        m.UNITS = "{units}"
+          GROUP BY YEAR;
+    '''
+    age_variables = ['VALUE_UNDER_FIVE', 'VALUE_FIVE_TO_NINE', 'VALUE_TEN_TO_FOURTEEN', 'VALUE_OVER_FOURTEEN']
+    selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'maltreatment_name': 'ALL', 'age_variables': ','.join([f'm.{v}' for v in age_variables]) }
+    maltrt_age_data_frame = pd.read_sql_query(query.format(**selection), db_conn)
+    age_labels = ["0-4", "5-9", "10-14", "15-17"]
+    # [2:7] to only get the values for each age group from the query
+    age_data = {row.YEAR: row[2:7] for row in maltrt_age_data_frame.itertuples()}
+
+    # Normalize the data for each age group
+    sum_per_year = {year: sum(age_data[year]) for year in age_data}
+    normalized_age_data = {year: [value / sum_per_year[year] for value in age_data[year]] for year in age_data}
+
+    data = []
+    for i, age in enumerate(age_labels):
+        #TODO
+        #try:
+    # Extract the data for the current age group and add trace to fig
+            age_group_data = [(normalized_age_data[year][i] * 100) for year in sorted(age_data.keys())]            
+            trace = go.Bar(
+                name=age,
+                x=list(age_data.keys()),
+                y=age_group_data,
+                xaxis = 'x',
+                yaxis = 'y',
+                marker_color=light_green_to_blue_color_palette[i]
+            )
+            data.append(trace)
+        #TODO
+        # except :
+        #
+
+
+    fig = go.Figure(data=data)
+    fig.update_layout(barmode='stack',
+                    margin=dict(l=10, r=10, t=10, b=10),
+                    legend=dict(title="Age Group"),
+                    )
+    fig.update_xaxes(title_text='Years')
+    fig.update_yaxes(title_text='Percent of Cases')
+    fig.update_traces(marker=dict(
+                line=dict(color='black',width=1)
+                                )
+                    )
+    
+    return json.loads(fig.to_json())

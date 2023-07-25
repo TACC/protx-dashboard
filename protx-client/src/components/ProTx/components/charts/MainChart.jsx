@@ -13,12 +13,14 @@ import { getSelectedGeographyName } from '../shared/dataUtils';
 import { Button } from 'reactstrap';
 import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 import DemographicFeatureNote from './DemographicFeatureNote';
+import MaltreatmentAgeBreakdown from '../modals/MaltreatmentAgeBreakdown';
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
   const dispatch = useDispatch();
   const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
     useState(false);
+  const [showAgeModal, setShowAgeModal] = useState(false);
 
   // TODO refactor into components; current workaround is placing different hooks with conditions at
   //  the top of this component
@@ -206,6 +208,20 @@ function MainChart({ data, showInstructions }) {
             selection.selectedGeographicFeature
           )}{' '}
           County
+          <Button
+            className={styles.link}
+            color="link"
+            onClick={() => setShowAgeModal(true)}
+          >
+            <MaltreatmentAgeBreakdown
+              isOpen={showAgeModal}
+              toggle={() => setShowAgeModal(false)}
+              geographyLabel={countyName + ' County'}
+              geography={selection.geography}
+              selectedGeographicFeature={selection.selectedGeographicFeature}
+            />
+            View County Maltreatment Percentages by Age
+          </Button>
         </>
       ) : (
         ''

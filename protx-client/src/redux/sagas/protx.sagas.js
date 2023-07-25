@@ -101,6 +101,25 @@ export function* fetchProtxMaltreatmentDistribution(action) {
   }
 }
 
+export function* fetchProtxMaltreatmentAgeDistribution(action) {
+  yield put({ type: 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_INIT' });
+  try {
+    const data = yield call(fetchUtil, {
+      url: `/protx/api/maltreatment-plot-distribution/${action.payload.area}/${action.payload.selectedArea}/${action.payload.variable}/${action.payload.unit}/`,
+    });
+    yield put({
+      type: 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_SUCCESS',
+      payload: {
+        data: data.result,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_FAILURE',
+    });
+  }
+}
+
 export function* fetchProtxAnalytics(action) {
   yield put({ type: 'PROTX_ANALYTICS_INIT' });
   try {
@@ -155,6 +174,13 @@ export function* watchProtxMaltreatmentDistribution() {
   yield takeLeading(
     'FETCH_PROTX_MALTREATMENT_DISTRIBUTION',
     fetchProtxMaltreatmentDistribution
+  );
+}
+
+export function* watchProtxMaltreatmentAgeDistribution() {
+  yield takeLeading(
+    'FETCH_PROTX_AGE_MALTREATMENT_DISTRIBUTION',
+    fetchProtxMaltreatmentAgeDistribution
   );
 }
 

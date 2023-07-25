@@ -348,12 +348,12 @@ def get_age_race_pie_charts(area, geoid):
     from demographics d
     left join display_data u on
         u.NAME = d.DEMOGRAPHICS_NAME
-    where d.GEOID = "{geoid}" and
+    where d.GEOTYPE = "{area}" and
+        d.UNITS = "{units}" and
         d.DEMOGRAPHICS_NAME in ({variables}) and
         d.GEOID = "{geoid}" and
         d.YEAR = "2020" and
-        d.GEOTYPE = "{area}" and
-        d.UNITS = "{units}";
+        d.GEOTYPE = "{area}";
     '''
     variables = ['TOTPOP', 'AGE17', 'AGE65', 'LAND_AREA']
     selection = {'units': 'count" or d.UNITS = "square mile', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
@@ -425,9 +425,9 @@ def get_age_race_pie_charts(area, geoid):
                 labels=ethnicity_labels,
                 sort=False,
                 legendgroup='Ethnicity',
-                legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=15, color="Black",  family="Roboto")),
+                legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity'),
                 name="Ethnicity",
-                title=dict(text='Ethnicity', position='bottom center', font=dict(size=18, color="Black",  family="Roboto")),
+                title=dict(text='Ethnicity', position='bottom center', font=dict(size=18)),
                 marker_colors=light_green_to_blue_color_palette),
             row=2, col=1)
     fig.add_trace(
@@ -436,21 +436,21 @@ def get_age_race_pie_charts(area, geoid):
             labels=race_labels,
             sort=False,
             legendgroup='Race',
-            legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=15, color="Black",  family="Roboto")),
+            legendgrouptitle=go.pie.Legendgrouptitle(text='Race'),
             name="Race",
-            title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto")),
+            title=dict(text='Race', position='bottom center', font=dict(size=18)),
             marker_colors=light_green_to_blue_color_palette),
         row=2, col=2)
 
 
     fig.update_layout(
         yaxis=dict(title='Population (persons)'),
-        yaxis2=dict(title='Population Density<br>(persons per square mile)', overlaying='y'),        font=dict(color="Black",  family="Roboto",),
-        legend=dict(y=-.05),
-        margin=dict(l=10, r=10, t=20, b=20),
+        yaxis2=dict(title='Population Density<br>(persons per square mile)', overlaying='y'),
+        # to make legend to the right of pie charts
+        legend=dict(y=-.02),
+        margin=dict(l=10, r=10, t=10, b=10),
         xaxis=dict(tickfont=dict(
-                        size=12,
-                        color='black'
+                        size=11
                     ),
                 ),
     )
