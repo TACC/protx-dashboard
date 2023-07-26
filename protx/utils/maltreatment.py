@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import plotly.graph_objects as go
 from protx.log import logger
-from protx.conf.styles import maltreatment_palette
+from protx.conf.styles import maltreatment_palette, light_green_to_blue_color_palette
 from protx.utils import db
 
 
@@ -124,18 +124,6 @@ def maltreatment_plot_figure(area, geoid, variables, unit):
 
 def get_child_mal_by_age_charts(area, geoid):
     db_conn = sqlite3.connect(db.cooks_db)
-    light_green_to_blue_color_palette = [
-        "#eff5d6",
-        "#c6e8b0",
-        "#8fcca1",
-        "#62ad9c",
-        "#3c7d8a",
-        "#26547a",
-        "#eff5d6",
-        "#c6e8b0",
-        "#8fcca1",
-        "#62ad9c",
-    ]
 
     query = """
     SELECT YEAR, {age_variables} as AGE
