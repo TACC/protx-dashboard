@@ -29,7 +29,17 @@ const MaltreatmentByAgeChart = ({ geography, selectedGeographicFeature }) => {
   if (isError) {
     return <SectionMessage type="error">Something went wrong</SectionMessage>;
   }
-
+  // data.result['data'] will be  empty if there is no data in the DB for that county
+  if (!data.result['data'].length) {
+    return (
+      <>
+        <SectionMessage type="warning">
+          Insuffcient sample size for this county.
+        </SectionMessage>
+        <MainPlot plotState={data.result} />
+      </>
+    );
+  }
   return <MainPlot plotState={data.result} />;
 };
 

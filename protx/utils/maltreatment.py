@@ -173,9 +173,6 @@ def get_child_mal_by_age_charts(area, geoid):
 
     data = []
     for i, age in enumerate(age_labels):
-        # TODO
-        # try:
-        # Extract the data for the current age group and add trace to fig
         age_group_data = [
             (normalized_age_data[year][i] * 100) for year in sorted(age_data.keys())
         ]
@@ -187,10 +184,10 @@ def get_child_mal_by_age_charts(area, geoid):
             yaxis="y",
             marker_color=light_green_to_blue_color_palette[i],
         )
-        data.append(trace)
-    # TODO
-    # except :
-    #
+        # Doesn't add trace to data passed to front end if there is no data in the DB for maltreatment by age
+        # This leaves data blank for front end to catch and let user know if there shouldn't be a filled in figure for that county
+        if age_group_data != []:
+            data.append(trace)
 
     fig = go.Figure(data=data)
     fig.update_layout(
@@ -199,7 +196,6 @@ def get_child_mal_by_age_charts(area, geoid):
         legend=dict(title="Age Group"),
     )
     fig.update_xaxes(title_text="Years", tickmode="linear")
-    fig.update_yaxes(title_text="Percent of Cases<br>(All maltreatment types)")
+    fig.update_yaxes(title_text="Percent of Cases<br>(All Maltreatment Types)")
     fig.update_traces(marker=dict(line=dict(color="black", width=1)))
-
     return json.loads(fig.to_json())
