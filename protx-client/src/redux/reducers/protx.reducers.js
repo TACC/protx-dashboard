@@ -91,37 +91,6 @@ export function protxMaltreatmentDistribution(
   }
 }
 
-export const initialMaltreatmentAgeDistributionState = {
-  loading: true,
-  error: false,
-  data: null,
-};
-export function protxMaltreatmentAgeDistribution(
-  state = initialMaltreatmentAgeDistributionState,
-  action
-) {
-  switch (action.type) {
-    case 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_INIT':
-      return {
-        ...initialMaltreatmentAgeDistributionState,
-        loading: true,
-      };
-    case 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_SUCCESS':
-      return {
-        ...state,
-        data: action.payload.data,
-        loading: false,
-      };
-    case 'PROTX_MALTREATMENT_AGE_DISTRIBUTION_FAILURE':
-      return {
-        ...initialMaltreatmentAgeDistributionState,
-        error: true,
-      };
-    default:
-      return state;
-  }
-}
-
 export const initialAnalyticsState = {
   loading: true,
   error: false,
