@@ -83,37 +83,34 @@ function MainChart({ data, showInstructions }) {
       selection.geography,
       selection.selectedGeographicFeature
     );
-    const plotDetailSectionTitle = selection.selectedGeographicFeature ? (
-      <>
-        {getSelectedGeographyName(
-          selection.geography,
-          selection.selectedGeographicFeature
-        )}{' '}
-        County
-        <Button
-          className={styles.link}
-          color="link"
-          onClick={() => setShowCommunityCharacteristics(true)}
-        >
-          <CommunityCharacteristics
-            isOpen={showCommunityCharacteristics}
-            toggle={() => setShowCommunityCharacteristics(false)}
-            geographyLabel={countyName + ' County'}
-            geography={selection.geography}
-            selectedGeographicFeature={selection.selectedGeographicFeature}
-          />
-          View County Characteristics
-        </Button>
-      </>
-    ) : (
-      'Texas Statewide Data'
-    );
 
     return (
       <div className={styles['main-chart']}>
         <span className={styles['main-chart-title']}>
           <span className={styles['main-chart-title-text']}>
-            {plotDetailSectionTitle}
+            {selection.selectedGeographicFeature ? (
+              <>
+                {countyName} County
+                <Button
+                  className={styles.link}
+                  color="link"
+                  onClick={() => setShowCommunityCharacteristics(true)}
+                >
+                  <CommunityCharacteristics
+                    isOpen={showCommunityCharacteristics}
+                    toggle={() => setShowCommunityCharacteristics(false)}
+                    geographyLabel={countyName + ' County'}
+                    geography={selection.geography}
+                    selectedGeographicFeature={
+                      selection.selectedGeographicFeature
+                    }
+                  />
+                  View County Characteristics
+                </Button>
+              </>
+            ) : (
+              'Texas Statewide Data'
+            )}
           </span>
         </span>
 
@@ -201,38 +198,32 @@ function MainChart({ data, showInstructions }) {
         selection.geography,
         selection.selectedGeographicFeature
       );
-      const plotDetailSectionTitle = selection.selectedGeographicFeature ? (
-        <>
-          {getSelectedGeographyName(
-            selection.geography,
-            selection.selectedGeographicFeature
-          )}{' '}
-          County
-          <Button
-            className={styles.link}
-            color="link"
-            onClick={() => setShowAgeModal(true)}
-          >
-            <MaltreatmentAgeBreakdown
-              isOpen={showAgeModal}
-              toggle={() => setShowAgeModal(false)}
-              geographyLabel={countyName + ' County'}
-              geography={selection.geography}
-              selectedGeographicFeature={selection.selectedGeographicFeature}
-            />
-            View County Maltreatment Percentages by Age
-          </Button>
-        </>
-      ) : (
-        ''
-      );
 
       return (
         <div className={styles['main-chart']}>
           <span className={styles['main-chart-title']}>
-            <span className={styles['main-chart-title-text']}>
-              {plotDetailSectionTitle}
-            </span>
+            {selection.selectedGeographicFeature && (
+              <span className={styles['main-chart-title-text']}>
+                {countyName} County
+                <Button
+                  className={styles.link}
+                  color="link"
+                  onClick={() => setShowAgeModal(true)}
+                >
+                  {' '}
+                  <MaltreatmentAgeBreakdown
+                    isOpen={showAgeModal}
+                    toggle={() => setShowAgeModal(false)}
+                    geographyLabel={countyName + ' County'}
+                    geography={selection.geography}
+                    selectedGeographicFeature={
+                      selection.selectedGeographicFeature
+                    }
+                  />
+                  View County Maltreatment Percentages by Age
+                </Button>
+              </span>
+            )}
           </span>
           <MaltreatmentDetails
             geography={selection.geography}

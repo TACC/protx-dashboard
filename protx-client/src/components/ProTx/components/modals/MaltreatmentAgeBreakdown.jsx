@@ -34,7 +34,7 @@ const MaltreatmentByAgeChart = ({ geography, selectedGeographicFeature }) => {
     return (
       <>
         <SectionMessage type="warning">
-          Insuffcient sample size for this county.
+          Insufficient sample size for this county. No analysis available.
         </SectionMessage>
         <MainPlot plotState={data.result} />
       </>

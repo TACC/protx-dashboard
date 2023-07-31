@@ -181,9 +181,16 @@ def get_child_mal_by_age_charts(area, geoid):
     fig.update_layout(
         barmode="stack",
         margin=dict(l=10, r=10, t=10, b=10),
-        legend=dict(title="Age Group"),
+        legend=dict(title="Age Group", font=dict(size=14)),
     )
-    fig.update_xaxes(title_text="Years", tickmode="linear")
-    fig.update_yaxes(title_text="Percent of Cases<br>(All Maltreatment Types)")
+    fig.update_xaxes(
+        title=dict(text="Years", font=dict(size=16)),
+        tickmode="linear",
+    )
+    fig.update_yaxes(
+        title=dict(
+            text="Percent of Cases<br>(All Maltreatment Types)", font=dict(size=16)
+        )
+    )
     fig.update_traces(marker=dict(line=dict(color="black", width=1)))
     return json.loads(fig.to_json())
