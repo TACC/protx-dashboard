@@ -102,6 +102,16 @@ class MaltreatmentPlotData(Resource):
         return {"result": result}
 
 
+@api.route("/maltreatment-age-breakdown-chart/<area>/<geoid>/")
+class MaltreatmentAgeDistributionChart(Resource):
+    @api.doc("get_maltreatment_age_breakdown_chart")
+    def get(self, area, geoid):
+
+        logger.info(f"Getting maltreatment breakdown by children age chart for area: {area} and selected geoid:{geoid}")
+        charts = maltreatment.get_child_mal_by_age_charts(area=area, geoid=geoid)
+        return {"result": charts}
+
+
 @api.route("/analytics/<area>/")
 class Analytics(Resource):
     @api.doc("get_analytics_data")
