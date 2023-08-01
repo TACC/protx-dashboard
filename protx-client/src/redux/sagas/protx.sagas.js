@@ -158,13 +158,6 @@ export function* watchProtxMaltreatmentDistribution() {
   );
 }
 
-export function* watchProtxMaltreatmentAgeDistribution() {
-  yield takeLeading(
-    'FETCH_PROTX_AGE_MALTREATMENT_DISTRIBUTION',
-    fetchProtxMaltreatmentAgeDistribution
-  );
-}
-
 export function* watchProtxAnalytics() {
   yield takeLeading('FETCH_PROTX_ANALYTICS', fetchProtxAnalytics);
 }
