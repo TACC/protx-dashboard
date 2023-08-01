@@ -200,39 +200,44 @@ function MainChart({ data, showInstructions }) {
       );
 
       return (
-        <div className={styles['main-chart']}>
-          <span className={styles['main-chart-title']}>
-            {selection.selectedGeographicFeature && (
-              <span className={styles['main-chart-title-text']}>
-                {countyName} County
-                <Button
-                  className={styles.link}
-                  color="link"
-                  onClick={() => setShowAgeModal(true)}
-                >
-                  {' '}
-                  <MaltreatmentAgeBreakdown
-                    isOpen={showAgeModal}
-                    toggle={() => setShowAgeModal(false)}
-                    geographyLabel={countyName + ' County'}
-                    geography={selection.geography}
-                    selectedGeographicFeature={
-                      selection.selectedGeographicFeature
-                    }
-                  />
-                  View County Maltreatment Percentages by Age
-                </Button>
+        <div className="maltreatment-chart">
+          <div className="maltreatment-types-plot">
+            <div className="maltreatment-types-plot-layout">
+              <span className={styles['main-chart-title']}>
+                {selection.selectedGeographicFeature && (
+                  <span className={styles['main-chart-title-text']}>
+                    {countyName} County
+                    <Button
+                      className={styles.link}
+                      color="link"
+                      onClick={() => setShowAgeModal(true)}
+                    >
+                      {' '}
+                      <MaltreatmentAgeBreakdown
+                        isOpen={showAgeModal}
+                        toggle={() => setShowAgeModal(false)}
+                        geographyLabel={countyName + ' County'}
+                        geography={selection.geography}
+                        selectedGeographicFeature={
+                          selection.selectedGeographicFeature
+                        }
+                      />
+                      View County Maltreatment Percentages by Age
+                    </Button>
+                  </span>
+                )}
               </span>
-            )}
-          </span>
-          <MaltreatmentDetails
-            geography={selection.geography}
-            selectedGeographicFeature={selection.selectedGeographicFeature}
-            maltreatmentTypes={selection.maltreatmentTypes}
-            data={data}
-          />
-          <MainPlot plotState={plotState} />
-          <ChartInstructions currentReportType="hidden" />
+
+              <MaltreatmentDetails
+                geography={selection.geography}
+                selectedGeographicFeature={selection.selectedGeographicFeature}
+                maltreatmentTypes={selection.maltreatmentTypes}
+                data={data}
+              />
+              <MainPlot plotState={plotState} />
+              <ChartInstructions currentReportType="hidden" />
+            </div>
+          </div>
         </div>
       );
     }
