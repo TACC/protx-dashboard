@@ -157,7 +157,6 @@ export function* watchProtxMaltreatmentDistribution() {
     fetchProtxMaltreatmentDistribution
   );
 }
-
 export function* watchProtxAnalytics() {
   yield takeLeading('FETCH_PROTX_ANALYTICS', fetchProtxAnalytics);
 }

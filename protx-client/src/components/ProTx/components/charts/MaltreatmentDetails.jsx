@@ -28,13 +28,6 @@ function MaltreatmentDetails({
       <div className="plot-details">
         <div className="plot-details-section">
           <div className="plot-details-section-selected">
-            <span className="plot-details-section-selected-value">
-              {fipsIdValue} {geographyLabel}
-            </span>
-          </div>
-        </div>
-        <div className="plot-details-section">
-          <div className="plot-details-section-selected">
             <span className="plot-details-section-selected-label">
               Current Aggregation:{'  '}
             </span>
