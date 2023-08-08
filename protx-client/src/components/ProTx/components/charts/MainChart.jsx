@@ -13,12 +13,14 @@ import { getSelectedGeographyName } from '../shared/dataUtils';
 import { Button } from 'reactstrap';
 import CommunityCharacteristics from '../modals/CommunityCharacteristics';
 import DemographicFeatureNote from './DemographicFeatureNote';
+import MaltreatmentAgeBreakdown from '../modals/MaltreatmentAgeBreakdown';
 
 function MainChart({ data, showInstructions }) {
   const selection = useSelector((state) => state.protxSelection);
   const dispatch = useDispatch();
   const [showCommunityCharacteristics, setShowCommunityCharacteristics] =
     useState(false);
+  const [showAgeModal, setShowAgeModal] = useState(false);
 
   // TODO refactor into components; current workaround is placing different hooks with conditions at
   //  the top of this component
@@ -81,37 +83,34 @@ function MainChart({ data, showInstructions }) {
       selection.geography,
       selection.selectedGeographicFeature
     );
-    const plotDetailSectionTitle = selection.selectedGeographicFeature ? (
-      <>
-        {getSelectedGeographyName(
-          selection.geography,
-          selection.selectedGeographicFeature
-        )}{' '}
-        County
-        <Button
-          className={styles.link}
-          color="link"
-          onClick={() => setShowCommunityCharacteristics(true)}
-        >
-          <CommunityCharacteristics
-            isOpen={showCommunityCharacteristics}
-            toggle={() => setShowCommunityCharacteristics(false)}
-            geographyLabel={countyName + ' County'}
-            geography={selection.geography}
-            selectedGeographicFeature={selection.selectedGeographicFeature}
-          />
-          View County Characteristics
-        </Button>
-      </>
-    ) : (
-      'Texas Statewide Data'
-    );
 
     return (
       <div className={styles['main-chart']}>
         <span className={styles['main-chart-title']}>
           <span className={styles['main-chart-title-text']}>
-            {plotDetailSectionTitle}
+            {selection.selectedGeographicFeature ? (
+              <>
+                {countyName} County
+                <Button
+                  className={styles.link}
+                  color="link"
+                  onClick={() => setShowCommunityCharacteristics(true)}
+                >
+                  <CommunityCharacteristics
+                    isOpen={showCommunityCharacteristics}
+                    toggle={() => setShowCommunityCharacteristics(false)}
+                    geographyLabel={countyName + ' County'}
+                    geography={selection.geography}
+                    selectedGeographicFeature={
+                      selection.selectedGeographicFeature
+                    }
+                  />
+                  View County Characteristics
+                </Button>
+              </>
+            ) : (
+              'Texas Statewide Data'
+            )}
           </span>
         </span>
 
@@ -195,11 +194,40 @@ function MainChart({ data, showInstructions }) {
       }
 
       const plotState = protxMaltreatmentDistribution.data;
+      const countyName = getSelectedGeographyName(
+        selection.geography,
+        selection.selectedGeographicFeature
+      );
 
       return (
         <div className="maltreatment-chart">
           <div className="maltreatment-types-plot">
             <div className="maltreatment-types-plot-layout">
+              <span className={styles['main-chart-title']}>
+                {selection.selectedGeographicFeature && (
+                  <span className={styles['main-chart-title-text']}>
+                    {countyName} County
+                    <Button
+                      className={styles.link}
+                      color="link"
+                      onClick={() => setShowAgeModal(true)}
+                    >
+                      {' '}
+                      <MaltreatmentAgeBreakdown
+                        isOpen={showAgeModal}
+                        toggle={() => setShowAgeModal(false)}
+                        geographyLabel={countyName + ' County'}
+                        geography={selection.geography}
+                        selectedGeographicFeature={
+                          selection.selectedGeographicFeature
+                        }
+                      />
+                      View County Maltreatment Percentages by Age
+                    </Button>
+                  </span>
+                )}
+              </span>
+
               <MaltreatmentDetails
                 geography={selection.geography}
                 selectedGeographicFeature={selection.selectedGeographicFeature}
