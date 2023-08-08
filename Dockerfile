@@ -7,7 +7,7 @@ ENV POETRY_HOME=/opt/poetry
 ENV PATH="$POETRY_HOME/bin:$PATH"
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl gdal-bin libgdal-dev gcc g++
 
 RUN mkdir /app
 WORKDIR /app/protx
