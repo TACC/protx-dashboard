@@ -92,10 +92,6 @@ services:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
     container_name: core_portal_nginx
-    depends_on:
-      - cms
-      - core
-      - protx
 
   websockets:
     image: ${PORTAL_IMAGE}:${PORTAL_TAG}
