@@ -2,7 +2,7 @@
 
 ## Related Jira tickets: ##
 
-* [COOKS-123](https://jira.tacc.utexas.edu/browse/COOKS-123)
+* [WG-123](https://jira.tacc.utexas.edu/browse/WG-123)
 
 ## Summary of Changes: ##
 
