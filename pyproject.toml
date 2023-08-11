@@ -6,7 +6,7 @@ authors = ["TACC-WMA <wma-portals@tacc.utexas.edu>"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
-requests = "^2.29.0"
+requests = "^2.31.0"
 gevent = "^21.12.0"
 numpy = "^1.23.2"
 SQLAlchemy = "^1.4.24"
