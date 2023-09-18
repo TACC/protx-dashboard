@@ -463,7 +463,6 @@ def get_age_race_pie_charts(area, geoid):
     fig = make_subplots(
         rows=2,
         cols=2,
-        # "r": .07 on all subplots to make them center to each other and give margin to bar graph's y axis label
         specs=[
             [
                 {
@@ -475,6 +474,7 @@ def get_age_race_pie_charts(area, geoid):
             ],
             [{"type": "pie"}, {"type": "pie"}],
         ],
+        vertical_spacing=0.25
     )
     fig.add_trace(
         go.Bar(
@@ -544,7 +544,7 @@ def get_age_race_pie_charts(area, geoid):
             title="Population Density<br>(persons per square mile)", overlaying="y"
         ),
         # to make legend to the right of pie charts
-        legend=dict(y=-0.02),
+        legend=dict(x = 1.0, y=-0.02),
         margin=dict(l=10, r=10, t=10, b=10),
         xaxis=dict(
             tickfont=dict(size=11),
