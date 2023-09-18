@@ -376,12 +376,12 @@ def get_age_race_pie_charts(area, geoid):
     from demographics d
     left join display_data u on
         u.NAME = d.DEMOGRAPHICS_NAME
-    where d.GEOTYPE = "{area}" and
-        d.UNITS = "{units}" and
-        d.DEMOGRAPHICS_NAME in ({variables}) and
-        d.GEOID = "{geoid}" and
-        d.YEAR = "2020" and
-        d.GEOTYPE = "{area}";
+    where (d.GEOTYPE = "{area}") and
+        (d.UNITS = "{units}") and
+        (d.DEMOGRAPHICS_NAME in ({variables})) and
+        (d.GEOID = "{geoid}") and
+        (d.YEAR = "2020") and
+        (d.GEOTYPE = "{area}");
     """
     variables = ["TOTPOP", "AGE17", "AGE65", "LAND_AREA"]
     selection = {
