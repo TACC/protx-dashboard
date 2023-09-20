@@ -385,7 +385,7 @@ def get_age_race_pie_charts(area, geoid):
     """
     variables = ["TOTPOP", "AGE17", "AGE65", "LAND_AREA"]
     selection = {
-        "units": 'count" or d.UNITS = "square mile',
+        "units": 'count" or d.UNITS = "square mile', # sq mile added to be able to include LAND_AREA in demographics info
         "area": area,
         "geoid": geoid,
         "variables": ",".join([f'"{v}"' for v in variables]),
