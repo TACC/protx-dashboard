@@ -385,7 +385,7 @@ def get_age_race_pie_charts(area, geoid):
     """
     variables = ["TOTPOP", "AGE17", "AGE65", "LAND_AREA"]
     selection = {
-        "units": 'count" or d.UNITS = "square mile', # sq mile added to be able to include LAND_AREA in demographics info
+        "units": 'count" or d.UNITS = "square mile',  # sq mile added to be able to include LAND_AREA in demographics info
         "area": area,
         "geoid": geoid,
         "variables": ",".join([f'"{v}"' for v in variables]),
@@ -544,7 +544,7 @@ def get_age_race_pie_charts(area, geoid):
             title="Population Density<br>(persons per square mile)", overlaying="y"
         ),
         # to make legend to the right of pie charts
-        legend=dict(x = 1.0, y=-0.02),
+        legend=dict(x=1.0, y=-0.02),
         margin=dict(l=10, r=10, t=10, b=10),
         xaxis=dict(
             tickfont=dict(size=11),
