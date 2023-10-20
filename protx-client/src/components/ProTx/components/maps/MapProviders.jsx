@@ -6,6 +6,7 @@ export default function Maptiles() {
 
   // Provider: Stamen.
   // No key required.
+
   // eslint-disable-next-line no-unused-vars
   const basemapToner = L.tileLayer(
     'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
@@ -20,6 +21,7 @@ export default function Maptiles() {
     }
   );
 
+  // eslint-disable-next-line no-unused-vars
   const basemapTonerLite = L.tileLayer(
     'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}',
     {
@@ -49,6 +51,7 @@ export default function Maptiles() {
 
   // Provider: Open Street Maps
   // No key required.
+
   // eslint-disable-next-line no-unused-vars
   const basemapOsmDefault = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -88,6 +91,7 @@ export default function Maptiles() {
     }
   );
 
+  // eslint-disable-next-line no-unused-vars
   const basemapOsmBw = L.tileLayer(
     'https://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png',
     {
@@ -100,8 +104,29 @@ export default function Maptiles() {
     }
   );
 
-  providers.push(basemapOsmBw);
+  // eslint-disable-next-line no-unused-vars
+  const basemapOsmBw = L.tileLayer(
+    'https://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png',
+    {
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      minZoom: 0,
+      maxZoom: 18,
+      name: 'OSM - Mapnik B&W',
+      type: 'png',
+    }
+  );
+
+  // Stamen Maptiles.
+  providers.push(basemapToner);
   providers.push(basemapTonerLite);
+  providers.push(basemapTerrain);
+
+  // OpenStreetMaps Maptiles.
+  providers.push(basemapOsmDefault);
+  providers.push(basemapOsmTopo);
+  providers.push(basemapOsmMapnik);
+  providers.push(basemapOsmBw);
 
   Object.keys(providers).forEach((k) => {
     const layer = providers[k];
