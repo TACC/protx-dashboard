@@ -12,11 +12,11 @@ import math
 
 
 def currency(value1, value2):
-    return '{:.0f}-{:.0f}'.format(round(value1 / 1000, 0), round(value2 / 1000, 0))
+    return "{:.0f}-{:.0f}".format(round(value1 / 1000, 0), round(value2 / 1000, 0))
 
 
 def not_currency(value1, value2):
-    return '{:.0f}-{:.0f}'.format(value1, value2)
+    return "{:.0f}-{:.0f}".format(value1, value2)
 
 
 def hist_to_bar(vector, range_vals, bins):
@@ -29,7 +29,7 @@ def hist_to_bar(vector, range_vals, bins):
     try:
         assert len(vector) > 1
     except AssertionError:
-        print('Data vector is empty.')
+        print("Data vector is empty.")
         return
 
     height, edges = np.histogram(vector, range=range_vals, bins=bins, density=False)
@@ -42,18 +42,18 @@ def pearson_kurtosis(x):
     mean = np.mean(x)
     deviation = x - mean
     ratio = deviation / sigma
-    k_vector = ratio ** 4
+    k_vector = ratio**4
     k = np.mean(k_vector)
 
     return k
 
 
 def get_bin_edges(query_return_df, label_template):
-    all_data = query_return_df['VALUE'].values
+    all_data = query_return_df["VALUE"].values
     all_data = all_data[np.logical_not(np.isnan(all_data))]
 
     # resample data down to an annual sample size (data size is used in bin calc algorithms)
-    n_draws = len(query_return_df['GEOID'].unique()) - 2
+    n_draws = len(query_return_df["GEOID"].unique()) - 2
 
     # could perform resampling multiple times and average edges
     # but doing calc only once for efficiency
@@ -64,8 +64,11 @@ def get_bin_edges(query_return_df, label_template):
     sampled_data.append(min(all_data))
 
     # Freedman Diaconis Estimator
-    bin_edges = np.histogram_bin_edges(sampled_data, bins='fd')
-    bar_centers = [round(((bin_edges[i - 1] + bin_edges[i]) / 2.0), 2) for i in range(1, len(bin_edges))]
+    bin_edges = np.histogram_bin_edges(sampled_data, bins="fd")
+    bar_centers = [
+        round(((bin_edges[i - 1] + bin_edges[i]) / 2.0), 2)
+        for i in range(1, len(bin_edges))
+    ]
 
     # measure kurtosis to determine binning strategy
     k = pearson_kurtosis(all_data)
@@ -73,7 +76,10 @@ def get_bin_edges(query_return_df, label_template):
     # k = 0 is close to a normal distribution; some of our data have k = 80
     if k < 10:
 
-        label_fmt = [label_template(bin_edges[i - 1], bin_edges[i]) for i in range(1, len(bin_edges))]
+        label_fmt = [
+            label_template(bin_edges[i - 1], bin_edges[i])
+            for i in range(1, len(bin_edges))
+        ]
         return bin_edges, bar_centers, label_fmt
 
     else:
@@ -91,7 +97,10 @@ def get_bin_edges(query_return_df, label_template):
         bar_centers_threshold = bar_centers[0: len(edges_threshold) + 1]
 
         # update the bar labels
-        label_fmt_threshold = [label_template(edges_threshold[i - 1], edges_threshold[i]) for i in range(1, len(edges_threshold))]
+        label_fmt_threshold = [
+            label_template(edges_threshold[i - 1], edges_threshold[i])
+            for i in range(1, len(edges_threshold))
+        ]
 
         return edges_threshold, bar_centers_threshold, label_fmt_threshold
 
@@ -115,7 +124,7 @@ Demographics Demo
 
 # ### Select variable across all years
 
-yearly_data_query = '''
+yearly_data_query = """
 select d.VALUE, d.GEOID, d.GEOTYPE, d.DEMOGRAPHICS_NAME, d.YEAR,
     d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units,
     u.DISPLAY_TEXT as units_display, u.DISPLAY_TEXT_PLOT as units_plot
@@ -129,11 +138,11 @@ join display_data u on
 where d.GEOTYPE = "{area}" and
     d.UNITS = "{unit}" and
     d.DEMOGRAPHICS_NAME = "{variable}";
-'''
+"""
 
 # ### Select annual values for a focal area
 
-focal_query = '''
+focal_query = """
 select d.VALUE, d.GEOID, d.GEOTYPE, d.DEMOGRAPHICS_NAME, d.YEAR,
     d.UNITS as count_or_pct, g.DISPLAY_TEXT as geo_display, u.UNITS as units,
     u.DISPLAY_TEXT as units_display, u.DISPLAY_TEXT_PLOT as units_plot
@@ -149,7 +158,7 @@ where d.GEOTYPE = "{area}" and
     d.DEMOGRAPHICS_NAME = "{variable}" and
     d.GEOID = "{geoid}" and
     d.GEOTYPE = "{area}";
-'''
+"""
 
 
 def demographic_data_prep(query_return_df):
@@ -160,7 +169,10 @@ def demographic_data_prep(query_return_df):
     ########################
 
     # range should be min - 10%, max + 10%
-    range_vals = (np.nanmin(query_return_df['VALUE']) * 0.9, np.nanmax(query_return_df['VALUE']) * 1.1)
+    range_vals = (
+        np.nanmin(query_return_df["VALUE"]) * 0.9,
+        np.nanmax(query_return_df["VALUE"]) * 1.1,
+    )
 
     ###########################################################
     # RETURN DATA PROCESSING -- AESTHETICS FOR ALL SUBPLOTS ##
@@ -169,21 +181,26 @@ def demographic_data_prep(query_return_df):
     # parse the units themselves; dollars use label_template "currency"
     # with the exception of median rent as a percent of household income, which uses "not_currency"
     # all others use "not_currency"
-    if (query_return_df['units'].unique().item() == 'dollars') and \
-            (query_return_df['DEMOGRAPHICS_NAME'] != 'MEDIAN_GROSS_RENT_PCT_HH_INCOME').unique().item():
+    if (query_return_df["units"].unique().item() == "dollars") and (
+        query_return_df["DEMOGRAPHICS_NAME"] != "MEDIAN_GROSS_RENT_PCT_HH_INCOME"
+    ).unique().item():
         label_template = currency
         # division is done in formatting helper but could be pushed up to .db file
-        label_units = query_return_df['units_display'].unique().item() + ' (1000s of dollars)'
-        label_legend = query_return_df['units_plot'].unique().item() + ' (1000s of dollars)'
+        label_units = (
+            query_return_df["units_display"].unique().item() + " (1000s of dollars)"
+        )
+        label_legend = (
+            query_return_df["units_plot"].unique().item() + " (1000s of dollars)"
+        )
     else:
         label_template = not_currency
-        label_units = query_return_df['units_display'].unique().item()
-        label_legend = query_return_df['units_plot'].unique().item()
+        label_units = query_return_df["units_display"].unique().item()
+        label_legend = query_return_df["units_plot"].unique().item()
         # for line plots, PCI should use median and others should use mean
-    if query_return_df['DEMOGRAPHICS_NAME'].unique().item() == 'PCI':
-        center = 'median'
+    if query_return_df["DEMOGRAPHICS_NAME"].unique().item() == "PCI":
+        center = "median"
     else:
-        center = 'mean'
+        center = "mean"
 
     ############################################################
     # CALCULATE HISTOGRAM BIN EDGES FOR DATA ACROSS ALL YEARS ##
@@ -202,23 +219,22 @@ def demographic_data_prep(query_return_df):
 
     # set up response dictionary
     data_response = {
-        'fig_aes': {
-            'yrange': (hist_min, hist_max),
-            'simple_yrange': range_vals,
-            'xrange': (0, 0),  # for horizontal boxplots, updated dynamically
-            'geotype': query_return_df['GEOTYPE'].unique().item(),
-            'label_units': label_units,
-            'label_legend': label_legend,
-            'bar_labels': None,
-            'bar_centers': None,
-            'focal_display': None,
-            'center': center
+        "fig_aes": {
+            "yrange": (hist_min, hist_max),
+            "simple_yrange": range_vals,
+            "xrange": (0, 0),  # for horizontal boxplots, updated dynamically
+            "geotype": query_return_df["GEOTYPE"].unique().item(),
+            "label_units": label_units,
+            "label_legend": label_legend,
+            "bar_labels": None,
+            "bar_centers": None,
+            "focal_display": None,
+            "center": center,
         },
-        'years': {
-            i: {'focal_value': None,
-                'mean': None,
-                'median': None,
-                'bars': [None]} for i in range(2011, 2021)}
+        "years": {
+            i: {"focal_value": None, "mean": None, "median": None, "bars": [None]}
+            for i in range(2011, 2021)
+        },
     }
 
     ################################
@@ -226,37 +242,36 @@ def demographic_data_prep(query_return_df):
     ################################
 
     for year in range(2010, 2021):
-        data = query_return_df[query_return_df['YEAR'] == year]['VALUE'].values
+        data = query_return_df[query_return_df["YEAR"] == year]["VALUE"].values
         data = data[np.logical_not(np.isnan(data))]
 
         if len(data) > 0:
-            hbar, _ = hist_to_bar(
-                data,
-                range_vals=range_vals,
-                bins=bin_edges
-            )
+            hbar, _ = hist_to_bar(data, range_vals=range_vals, bins=bin_edges)
 
             ####################
             # UNIQUE BY YEAR ##
             ####################
-            data_response['years'][year]['mean'] = np.mean(data)
-            data_response['years'][year]['median'] = np.quantile(data, q=[0.5]).item()
-            data_response['years'][year]['bars'] = hbar
+            data_response["years"][year]["mean"] = np.mean(data)
+            data_response["years"][year]["median"] = np.quantile(data, q=[0.5]).item()
+            data_response["years"][year]["bars"] = hbar
 
             #######################################################
             # SHARED BY ALL SUBPLOTS BUT DYNAMICALLY CALCUALTED ##
             #######################################################
 
             # update the max xrange to the greater of (prior max, new height + 10%)
-            data_response['fig_aes']['xrange'] = (0, max(data_response['fig_aes']['xrange'][1], max(hbar) * 1.1))
+            data_response["fig_aes"]["xrange"] = (
+                0,
+                max(data_response["fig_aes"]["xrange"][1], max(hbar) * 1.1),
+            )
 
             ###########################
             # SHARED BY ALL SUBPLOTS ##
             ###########################
 
-            if not data_response['fig_aes']['bar_labels']:
-                data_response['fig_aes']['bar_labels'] = bar_labels
-                data_response['fig_aes']['bar_centers'] = bar_centers
+            if not data_response["fig_aes"]["bar_labels"]:
+                data_response["fig_aes"]["bar_labels"] = bar_labels
+                data_response["fig_aes"]["bar_centers"] = bar_centers
 
     return data_response
 
@@ -266,31 +281,41 @@ def update_focal_area(display_dict, focal_data):
     # GET DISPLAY TEXT FOR SPECIFIC GEOGRAPHY ##
     #############################################
 
-    if focal_data['geo_display'].unique().item():
-        display_name = focal_data['geo_display'].unique().item()
+    if focal_data["geo_display"].unique().item():
+        display_name = focal_data["geo_display"].unique().item()
     else:
-        display_name = focal_data['GEOID'].unique().item()
+        display_name = focal_data["GEOID"].unique().item()
 
     ##########################################################
     # CONVERT VALUES TO DICTIONARY AND ADD TO DISPLAY DICT ##
     ##########################################################
 
-    focal_dict = focal_data[['YEAR', 'VALUE']].set_index('YEAR').transpose().to_dict(orient='records')[0]
-    display_dict['fig_aes']['focal_display'] = display_name
+    focal_dict = (
+        focal_data[["YEAR", "VALUE"]]
+        .set_index("YEAR")
+        .transpose()
+        .to_dict(orient="records")[0]
+    )
+    display_dict["fig_aes"]["focal_display"] = display_name
     for year in range(2011, 2021):
         try:
             focal_val = focal_dict[year]
         except KeyError:
             focal_val = None
 
-        display_dict['years'][year]['focal_value'] = focal_val
+        display_dict["years"][year]["focal_value"] = focal_val
 
     return display_dict
 
 
 def demographic_data_query(area, unit, variable):
     db_conn = sqlite3.connect(db.cooks_db)
-    selection = {'area': area, 'unit': unit, 'variable': variable, 'report_type': 'demographics'}
+    selection = {
+        "area": area,
+        "unit": unit,
+        "variable": variable,
+        "report_type": "demographics",
+    }
     query = yearly_data_query.format(**selection)
     query_result = pd.read_sql_query(query, db_conn)
     db_conn.close()
@@ -299,7 +324,13 @@ def demographic_data_query(area, unit, variable):
 
 def demographic_focal_area_data_query(area, geoid, unit, variable):
     db_conn = sqlite3.connect(db.cooks_db)
-    selection = {'area': area, 'geoid': geoid, 'unit': unit, 'variable': variable, 'report_type': 'demographics'}
+    selection = {
+        "area": area,
+        "geoid": geoid,
+        "unit": unit,
+        "variable": variable,
+        "report_type": "demographics",
+    }
     query = focal_query.format(**selection)
     query_result = pd.read_sql_query(query, db_conn)
     db_conn.close()
@@ -316,10 +347,7 @@ def demographics_simple_lineplot_figure(area, geoid, unit, variable):
     geography_data = demographic_focal_area_data_query(area, geoid, unit, variable)
 
     # Combine statewide and geography data results.
-    plot_result = update_focal_area(
-        state_result,
-        geography_data
-    )
+    plot_result = update_focal_area(state_result, geography_data)
 
     # Generate the plot figure data object.
     plot_figure = timeseries_lineplot(plot_result)
@@ -343,93 +371,184 @@ def get_age_race_pie_charts(area, geoid):
 
     db_conn = sqlite3.connect(db.cooks_db)
 
-    query = '''
+    query = """
     select d.DEMOGRAPHICS_NAME, d.VALUE, u.DISPLAY_TEXT
     from demographics d
     left join display_data u on
         u.NAME = d.DEMOGRAPHICS_NAME
-    where d.GEOTYPE = "{area}" and
-        d.UNITS = "{units}" and
-        d.DEMOGRAPHICS_NAME in ({variables}) and
-        d.GEOID = "{geoid}" and
-        d.YEAR = "2020" and
-        d.GEOTYPE = "{area}";
-    '''
-    variables = ['TOTPOP', 'AGE17', 'AGE65']
-    selection = {'units': 'count', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    where (d.GEOTYPE = "{area}") and
+        (d.UNITS = "{units}") and
+        (d.DEMOGRAPHICS_NAME in ({variables})) and
+        (d.GEOID = "{geoid}") and
+        (d.YEAR = "2020") and
+        (d.GEOTYPE = "{area}");
+    """
+    variables = ["TOTPOP", "AGE17", "AGE65", "LAND_AREA"]
+    selection = {
+        "units": 'count" or d.UNITS = "square mile',  # sq mile added to be able to include LAND_AREA in demographics info
+        "area": area,
+        "geoid": geoid,
+        "variables": ",".join([f'"{v}"' for v in variables]),
+    }
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
-
     population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
-    population_17_to_65 = population["TOTPOP"].VALUE - population["AGE17"].VALUE - population["AGE65"].VALUE
-    age_labels = [population["AGE17"].DISPLAY_TEXT, "Population between 17 and 65", population["AGE65"].DISPLAY_TEXT]
-    age_values = [population["AGE17"].VALUE, population_17_to_65, population["AGE65"].VALUE]
+    population_17_to_65 = (
+        population["TOTPOP"].VALUE
+        - population["AGE17"].VALUE
+        - population["AGE65"].VALUE
+    )
+    age_labels = [
+        population["AGE17"].DISPLAY_TEXT,
+        "Population between 17 and 65",
+        population["AGE65"].DISPLAY_TEXT,
+    ]
+    age_values = [
+        population["AGE17"].VALUE,
+        population_17_to_65,
+        population["AGE65"].VALUE,
+    ]
+    density_values = [
+        (population["AGE17"].VALUE / population["LAND_AREA"].VALUE),
+        (population_17_to_65 / population["LAND_AREA"].VALUE),
+        (population["AGE65"].VALUE / population["LAND_AREA"].VALUE),
+    ]
 
     # list of variables is in desired order (alphabetic order and then last two at end)
-    variables = ['AMERICAN_INDIAN_ALASKA_NATIVE_ALONE', 'ASIAN_ALONE',
-                 'BLACK_AFRICAN_AMERICAN_ALONE', 'NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE',
-                 'WHITE_ALONE', 'TWO_OR_MORE_RACES', 'OTHER_RACE_ALONE', ]
+    variables = [
+        "AMERICAN_INDIAN_ALASKA_NATIVE_ALONE",
+        "ASIAN_ALONE",
+        "BLACK_AFRICAN_AMERICAN_ALONE",
+        "NATIVE_HAWAIIAN_OTHER_PACIFIC_ISLANDER_ALONE",
+        "WHITE_ALONE",
+        "TWO_OR_MORE_RACES",
+        "OTHER_RACE_ALONE",
+    ]
 
-    selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    selection = {
+        "units": "percent",
+        "area": area,
+        "geoid": geoid,
+        "variables": ",".join([f'"{v}"' for v in variables]),
+    }
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
     race_data = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
     race_labels = [race_data[v].DISPLAY_TEXT for v in variables]
     race_values = [race_data[v].VALUE for v in variables]
 
     race_sum = sum(race_values)
-    if not math.isclose(race_sum, 100, abs_tol=.1):
-        logger.warn(f"Race characteristics percentages do not sum to 100. (sum = {race_sum} ")
+    if not math.isclose(race_sum, 100, abs_tol=0.1):
+        logger.warn(
+            f"Race characteristics percentages do not sum to 100. (sum = {race_sum} "
+        )
 
     # Hispanic/Latino Percent from DB and calculate Not Hispanic/Latino
-    variables = ['HISPANIC_LATINO']
-    selection = {'units': 'percent', 'area': area, 'geoid': geoid, 'variables': ','.join([f'"{v}"' for v in variables])}
+    variables = ["HISPANIC_LATINO"]
+    selection = {
+        "units": "percent",
+        "area": area,
+        "geoid": geoid,
+        "variables": ",".join([f'"{v}"' for v in variables]),
+    }
     data_frame_result = pd.read_sql_query(query.format(**selection), db_conn)
     population = {row.DEMOGRAPHICS_NAME: row for row in data_frame_result.itertuples()}
-    ethnicity_labels = [population["HISPANIC_LATINO"].DISPLAY_TEXT, "Not Hispanic/or Latino population"]
-    ethnicity_values = [population["HISPANIC_LATINO"].VALUE, 100-population["HISPANIC_LATINO"].VALUE]
+    ethnicity_labels = [
+        population["HISPANIC_LATINO"].DISPLAY_TEXT,
+        "Not Hispanic/or Latino population",
+    ]
+    ethnicity_values = [
+        population["HISPANIC_LATINO"].VALUE,
+        100 - population["HISPANIC_LATINO"].VALUE,
+    ]
 
-    fig = make_subplots(rows=2, cols=2,
-                        specs=[[{"type": "pie", "colspan": 2}, None], [{"type": "pie"}, {"type": "pie"}]])
+    fig = make_subplots(
+        rows=2,
+        cols=2,
+        specs=[
+            [
+                {
+                    "type": "xy",
+                    "colspan": 2,
+                    "secondary_y": True,
+                },
+                None,
+            ],
+            [{"type": "pie"}, {"type": "pie"}],
+        ],
+        vertical_spacing=0.25
+    )
     fig.add_trace(
-        go.Pie(
-            values=age_values,
-            labels=age_labels,
-            sort=False,
-            legendgroup='Age',
-            legendgrouptitle=go.pie.Legendgrouptitle(text='Age', font=dict(size=20, color="Black",  family="Roboto")),
-            name="Age",
-            title=dict(text='Age', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=1, col=1)
+        go.Bar(
+            name="Population",
+            x=age_labels,
+            y=age_values,
+            yaxis="y",
+            xaxis="x",
+            marker=dict(
+                color=light_green_to_blue_color_palette[1],
+                line=dict(color="black", width=1),
+            ),
+            showlegend=False,
+        ),
+        row=1,
+        col=1,
+    )
+    fig.add_trace(
+        go.Bar(
+            name="Population Density",
+            x=age_labels,
+            y=density_values,
+            yaxis="y2",
+            xaxis="x",
+            marker=dict(
+                color=light_green_to_blue_color_palette[1],
+                line=dict(color="black", width=1),
+            ),
+            showlegend=False,
+        ),
+        row=1,
+        col=1,
+        secondary_y=True,
+    )
     fig.add_trace(
         go.Pie(
             values=ethnicity_values,
             labels=ethnicity_labels,
             sort=False,
-            legendgroup='Ethnicity',
-            legendgrouptitle=go.pie.Legendgrouptitle(text='Ethnicity', font=dict(size=20, color="Black",  family="Roboto")),
+            legendgroup="Ethnicity",
+            legendgrouptitle=go.pie.Legendgrouptitle(text="Ethnicity"),
             name="Ethnicity",
-            title=dict(text='Ethnicity', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=2, col=1)
+            title=dict(text="Ethnicity", position="bottom center", font=dict(size=18)),
+            marker_colors=light_green_to_blue_color_palette,
+        ),
+        row=2,
+        col=1,
+    )
     fig.add_trace(
         go.Pie(
             values=race_values,
             labels=race_labels,
             sort=False,
-            legendgroup='Race',
-            legendgrouptitle=go.pie.Legendgrouptitle(text='Race', font=dict(size=20, color="Black",  family="Roboto")),
+            legendgroup="Race",
+            legendgrouptitle=go.pie.Legendgrouptitle(text="Race"),
             name="Race",
-            title=dict(text='Race', position='bottom center', font=dict(size=18, color="Black",  family="Roboto"))),
-        row=2, col=2)
-
-    fig.update_traces(marker=dict(
-        colors=light_green_to_blue_color_palette, line=dict(
-            color='black',
-            width=1
-        )))
+            title=dict(text="Race", position="bottom center", font=dict(size=18)),
+            marker_colors=light_green_to_blue_color_palette,
+        ),
+        row=2,
+        col=2,
+    )
 
     fig.update_layout(
-        font=dict(size=13, color="Black",  family="Roboto"),
+        yaxis=dict(title="Population (persons)"),
+        yaxis2=dict(
+            title="Population Density<br>(persons per square mile)", overlaying="y"
+        ),
+        # to make legend to the right of pie charts
+        legend=dict(x=1.0, y=-0.02),
         margin=dict(l=10, r=10, t=10, b=10),
-        height=620,
+        xaxis=dict(
+            tickfont=dict(size=11),
+        ),
     )
 
     fig.show()
